@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PesaGuard developer documentation</title>
+  <meta name="description" content="Developer documentation for PesaGuard: real-time reconciliation of M-Pesa (Safaricom Daraja) payments, with honest status for every capability.">
+  <link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/navigation.css">
+  <link rel="stylesheet" href="css/content.css">
+  <link rel="stylesheet" href="css/code.css">
+  <link rel="stylesheet" href="css/search.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-path="/">
+  <a class="visually-hidden" href="#main">Skip to content</a>
+
+  <header class="docs-header">
+    <div class="docs-header-inner">
+      <a class="docs-brand" href="/">
+        <img src="assets/brand/favicon.svg" alt="" width="26" height="26">
+        PesaGuard <small>Docs</small>
+      </a>
+      <div class="docs-search">
+        <span aria-hidden="true">⌕</span>
+        <input type="search" placeholder="Search documentation…" aria-label="Search documentation">
+        <kbd>Ctrl K</kbd>
+      </div>
+      <nav class="docs-header-links" aria-label="Primary">
+        <a href="getting-started/">Getting started</a>
+        <a href="concepts/">Concepts</a>
+        <a href="api/">API</a>
+        <a href="webhooks/">Webhooks</a>
+        <a href="security/">Security</a>
+        <a href="status/">Status</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="docs-shell docs-content-wide">
+      <article class="docs-article">
+        <p class="docs-eyebrow">Developer documentation</p>
+        <h1>Reconcile M-Pesa payments with evidence attached.</h1>
+        <p class="docs-lede">
+          PesaGuard watches Safaricom Daraja callbacks as they arrive, matches them against your
+          internal records, and keeps the reason behind every outcome. This documentation covers the
+          concepts, the operations API surface and the delivery behaviour you will build against.
+        </p>
+
+        <div class="card-grid reveal">
+          <a class="card" href="getting-started/">
+            <h3>Getting started</h3>
+            <p>Architecture in five minutes, then your first environment check.</p>
+            <span class="go">Start →</span>
+          </a>
+          <a class="card" href="concepts/">
+            <h3>Concepts</h3>
+            <p>Reconciliation, idempotency, tenants and the event pipeline.</p>
+            <span class="go">Read →</span>
+          </a>
+          <a class="card" href="api/">
+            <h3>API reference</h3>
+            <p>The operations API surface, errors, pagination and versioning.</p>
+            <span class="go">Browse →</span>
+          </a>
+          <a class="card" href="webhooks/">
+            <h3>Webhooks</h3>
+            <p>Signed delivery, retries, dead letters and verification.</p>
+            <span class="go">Read →</span>
+          </a>
+          <a class="card" href="security/">
+            <h3>Security</h3>
+            <p>Tenant isolation, access control and how evidence is kept.</p>
+            <span class="go">Read →</span>
+          </a>
+          <a class="card" href="status/">
+            <h3>Status</h3>
+            <p>Live health of the services this documentation describes.</p>
+            <span class="go">Open →</span>
+          </a>
+        </div>
+
+        <div class="callout" data-tone="warn">
+          <strong>Scope, stated up front</strong>
+          <p>
+            PesaGuard reconciles <strong>M-Pesa (Safaricom Daraja) only</strong> today. Airtel Money,
+            bank rails and point-of-sale feeds are <em>planned</em> — they have no adapter, tests or
+            documentation yet, and these pages label them accordingly. See
+            <a href="concepts/">Concepts</a> for what is live.
+          </p>
+        </div>
+
+        <h2>What the platform guarantees</h2>
+        <ul>
+          <li><strong>Idempotent writes.</strong> A retried callback never creates a second financial record.</li>
+          <li><strong>Deterministic matching.</strong> Amount, reference and timestamp tolerance decide the outcome — the same inputs produce the same result.</li>
+          <li><strong>Append-only evidence.</strong> Every decision keeps its reason, so review and audit read the record instead of memory.</li>
+          <li><strong>Enforced tenant isolation.</strong> Boundaries are enforced at the database layer, not by application convention.</li>
+        </ul>
+
+        <h2>Where to look first</h2>
+        <p>
+          If you are integrating the dashboard operations surface, start with
+          <a href="api/">the API reference</a> and <a href="api/errors.html">error handling</a>.
+          If you are wiring delivery into your own systems, read
+          <a href="webhooks/">webhook delivery</a> end to end before you write a consumer.
+        </p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="docs-footer">
+    <div class="docs-footer-inner">
+      <span>© 2026 PesaGuard</span>
+      <nav aria-label="Footer">
+        <a href="https://pesaguard.victorkipruto.com">Product</a>
+        <a href="https://status.pesaguard.victorkipruto.com">System status</a>
+        <a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a>
+        <a href="security/responsible-disclosure.html">Report an issue</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>

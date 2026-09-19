@@ -1,0 +1,26 @@
+/* Responsive behaviour: search collapses, sidebar stacks, cards tighten. */
+
+@media (max-width: 960px) {
+  .docs-shell { grid-template-columns: minmax(0, 1fr); }
+
+  .docs-sidebar {
+    position: static;
+    max-height: none;
+    padding-block: 20px 0;
+    border-bottom: 1px solid var(--line-soft);
+    margin-bottom: 8px;
+  }
+
+  .docs-nav-group { margin-bottom: 12px; }
+}
+
+@media (max-width: 700px) {
+  .docs-search { width: 40px; padding: 8px 10px; }
+  .docs-search input, .docs-search kbd { display: none; }
+  .docs-header-links { display: none; }
+  .docs-brand small { display: none; }
+
+  .card-grid { grid-template-columns: minmax(0, 1fr); }
+
+  .docs-article table { display: block; overflow-x: auto; }
+}

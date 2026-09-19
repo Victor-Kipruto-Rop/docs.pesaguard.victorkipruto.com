@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create an account — PesaGuard docs</title>
+<meta name="description" content="How access to a PesaGuard deployment is provisioned: with the pilot team, not through public signup.">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/navigation.css">
+<link rel="stylesheet" href="../css/content.css">
+<link rel="stylesheet" href="../css/code.css">
+<link rel="stylesheet" href="../css/search.css">
+<link rel="stylesheet" href="../css/animations.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body data-path="/getting-started/create-account.html">
+<a class="visually-hidden" href="#main">Skip to content</a>
+<header class="docs-header"><div class="docs-header-inner">
+  <a class="docs-brand" href="../index.html"><img src="../assets/brand/favicon.svg" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
+  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+  <nav class="docs-header-links" aria-label="Primary">
+    <a href="../getting-started/">Getting started</a>
+    <a href="../concepts/">Concepts</a>
+    <a href="../api/">API</a>
+    <a href="../webhooks/">Webhooks</a>
+    <a href="../security/">Security</a>
+    <a href="../status/">Status</a>
+  </nav>
+</div></header>
+
+<main id="main">
+<div class="docs-shell">
+  <aside class="docs-sidebar" aria-label="Section navigation">
+    <div class="docs-nav-group"><p>Getting started</p><ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="quickstart.html">Quickstart</a></li>
+      <li><a href="create-account.html">Create an account</a></li>
+      <li><a href="create-api-key.html">Create an API key</a></li>
+      <li><a href="first-request.html">First request</a></li>
+      <li><a href="first-transaction.html">First transaction</a></li>
+      <li><a href="test-environment.html">Test environment</a></li>
+      <li><a href="production-checklist.html">Production checklist</a></li>
+    </ul></div>
+    <div class="docs-nav-group"><p>Sections</p><ul>
+      <li><a href="../concepts/">Concepts</a></li>
+      <li><a href="../api/">API</a></li>
+      <li><a href="../webhooks/">Webhooks</a></li>
+      <li><a href="../security/">Security</a></li>
+      <li><a href="../status/">Status</a></li>
+    </ul></div>
+  </aside>
+
+  <article class="docs-article">
+    <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span><a href="index.html">Getting started</a><span aria-hidden="true">/</span><span>Create an account</span></nav>
+    <p class="docs-eyebrow">Getting started</p>
+    <h1>Create an account <span class="status-pill" data-tone="draft"><i></i>Pilot-scoped</span></h1>
+    <p class="docs-lede">PesaGuard has no public signup. Access is provisioned with the pilot team, because the reconciliation scope — flows, matching keys, retention — is agreed per operation rather than self-served.</p>
+
+    <h2>What provisioning covers</h2>
+    <ul>
+      <li><strong>A tenant.</strong> Your organization's data lives in its own tenant boundary, enforced at the database layer.</li>
+      <li><strong>An M-Pesa (Daraja) flow.</strong> The active payment scope: STK Push and PayBill callbacks.</li>
+      <li><strong>Dashboard users.</strong> Named accounts with roles — reviewer, operator, administrator.</li>
+      <li><strong>A pilot plan.</strong> Pricing follows your operation; see <a href="https://pesaguard.victorkipruto.com/pricing">pricing</a> for the shape of it.</li>
+    </ul>
+
+    <h2>What we ask before provisioning</h2>
+    <ol>
+      <li>Which M-Pesa shortcodes and flows you collect on.</li>
+      <li>Where your internal records live (Postgres, Sheets or a REST ledger).</li>
+      <li>Who reviews exceptions, and through which channels they should be reached.</li>
+      <li>Whether you need Airtel Money or bank rails today — because those are <em>not</em> included, and we would rather say so now than mid-pilot.</li>
+    </ol>
+
+    <div class="callout" data-tone="info">
+      <strong>Multi-rail is a scoping conversation</strong>
+      <p>Airtel Money, bank transfers and card rails are out of scope for the pilot. If multi-rail support is a hard requirement, it becomes a separate scoping exercise — say so in the first conversation.</p>
+    </div>
+
+    <h2>Then</h2>
+    <p>Once your tenant exists, <a href="create-api-key.html">create an API key</a> is a conversation, not a form — credentials are issued with explicit scopes and rotation metadata.</p>
+  </article>
+</div>
+</main>
+
+<footer class="docs-footer"><div class="docs-footer-inner">
+  <span>© 2026 PesaGuard</span>
+  <nav aria-label="Footer">
+    <a href="https://pesaguard.victorkipruto.com">Product</a>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a>
+    <a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a>
+  </nav>
+</div></footer>
+
+<script src="../js/app.js" defer></script>
+</body>
+</html>

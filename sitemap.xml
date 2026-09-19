@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://docs.pesaguard.victorkipruto.com/</loc></url>
+  <url><loc>https://docs.pesaguard.victorkipruto.com/getting-started/</loc></url>
+  <url><loc>https://docs.pesaguard.victorkipruto.com/concepts/</loc></url>
+  <url><loc>https://docs.pesaguard.victorkipruto.com/concepts/reconciliation.html</loc></url>
+  <url><loc>https://docs.pesaguard.victorkipruto.com/concepts/idempotency.html</loc></url>
+  <url><loc>https://docs.pesaguard.victorkipruto.com/concepts/tenants.html</loc></url>
+  <url><loc>https://docs.pesaguard.victorkipruto.com/api/</loc></url>
+  <url><loc>https://docs.pesaguard.victorkipruto.com/api/errors.html</loc></url>
+  <url><loc>https://docs.pesaguard.victorkipruto.com/api-reference/openapi.json</loc></url>
+  <url><loc>https://docs.pesaguard.victorkipruto.com/webhooks/</loc></url>
+  <url><loc>https://docs.pesaguard.victorkipruto.com/security/</loc></url>
+  <url><loc>https://docs.pesaguard.victorkipruto.com/status/</loc></url>
+</urlset>

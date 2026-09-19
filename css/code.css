@@ -1,0 +1,56 @@
+/* Code blocks, method tags, inline code inside code context. */
+
+pre[class*="language-"], pre.docs-code {
+  margin: 18px 0 26px;
+  padding: 18px 20px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--paper-sunken);
+  font: 400 12.8px / 1.75 var(--font-mono);
+  color: var(--text-muted);
+  tab-size: 2;
+}
+
+pre.docs-code code, pre[class*="language-"] code { font: inherit; color: inherit; }
+
+.code-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 11px / 1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 22px 0 0;
+}
+
+.code-head .method {
+  font-style: normal;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: var(--lime-wash);
+  color: var(--lime-ink);
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+.code-copy {
+  margin-left: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--paper-raised);
+  color: var(--text-muted);
+  font: 500 11px / 1 var(--font-mono);
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.code-copy:hover { color: var(--text); border-color: var(--line-strong); }
+
+/* Simple token colours for the tiny highlighter in js/code/syntax.js. */
+.tok-key { color: var(--lime-ink); }
+.tok-str { color: var(--forest-soft); }
+.tok-num { color: #a8641c; }
+.tok-com { color: var(--text-faint); font-style: italic; }
+.tok-cmd { color: var(--forest); font-weight: 600; }

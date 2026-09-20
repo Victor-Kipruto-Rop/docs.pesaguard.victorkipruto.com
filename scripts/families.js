@@ -37,10 +37,7 @@ function page(file, section, title, lede, status, blocks, related) {
     path: "/" + file.replace(/index\.html$/, ""),
     section,
     title,
-<<<<<<< HEAD
     lede,
-=======
->>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
     description: lede,
     status,
     sidebar: null,
@@ -191,10 +188,7 @@ for (const [dir, label, treeStatus, leaves] of GUIDE_TREES) {
     path: `/${dir}`,
     section: label,
     title: label,
-<<<<<<< HEAD
     lede: `${label} for PesaGuard integrations.`,
-=======
->>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
     description: `${label} for PesaGuard integrations.`,
     status: treeStatus,
     sidebar: null,
@@ -211,10 +205,7 @@ for (const [dir, label, treeStatus, leaves] of GUIDE_TREES) {
       path: `/${dir}${leaf}`,
       section: label,
       title,
-<<<<<<< HEAD
       lede,
-=======
->>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
       description: lede,
       status: dir.includes("integrations") && !/M-Pesa/.test(title) ? "Planned" : "Live",
       sidebar: null,

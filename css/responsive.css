@@ -1,14 +1,5 @@
 /* Responsive behaviour: search collapses, sidebar stacks, cards tighten. */
 
-<<<<<<< HEAD
-@media (max-width: 1080px) {
-  .docs-header-links { gap: 2px; }
-  .docs-header-links a { padding: 7px 8px; }
-  .header-cta { display: none; }
-}
-
-=======
->>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
 @media (max-width: 960px) {
   .docs-shell { grid-template-columns: minmax(0, 1fr); }
 
@@ -26,11 +17,7 @@
 @media (max-width: 700px) {
   .docs-search { width: 40px; padding: 8px 10px; }
   .docs-search input, .docs-search kbd { display: none; }
-<<<<<<< HEAD
-  .docs-search svg { margin: auto; }
   .docs-brand small { display: none; }
-  .docs-hero { padding: 24px 20px; border-radius: 18px; }
-  .guarantee-grid { grid-template-columns: minmax(0, 1fr); }
 
   .docs-nav-toggle { display: flex; }
 
@@ -52,10 +39,6 @@
   .docs-header-links.is-open { display: flex; }
 
   .docs-header-links a { padding: 10px 8px; font-size: 14px; }
-=======
-  .docs-header-links { display: none; }
-  .docs-brand small { display: none; }
->>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
 
   .card-grid { grid-template-columns: minmax(0, 1fr); }
 

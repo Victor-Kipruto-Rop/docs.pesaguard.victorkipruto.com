@@ -2,12 +2,21 @@
  * Shared behaviour for the static docs tree.
  *
  * - Marks the current sidebar/header link from body[data-path].
+<<<<<<< HEAD
  * - Filters the sidebar while typing; Enter jumps to first hit.
  * - Reveal-on-scroll via IntersectionObserver (respects reduced motion).
  * - Ctrl/⌘+K focuses search; reading progress bar; TOC; copy buttons.
  * - Back-to-top button; tiny syntax tint for code blocks.
  *
  * No frameworks, no build step, file://-safe.
+=======
+ * - Filters the sidebar while typing and opens the section on "/" like MkDocs.
+ * - Reveal-on-scroll via IntersectionObserver (respects reduced motion).
+ * - Ctrl/⌘+K focuses search; Enter jumps to the first visible sidebar hit.
+ * - Copy buttons on every pre.docs-code block.
+ *
+ * No frameworks, no build step, file://-safe (fetch is only used lazily).
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
  */
 (function () {
   "use strict";
@@ -15,6 +24,7 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var path = document.body.getAttribute("data-path") || "/";
 
+<<<<<<< HEAD
   /* --- Theme toggle -------------------------------------------------------
    * The <head> inline script already applies any stored theme before paint
    * (avoids a flash of the wrong theme). This just wires the button.
@@ -55,6 +65,8 @@
     });
   }
 
+=======
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
   /* --- Current link marking ---------------------------------------------- */
 
   document.querySelectorAll(".docs-nav-group a, .docs-header-links a").forEach(function (a) {
@@ -125,6 +137,7 @@
     revealables.forEach(function (el) { el.classList.add("is-visible"); });
   }
 
+<<<<<<< HEAD
   /* --- Copy buttons + tint ----------------------------------------------- */
 
   function tint(pre) {
@@ -142,17 +155,29 @@
 
   document.querySelectorAll("pre.docs-code").forEach(function (pre) {
     try { tint(pre); } catch (e) { /* no-op */ }
+=======
+  /* --- Copy buttons on code blocks ---------------------------------------- */
+
+  document.querySelectorAll("pre.docs-code").forEach(function (pre) {
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
     var button = document.createElement("button");
     button.className = "code-copy";
     button.type = "button";
     button.textContent = "Copy";
+<<<<<<< HEAD
     button.setAttribute("aria-label", "Copy code to clipboard");
+=======
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
     button.addEventListener("click", function () {
       var text = pre.innerText.replace(/^Copy\n?/, "");
       var done = function () {
         button.textContent = "Copied";
+<<<<<<< HEAD
         button.classList.add("is-copied");
         window.setTimeout(function () { button.textContent = "Copy"; button.classList.remove("is-copied"); }, 1400);
+=======
+        window.setTimeout(function () { button.textContent = "Copy"; }, 1400);
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(done, done);
@@ -169,6 +194,7 @@
     });
     pre.insertBefore(button, pre.firstChild);
   });
+<<<<<<< HEAD
 
   /* --- Reading progress --------------------------------------------------- */
 
@@ -242,4 +268,6 @@
       }
     }
   } catch (e) { /* no-op */ }
+=======
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
 })();

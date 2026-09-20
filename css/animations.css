@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Reveal-on-scroll + premium motion. */
 
 .reveal { opacity: 0; transform: translateY(16px); transition: opacity 560ms var(--ease-out), transform 560ms var(--ease-out); }
@@ -41,6 +42,12 @@
 }
 .back-to-top[data-visible="true"] { opacity: 1; transform: none; pointer-events: auto; }
 .back-to-top:hover { transform: translateY(-2px); }
+=======
+/* Reveal-on-scroll, kept subtle; disabled under reduced motion. */
+
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity 460ms var(--ease-out), transform 460ms var(--ease-out); }
+.reveal.is-visible { opacity: 1; transform: none; }
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

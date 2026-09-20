@@ -8,6 +8,7 @@
   border: 1px solid var(--line);
   border-radius: var(--r-full);
   background: var(--paper-raised);
+<<<<<<< HEAD
   padding: 8px 8px 8px 14px;
   width: min(340px, 42vw);
   color: var(--text-faint);
@@ -17,6 +18,15 @@
 }
 
 .docs-search:focus-within { border-color: rgba(103,125,26,.5); box-shadow: 0 0 0 3px var(--lime-veil), var(--shadow-xs); }
+=======
+  padding: 8px 14px;
+  width: min(340px, 42vw);
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.docs-search:focus-within { border-color: var(--line-strong); box-shadow: var(--shadow-xs); }
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
 
 .docs-search input {
   border: 0;

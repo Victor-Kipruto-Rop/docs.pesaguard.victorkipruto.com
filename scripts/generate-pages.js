@@ -36,6 +36,7 @@ function chrome(file, page, sidebarHtml) {
   ]
     .map(([label, href]) => `<a href="${up}${href}">${label}</a>`)
     .join("\n    ");
+<<<<<<< HEAD
   const siteRoot = "https://docs.pesaguard.victorkipruto.com";
   const canonical = siteRoot + page.path;
   const ogImage = `${siteRoot}/assets/brand/og-image.png`;
@@ -49,11 +50,14 @@ function chrome(file, page, sidebarHtml) {
   const lens = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>`;
 
   const themeCss = "#f5f4ec";
+=======
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<<<<<<< HEAD
 <title>${titleText}</title>
 <meta name="description" content="${page.description}">
 <link rel="canonical" href="${canonical}">
@@ -73,6 +77,11 @@ function chrome(file, page, sidebarHtml) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="${fonts}" rel="stylesheet">
+=======
+<title>${page.title} — PesaGuard docs</title>
+<meta name="description" content="${page.description}">
+<link rel="icon" type="image/svg+xml" href="${fav}">
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
 <link rel="stylesheet" href="${up}css/variables.css">
 <link rel="stylesheet" href="${up}css/layout.css">
 <link rel="stylesheet" href="${up}css/navigation.css">
@@ -81,6 +90,7 @@ function chrome(file, page, sidebarHtml) {
 <link rel="stylesheet" href="${up}css/search.css">
 <link rel="stylesheet" href="${up}css/animations.css">
 <link rel="stylesheet" href="${up}css/responsive.css">
+<<<<<<< HEAD
 <script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="${page.path}">
@@ -92,22 +102,43 @@ function chrome(file, page, sidebarHtml) {
   <div class="header-actions"><a class="header-cta" href="${up}getting-started/quickstart.html">Quickstart <span class="arrow" aria-hidden="true">→</span></a>
   <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">${sun}</span><span class="icon-dark">${moon}</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button></div>
+=======
+</head>
+<body data-path="${page.path}">
+<a class="visually-hidden" href="#main">Skip to content</a>
+<header class="docs-header"><div class="docs-header-inner">
+  <a class="docs-brand" href="${up}index.html"><img src="${fav}" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
+  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+  <nav class="docs-header-links" aria-label="Primary">${sectionLinks}</nav>
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
 ${sidebarHtml ? `<aside class="docs-sidebar" aria-label="Section navigation">${sidebarHtml}</aside>\n` : ""}  <article class="docs-article${page.wide ? " docs-content-wide" : ""}">
+<<<<<<< HEAD
 ${page.crumbs ? `    <nav class="docs-crumbs" aria-label="Breadcrumb">${page.crumbs}</nav>\n` : ""}    <p class="docs-eyebrow">${page.section}</p>
     <h1>${page.title}${page.status ? ` <span class="status-pill" data-tone="${page.status.toLowerCase()}"><i></i>${page.status}</span>` : ""}</h1>
     <p class="docs-lede">${page.lede}</p>
 ${bodyFor(page)}
+=======
+${page.crumbs ? `    <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="${up}index.html">Docs</a><span aria-hidden="true">/</span>${page.crumbs}</nav>\n` : ""}    <p class="docs-eyebrow">${page.section}</p>
+    <h1>${page.title}${page.status ? ` <span class="status-pill" data-tone="${page.status.toLowerCase()}"><i></i>${page.status}</span>` : ""}</h1>
+    <p class="docs-lede">${page.lede}</p>
+${page.body}
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
   </article>
 </div>
 </main>
 
 <footer class="docs-footer"><div class="docs-footer-inner">
+<<<<<<< HEAD
   <span class="footer-brand">${mark}© 2026 PesaGuard</span>
   <nav aria-label="Footer"><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a> <a href="https://status.pesaguard.victorkipruto.com">Status</a> <a href="${up}security/responsible-disclosure.html">Report an issue</a></nav>
+=======
+  <span>© 2026 PesaGuard</span>
+  <nav aria-label="Footer"><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a> <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98
 </div></footer>
 
 <script src="${appjs}" defer></script>
@@ -1126,6 +1157,7 @@ for (const page of pages) {
   fs.writeFileSync(out, normalizeHrefs(chrome(out, page, page.sidebar || ""), path.relative(ROOT, out)), "utf8");
   written += 1;
 }
+<<<<<<< HEAD
 console.log(`generated ${written} pages`);
 
 /* ---------------------------------------------------------------------------
@@ -1156,3 +1188,6 @@ const urls = htmlFiles.map((full) => {
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`;
 fs.writeFileSync(path.join(ROOT, "sitemap.xml"), sitemap, "utf8");
 console.log(`sitemap.xml: ${urls.length} urls`);
+=======
+console.log(`generated ${written} pages`);
+>>>>>>> 4fc729086b56f24d3ca0019aa980812a49d2fd98

@@ -42,7 +42,13 @@ function chrome(file, page, sidebarHtml) {
   const titleText = page.section && page.section !== page.title
     ? `${page.section} · ${page.title} — PesaGuard docs`
     : `${page.title} — PesaGuard docs`;
+  const fonts = "https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,WONK@9..144,40,0;9..144,70,1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap";
+  const mark = `<span class="brand-mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 32 32" fill="none"><path fill="#d5f94e" d="M16 5l9.5 3.6v6.7c0 5.9-4 9.9-9.5 11.9-5.5-2-9.5-6-9.5-11.9V8.6L16 5z"/><path fill="#0f3127" d="M16 7.7l7.3 2.8v5c0 4.6-3.1 7.8-7.3 9.4-4.2-1.6-7.3-4.8-7.3-9.4v-5l7.3-2.8z"/><path fill="#d5f94e" d="M12 15.5l2.7 2.7 5.2-5.4 1.5 1.5-6.7 6.9-4.2-4.2L12 15.5z"/></svg></span>`;
+  const sun = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3L19 19M19 5l-1.7 1.7M6.7 17.3L5 19"/></svg>`;
+  const moon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>`;
+  const lens = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>`;
 
+  const themeCss = "#f5f4ec";
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,8 +57,8 @@ function chrome(file, page, sidebarHtml) {
 <title>${titleText}</title>
 <meta name="description" content="${page.description}">
 <link rel="canonical" href="${canonical}">
-<meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="${themeCss}" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a0f0c" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
 <meta property="og:title" content="${titleText}">
@@ -66,7 +72,7 @@ function chrome(file, page, sidebarHtml) {
 <link rel="icon" type="image/svg+xml" href="${fav}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="${fonts}" rel="stylesheet">
 <link rel="stylesheet" href="${up}css/variables.css">
 <link rel="stylesheet" href="${up}css/layout.css">
 <link rel="stylesheet" href="${up}css/navigation.css">
@@ -79,12 +85,13 @@ function chrome(file, page, sidebarHtml) {
 </head>
 <body data-path="${page.path}">
 <a class="visually-hidden" href="#main">Skip to content</a>
-<header class="docs-header"><div class="docs-header-inner">
-  <a class="docs-brand" href="${up}index.html"><img src="${fav}" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
-  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+<header class="docs-header"><div class="read-progress" aria-hidden="true"></div><div class="docs-header-inner">
+  <a class="docs-brand" href="${up}index.html">${mark}PesaGuard <small>Docs</small></a>
+  <div class="docs-search">${lens}<input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
   <nav class="docs-header-links" aria-label="Primary" id="primary-nav">${sectionLinks}</nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
-  <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+  <div class="header-actions"><a class="header-cta" href="${up}getting-started/quickstart.html">Quickstart <span class="arrow" aria-hidden="true">→</span></a>
+  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">${sun}</span><span class="icon-dark">${moon}</span></button>
+  <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button></div>
 </div></header>
 
 <main id="main">
@@ -99,8 +106,8 @@ ${bodyFor(page)}
 </main>
 
 <footer class="docs-footer"><div class="docs-footer-inner">
-  <span>© 2026 PesaGuard</span>
-  <nav aria-label="Footer"><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a> <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
+  <span class="footer-brand">${mark}© 2026 PesaGuard</span>
+  <nav aria-label="Footer"><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a> <a href="https://status.pesaguard.victorkipruto.com">Status</a> <a href="${up}security/responsible-disclosure.html">Report an issue</a></nav>
 </div></footer>
 
 <script src="${appjs}" defer></script>

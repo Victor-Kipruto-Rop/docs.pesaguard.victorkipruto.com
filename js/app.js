@@ -2,12 +2,12 @@
  * Shared behaviour for the static docs tree.
  *
  * - Marks the current sidebar/header link from body[data-path].
- * - Filters the sidebar while typing and opens the section on "/" like MkDocs.
+ * - Filters the sidebar while typing; Enter jumps to first hit.
  * - Reveal-on-scroll via IntersectionObserver (respects reduced motion).
- * - Ctrl/⌘+K focuses search; Enter jumps to the first visible sidebar hit.
- * - Copy buttons on every pre.docs-code block.
+ * - Ctrl/⌘+K focuses search; reading progress bar; TOC; copy buttons.
+ * - Back-to-top button; tiny syntax tint for code blocks.
  *
- * No frameworks, no build step, file://-safe (fetch is only used lazily).
+ * No frameworks, no build step, file://-safe.
  */
 (function () {
   "use strict";
@@ -125,18 +125,34 @@
     revealables.forEach(function (el) { el.classList.add("is-visible"); });
   }
 
-  /* --- Copy buttons on code blocks ---------------------------------------- */
+  /* --- Copy buttons + tint ----------------------------------------------- */
+
+  function tint(pre) {
+    var code = pre.querySelector("code");
+    if (!code || code.children.length) return;
+    var html = code.innerHTML
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    html = html
+      .replace(/(^|\s)(curl|GET|POST|PUT|PATCH|DELETE|export|python|node|npm)(\s|;|$)/g, '$1<span class="tok-cmd">$2</span>$3')
+      .replace(/("[^"\n]*")/g, '<span class="tok-str">$1</span>')
+      .replace(/(^|[\s:=])(-?\d[\d.,]*)/g, '$1<span class="tok-num">$2</span>')
+      .replace(/(#[^\n<]*)/g, '<span class="tok-com">$1</span>');
+    code.innerHTML = html;
+  }
 
   document.querySelectorAll("pre.docs-code").forEach(function (pre) {
+    try { tint(pre); } catch (e) { /* no-op */ }
     var button = document.createElement("button");
     button.className = "code-copy";
     button.type = "button";
     button.textContent = "Copy";
+    button.setAttribute("aria-label", "Copy code to clipboard");
     button.addEventListener("click", function () {
       var text = pre.innerText.replace(/^Copy\n?/, "");
       var done = function () {
         button.textContent = "Copied";
-        window.setTimeout(function () { button.textContent = "Copy"; }, 1400);
+        button.classList.add("is-copied");
+        window.setTimeout(function () { button.textContent = "Copy"; button.classList.remove("is-copied"); }, 1400);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(done, done);
@@ -153,4 +169,77 @@
     });
     pre.insertBefore(button, pre.firstChild);
   });
+
+  /* --- Reading progress --------------------------------------------------- */
+
+  var progress = document.querySelector(".read-progress");
+  if (progress) {
+    var tick = function () {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      var ratio = max > 0 ? (h.scrollTop / max) : 0;
+      progress.style.transform = "scaleX(" + Math.min(1, Math.max(0, ratio)) + ")";
+    };
+    document.addEventListener("scroll", tick, { passive: true });
+    window.addEventListener("resize", tick);
+    tick();
+  }
+
+  /* --- Back to top -------------------------------------------------------- */
+
+  var topBtn = document.createElement("button");
+  topBtn.className = "back-to-top";
+  topBtn.type = "button";
+  topBtn.setAttribute("aria-label", "Back to top");
+  topBtn.textContent = "↑";
+  document.body.appendChild(topBtn);
+  var onScrollTop = function () {
+    topBtn.setAttribute("data-visible", window.scrollY > 900 ? "true" : "false");
+  };
+  document.addEventListener("scroll", onScrollTop, { passive: true });
+  onScrollTop();
+  topBtn.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+  });
+
+  /* --- Table of contents -------------------------------------------------- */
+
+  try {
+    var article = document.querySelector(".docs-article");
+    var heads = article ? article.querySelectorAll("h2") : [];
+    if (article && heads.length >= 2) {
+      var toc = document.createElement("nav");
+      toc.className = "docs-toc";
+      toc.setAttribute("aria-label", "On this page");
+      var label = document.createElement("p");
+      label.textContent = "On this page";
+      toc.appendChild(label);
+      var list = document.createElement("ul");
+      var links = [];
+      heads.forEach(function (h, i) {
+        if (!h.id) h.id = "section-" + (i + 1) + "-" + h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
+        var li = document.createElement("li");
+        var a = document.createElement("a");
+        a.href = "#" + h.id;
+        a.textContent = h.textContent.trim();
+        li.appendChild(a);
+        list.appendChild(li);
+        links.push(a);
+      });
+      toc.appendChild(list);
+      article.insertBefore(toc, article.children[3] || article.firstChild);
+      if ("IntersectionObserver" in window) {
+        var spy = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (!en.isIntersecting) return;
+            var id = "#" + en.target.id;
+            links.forEach(function (a) {
+              a.classList.toggle("is-active", a.getAttribute("href") === id);
+            });
+          });
+        }, { rootMargin: "-30% 0px -60% 0px" });
+        heads.forEach(function (h) { spy.observe(h); });
+      }
+    }
+  } catch (e) { /* no-op */ }
 })();

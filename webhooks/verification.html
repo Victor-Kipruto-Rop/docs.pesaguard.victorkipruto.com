@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Webhooks · Verification — PesaGuard docs</title>
+<meta name="description" content="Verify the sender before you trust the payload: signature checks on every delivery.">
+<link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/webhooks/verification.html">
+<meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PesaGuard docs">
+<meta property="og:title" content="Webhooks · Verification — PesaGuard docs">
+<meta property="og:description" content="Verify the sender before you trust the payload: signature checks on every delivery.">
+<meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/webhooks/verification.html">
+<meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Webhooks · Verification — PesaGuard docs">
+<meta name="twitter:description" content="Verify the sender before you trust the payload: signature checks on every delivery.">
+<meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/navigation.css">
+<link rel="stylesheet" href="../css/content.css">
+<link rel="stylesheet" href="../css/code.css">
+<link rel="stylesheet" href="../css/search.css">
+<link rel="stylesheet" href="../css/animations.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+</head>
+<body data-path="/webhooks/verification.html">
+<a class="visually-hidden" href="#main">Skip to content</a>
+<header class="docs-header"><div class="docs-header-inner">
+  <a class="docs-brand" href="../index.html"><img src="../assets/brand/favicon.svg" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
+  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+  <nav class="docs-header-links" aria-label="Primary" id="primary-nav"><a href="../getting-started/">Getting started</a>
+    <a href="../concepts/">Concepts</a>
+    <a href="../api/">API</a>
+    <a href="../webhooks/">Webhooks</a>
+    <a href="../security/">Security</a>
+    <a href="../status/">Status</a></nav>
+  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
+  <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+</div></header>
+
+<main id="main">
+<div class="docs-shell">
+<aside class="docs-sidebar" aria-label="Section navigation"><div class="docs-nav-group"><p>Webhooks</p><ul>
+      <li><a href="../webhooks/index.html">Overview</a></li>
+      <li><a href="../webhooks/event-catalog.html">Event catalog</a></li>
+      <li><a href="../webhooks/verification.html">Verification</a></li>
+      <li><a href="../webhooks/retries.html">Retries</a></li>
+    </ul></div></aside>
+  <article class="docs-article">
+    <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
+          <a href="../index.html">Webhooks</a><span aria-hidden="true">/</span>
+          <span>Verification</span></nav>
+    <p class="docs-eyebrow">Webhooks</p>
+    <h1>Verification <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
+    <p class="docs-lede">Every outbound delivery is signed. Your consumer should reject any delivery whose signature does not verify — the signature is what turns an HTTP POST into a trustworthy event.</p>
+    <ol>
+      <li>Read the signature header from the delivery.</li>
+      <li>Recompute the signature over the raw body using your shared secret.</li>
+      <li>Compare with a constant-time comparison; reject on mismatch with 401.</li>
+      <li>Only then parse the body and act — and act idempotently.</li>
+    </ol>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="../webhooks/retries.html">Retries</a></li>
+      <li><a href="../concepts/idempotency.html">Idempotency</a></li>
+    </ul>
+  </article>
+</div>
+</main>
+
+<footer class="docs-footer"><div class="docs-footer-inner">
+  <span>© 2026 PesaGuard</span>
+  <nav aria-label="Footer"><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a> <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
+</div></footer>
+
+<script src="../js/app.js" defer></script>
+</body>
+</html>

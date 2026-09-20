@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API · Authentication — PesaGuard docs</title>
+<meta name="description" content="Bearer JWT authentication, the scope model, and what login returns in the design contract.">
+<link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/api/authentication.html">
+<meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PesaGuard docs">
+<meta property="og:title" content="API · Authentication — PesaGuard docs">
+<meta property="og:description" content="Bearer JWT authentication, the scope model, and what login returns in the design contract.">
+<meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/api/authentication.html">
+<meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="API · Authentication — PesaGuard docs">
+<meta name="twitter:description" content="Bearer JWT authentication, the scope model, and what login returns in the design contract.">
+<meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/navigation.css">
+<link rel="stylesheet" href="../css/content.css">
+<link rel="stylesheet" href="../css/code.css">
+<link rel="stylesheet" href="../css/search.css">
+<link rel="stylesheet" href="../css/animations.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+</head>
+<body data-path="/api/authentication.html">
+<a class="visually-hidden" href="#main">Skip to content</a>
+<header class="docs-header"><div class="docs-header-inner">
+  <a class="docs-brand" href="../index.html"><img src="../assets/brand/favicon.svg" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
+  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+  <nav class="docs-header-links" aria-label="Primary" id="primary-nav"><a href="../getting-started/">Getting started</a>
+    <a href="../concepts/">Concepts</a>
+    <a href="../api/">API</a>
+    <a href="../webhooks/">Webhooks</a>
+    <a href="../security/">Security</a>
+    <a href="../status/">Status</a></nav>
+  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
+  <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+</div></header>
+
+<main id="main">
+<div class="docs-shell">
+<aside class="docs-sidebar" aria-label="Section navigation"><div class="docs-nav-group"><p>API</p><ul>
+      <li><a href="../api/index.html">Overview</a></li>
+      <li><a href="../api/authentication.html">Authentication</a></li>
+      <li><a href="../api/pagination.html">Pagination</a></li>
+      <li><a href="../api/versioning.html">Versioning</a></li>
+      <li><a href="../api/rate-limits.html">Rate limits</a></li>
+      <li><a href="../api/idempotency.html">Idempotency</a></li>
+      <li><a href="../api/errors.html">Errors</a></li>
+    </ul></div></aside>
+  <article class="docs-article">
+    <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
+          <a href="../index.html">API</a><span aria-hidden="true">/</span>
+          <span>Authentication</span></nav>
+    <p class="docs-eyebrow">API</p>
+    <h1>Authentication <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
+    <p class="docs-lede">Server access uses bearer JWTs carrying issuer, audience and tenant claims; session access uses the dashboard's authenticated session. Tokens are scoped, expiring and rotatable.</p>
+    <div class="code-head"><span class="method">POST</span><code>/api/v1/auth/login</code></div>
+    <pre class="docs-code" data-lang="json"><code>{
+  "email": "user@example.com",
+  "password": "secret"
+}</code></pre>
+    <p>The design contract returns an access token, a refresh token, the token type, expiry, the user record and the caller's permission set (for example <code>dashboard:read</code>, <code>transactions:read</code>). Login failures return <code>401</code>; a locked account returns <code>423</code>; excessive attempts return <code>429</code>.</p>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="../concepts/tenants.html">Tenants</a></li>
+      <li><a href="../api/errors.html">Errors</a></li>
+    </ul>
+  </article>
+</div>
+</main>
+
+<footer class="docs-footer"><div class="docs-footer-inner">
+  <span>© 2026 PesaGuard</span>
+  <nav aria-label="Footer"><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a> <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
+</div></footer>
+
+<script src="../js/app.js" defer></script>
+</body>
+</html>

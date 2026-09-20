@@ -1,0 +1,10 @@
+{
+  "name": "pesaguard-docs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static build tooling for docs.pesaguard.victorkipruto.com. Serves prebuilt HTML; scripts validate links and search.",
+  "scripts": {
+    "serve": "python -m http.server 4173 --directory .",
+    "check": "node scripts/check-docs.js"
+  }
+}

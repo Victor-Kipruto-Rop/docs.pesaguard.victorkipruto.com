@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>First authenticated request — PesaGuard docs</title>
+<meta name="description" content="The bearer-token pattern PesaGuard uses, the scope model behind it, and what an unauthenticated call returns.">
+<link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/getting-started/first-request.html">
+<meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PesaGuard docs">
+<meta property="og:title" content="First authenticated request — PesaGuard docs">
+<meta property="og:description" content="The bearer-token pattern PesaGuard uses, the scope model behind it, and what an unauthenticated call returns.">
+<meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/getting-started/first-request.html">
+<meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="First authenticated request — PesaGuard docs">
+<meta name="twitter:description" content="The bearer-token pattern PesaGuard uses, the scope model behind it, and what an unauthenticated call returns.">
+<meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/navigation.css">
+<link rel="stylesheet" href="../css/content.css">
+<link rel="stylesheet" href="../css/code.css">
+<link rel="stylesheet" href="../css/search.css">
+<link rel="stylesheet" href="../css/animations.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
+</head>
+<body data-path="/getting-started/first-request.html">
+<a class="visually-hidden" href="#main">Skip to content</a>
+<header class="docs-header"><div class="docs-header-inner">
+  <a class="docs-brand" href="../index.html"><img src="../assets/brand/favicon.svg" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
+  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+  <nav class="docs-header-links" aria-label="Primary" id="primary-nav">
+    <a href="../getting-started/">Getting started</a>
+    <a href="../concepts/">Concepts</a>
+    <a href="../api/">API</a>
+    <a href="../webhooks/">Webhooks</a>
+    <a href="../security/">Security</a>
+    <a href="../status/">Status</a>
+  </nav>
+  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
+  <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+</div></header>
+
+<main id="main">
+<div class="docs-shell">
+  <aside class="docs-sidebar" aria-label="Section navigation">
+    <div class="docs-nav-group"><p>Getting started</p><ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="quickstart.html">Quickstart</a></li>
+      <li><a href="create-account.html">Create an account</a></li>
+      <li><a href="create-api-key.html">Create an API key</a></li>
+      <li><a href="first-request.html">First request</a></li>
+      <li><a href="first-transaction.html">First transaction</a></li>
+      <li><a href="test-environment.html">Test environment</a></li>
+      <li><a href="production-checklist.html">Production checklist</a></li>
+    </ul></div>
+    <div class="docs-nav-group"><p>Sections</p><ul>
+      <li><a href="../concepts/">Concepts</a></li>
+      <li><a href="../api/">API</a></li>
+      <li><a href="../webhooks/">Webhooks</a></li>
+      <li><a href="../security/">Security</a></li>
+      <li><a href="../status/">Status</a></li>
+    </ul></div>
+  </aside>
+
+  <article class="docs-article">
+    <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span><a href="index.html">Getting started</a><span aria-hidden="true">/</span><span>First request</span></nav>
+    <p class="docs-eyebrow">Getting started</p>
+    <h1>First authenticated request <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
+    <p class="docs-lede">PesaGuard uses bearer authentication. Every request carries a token; every token carries a scope, an expiry and the tenant it belongs to.</p>
+
+    <h2>The header</h2>
+    <div class="code-head"><span class="method">AUTH</span><code>Authorization</code></div>
+    <pre class="docs-code" data-lang="http"><code>Authorization: Bearer &lt;token&gt;</code></pre>
+    <p>
+      The backend validates the token's issuer, audience and tenant claims where applicable.
+      Tokens are issued per deployment by the team that runs it — see
+      <a href="create-api-key.html">Create an API key</a> for what you receive.
+    </p>
+
+    <h2>Scopes decide what a token may do</h2>
+    <p>Permissions are expressed as resource-oriented scopes, for example:</p>
+    <ul>
+      <li><code>dashboard:read</code> — operational telemetry</li>
+      <li><code>transactions:read</code> / <code>transactions:write</code> / <code>transactions:export</code></li>
+      <li><code>reconciliation:read</code> / <code>reconciliation:create</code></li>
+      <li><code>anomalies:read</code> / <code>anomalies:investigate</code></li>
+      <li><code>integrations:read</code> / <code>integrations:manage</code></li>
+      <li><code>audit:read</code>, <code>settings:read</code>, <code>settings:write</code></li>
+    </ul>
+    <p>A token grants exactly the scopes it was issued for. Anything else returns <code>403</code>; see <a href="../api/errors.html">Errors</a>.</p>
+
+    <h2>What an unauthenticated call returns</h2>
+    <pre class="docs-code" data-lang="json"><code>{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Authentication failed.",
+    "request_id": "&lt;uuid&gt;"
+  }
+}</code></pre>
+    <div class="callout" data-tone="danger">
+      <strong>There is no anonymous fallback</strong>
+      <p>When authentication fails, the request ends there. No degraded mode serves financial data without a verified identity.</p>
+    </div>
+
+    <h2>Next</h2>
+    <ul>
+      <li><a href="first-transaction.html">First transaction</a> — watch a payment become a reconciled record.</li>
+      <li><a href="../security/tenant-isolation.html">Tenant isolation</a> — how the tenant in your token bounds every query.</li>
+    </ul>
+  </article>
+</div>
+</main>
+
+<footer class="docs-footer"><div class="docs-footer-inner">
+  <span>© 2026 PesaGuard</span>
+  <nav aria-label="Footer">
+    <a href="https://pesaguard.victorkipruto.com">Product</a>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a>
+    <a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a>
+  </nav>
+</div></footer>
+
+<script src="../js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+/* Design tokens — PesaGuard editorial system.
+ * Fraunces (display serif) + Inter (UI) + JetBrains Mono (code).
+ * Paper/ink foundation with a deep forest + lime accent. */
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,WONK@9..144,40,0;9..144,70,1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+:root {
+  --ink: #0c1210;
+  --ink-soft: #141c18;
+  --paper: #f5f4ec;
+  --paper-raised: #fdfdf8;
+  --paper-sunken: #ecebe0;
+  --paper-deep: #dedccf;
+  --lime: #d5f94e;
+  --lime-deep: #677d1a;
+  --lime-ink: #47590e;
+  --lime-wash: rgba(213, 249, 78, 0.22);
+  --lime-veil: rgba(213, 249, 78, 0.1);
+  --forest: #0f3127;
+  --forest-soft: #1d4b3d;
+  --forest-mist: rgba(15, 49, 39, 0.07);
+  --signal-green: #7cc63c;
+  --signal-amber: #dd9a33;
+  --signal-red: #cf6f61;
+  --text: #0c1210;
+  --text-muted: #57625c;
+  --text-faint: #8b948c;
+  --line: #d5d8cb;
+  --line-soft: #e4e5d8;
+  --line-strong: #aab3a1;
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-full: 999px;
+  --shadow-xs: 0 1px 2px rgba(12, 18, 16, 0.07);
+  --shadow-sm: 0 8px 22px -12px rgba(12, 18, 16, 0.3);
+  --shadow-md: 0 24px 48px -28px rgba(12, 18, 16, 0.36);
+  --shadow-lift: 0 2px 4px rgba(12,18,16,.05), 0 18px 38px -22px rgba(15,49,39,.35);
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sidebar-w: 276px;
+  --header-h: 66px;
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.44, 1);
+  --header-bg: rgba(253, 253, 248, 0.88);
+  --grain-opacity: 0.5;
+  color-scheme: light;
+}
+
+/* --- Dark theme -----------------------------------------------------------
+ * Applied when the OS prefers dark AND the user has not explicitly chosen
+ * light, or when the user has explicitly chosen dark via the toggle
+ * (persisted to localStorage as data-theme on <html>). The declarations are
+ * intentionally duplicated between the media query and the explicit
+ * attribute selector — plain CSS has no mixins, and this keeps both paths
+ * trivially auditable side by side.
+ * ------------------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #0a0f0c;
+    --paper-raised: #101713;
+    --paper-sunken: #060907;
+    --paper-deep: #040705;
+    --text: #ecefe8;
+    --text-muted: #a3afa7;
+    --text-faint: #6c7871;
+    --line: #222d27;
+    --line-soft: #17201b;
+    --line-strong: #38463e;
+    --forest: #8fe3a1;
+    --forest-soft: #5fbf7d;
+    --forest-mist: rgba(143, 227, 161, 0.09);
+    --lime-ink: #d5f94e;
+    --lime-deep: #c4ec62;
+    --lime-wash: rgba(213, 249, 78, 0.14);
+    --lime-veil: rgba(213, 249, 78, 0.09);
+    --header-bg: rgba(10, 15, 12, 0.82);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 6px 18px -10px rgba(0, 0, 0, 0.55);
+    --shadow-md: 0 18px 40px -24px rgba(0, 0, 0, 0.6);
+    --shadow-lift: 0 18px 40px -20px rgba(0,0,0,.65);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0a0f0c;
+  --paper-raised: #101713;
+  --paper-sunken: #060907;
+  --paper-deep: #040705;
+  --text: #ecefe8;
+  --text-muted: #a3afa7;
+  --text-faint: #6c7871;
+  --line: #222d27;
+  --line-soft: #17201b;
+  --line-strong: #38463e;
+  --forest: #8fe3a1;
+  --forest-soft: #5fbf7d;
+  --forest-mist: rgba(143, 227, 161, 0.09);
+  --lime-ink: #d5f94e;
+  --lime-deep: #c4ec62;
+  --lime-wash: rgba(213, 249, 78, 0.14);
+  --lime-veil: rgba(213, 249, 78, 0.09);
+  --header-bg: rgba(10, 15, 12, 0.82);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 6px 18px -10px rgba(0, 0, 0, 0.55);
+  --shadow-md: 0 18px 40px -24px rgba(0, 0, 0, 0.6);
+  --shadow-lift: 0 18px 40px -20px rgba(0,0,0,.65);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 22px);
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 0.96rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-image: radial-gradient(1200px 500px at 85% -120px, var(--lime-veil), transparent 60%), radial-gradient(900px 420px at -10% 0%, var(--forest-mist), transparent 55%);
+  background-attachment: fixed;
+}
+
+:root[data-theme="dark"] body, :root:not([data-theme="light"]) body { background-image: radial-gradient(1000px 480px at 80% -140px, rgba(213,249,78,.07), transparent 60%); }
+
+a { color: var(--forest-soft); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+:root[data-theme="dark"] a, :root:not([data-theme="light"]) a { color: var(--forest); }
+a:hover { color: var(--lime-ink); }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+::selection { background: var(--lime); color: #0c1210; }
+
+:focus-visible { outline: 2px solid var(--lime-deep); outline-offset: 3px; border-radius: 4px; }

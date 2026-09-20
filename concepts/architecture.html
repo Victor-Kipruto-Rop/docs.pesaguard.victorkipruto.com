@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concepts · Architecture — PesaGuard docs</title>
+<meta name="description" content="The services behind PesaGuard: Flask and SQLAlchemy API, Postgres store, Redis and RQ workers, Kafka transport, Alembic migrations.">
+<link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/concepts/architecture.html">
+<meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PesaGuard docs">
+<meta property="og:title" content="Concepts · Architecture — PesaGuard docs">
+<meta property="og:description" content="The services behind PesaGuard: Flask and SQLAlchemy API, Postgres store, Redis and RQ workers, Kafka transport, Alembic migrations.">
+<meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/concepts/architecture.html">
+<meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Concepts · Architecture — PesaGuard docs">
+<meta name="twitter:description" content="The services behind PesaGuard: Flask and SQLAlchemy API, Postgres store, Redis and RQ workers, Kafka transport, Alembic migrations.">
+<meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/navigation.css">
+<link rel="stylesheet" href="../css/content.css">
+<link rel="stylesheet" href="../css/code.css">
+<link rel="stylesheet" href="../css/search.css">
+<link rel="stylesheet" href="../css/animations.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+</head>
+<body data-path="/concepts/architecture.html">
+<a class="visually-hidden" href="#main">Skip to content</a>
+<header class="docs-header"><div class="docs-header-inner">
+  <a class="docs-brand" href="../index.html"><img src="../assets/brand/favicon.svg" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
+  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+  <nav class="docs-header-links" aria-label="Primary" id="primary-nav"><a href="../getting-started/">Getting started</a>
+    <a href="../concepts/">Concepts</a>
+    <a href="../api/">API</a>
+    <a href="../webhooks/">Webhooks</a>
+    <a href="../security/">Security</a>
+    <a href="../status/">Status</a></nav>
+  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
+  <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+</div></header>
+
+<main id="main">
+<div class="docs-shell">
+<aside class="docs-sidebar" aria-label="Section navigation"><div class="docs-nav-group"><p>Concepts</p><ul>
+      <li><a href="../concepts/index.html">Overview</a></li>
+      <li><a href="../concepts/architecture.html">Architecture</a></li>
+      <li><a href="../concepts/reconciliation.html">Reconciliation</a></li>
+      <li><a href="../concepts/transaction-lifecycle.html">Transaction lifecycle</a></li>
+      <li><a href="../concepts/idempotency.html">Idempotency</a></li>
+      <li><a href="../concepts/tenants.html">Tenants</a></li>
+      <li><a href="../concepts/anomalies.html">Anomalies</a></li>
+      <li><a href="../concepts/audit-trails.html">Audit trails</a></li>
+    </ul></div></aside>
+  <article class="docs-article">
+    <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
+          <a href="../index.html">Concepts</a><span aria-hidden="true">/</span>
+          <span>Architecture</span></nav>
+    <p class="docs-eyebrow">Concepts</p>
+    <h1>Architecture <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
+    <p class="docs-lede">PesaGuard runs a Flask and SQLAlchemy backend on PostgreSQL, with Redis and RQ for asynchronous work, Kafka for event transport, and Alembic for schema migration.</p>
+    <table>
+      <thead><tr><th>Component</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td>Flask + SQLAlchemy API</td><td>Operational and dashboard endpoints; publishes its own OpenAPI document.</td></tr>
+        <tr><td>PostgreSQL</td><td>Production store. Tenant predicates are enforced here, not in application code.</td></tr>
+        <tr><td>Redis + RQ</td><td>Asynchronous work and bounded retries.</td></tr>
+        <tr><td>Kafka</td><td>Event transport between ingestion, reconciliation and notification stages.</td></tr>
+        <tr><td>Alembic</td><td>Schema migrations with deliberate compatibility paths.</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li><strong>Durability first</strong> — work is acknowledged only after the required durable state or idempotency record is written.</li>
+      <li><strong>Safe failure</strong> — transient failures retry with bounded backoff; exhausted work is dead-lettered, never discarded.</li>
+      <li><strong>Evidence by default</strong> — correlation IDs, structured logs, metrics and append-only audit events explain what happened.</li>
+    </ul>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="../concepts/tenants.html">Tenants</a></li>
+      <li><a href="../concepts/idempotency.html">Idempotency</a></li>
+      <li><a href="../environments/index.html">Environments</a></li>
+    </ul>
+  </article>
+</div>
+</main>
+
+<footer class="docs-footer"><div class="docs-footer-inner">
+  <span>© 2026 PesaGuard</span>
+  <nav aria-label="Footer"><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a> <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
+</div></footer>
+
+<script src="../js/app.js" defer></script>
+</body>
+</html>

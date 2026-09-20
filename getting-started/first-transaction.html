@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting started · First transaction — PesaGuard docs</title>
+<meta name="description" content="Follow one M-Pesa payment from callback to matched record, and what each state means on the way.">
+<link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/getting-started/first-transaction.html">
+<meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PesaGuard docs">
+<meta property="og:title" content="Getting started · First transaction — PesaGuard docs">
+<meta property="og:description" content="Follow one M-Pesa payment from callback to matched record, and what each state means on the way.">
+<meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/getting-started/first-transaction.html">
+<meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Getting started · First transaction — PesaGuard docs">
+<meta name="twitter:description" content="Follow one M-Pesa payment from callback to matched record, and what each state means on the way.">
+<meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/navigation.css">
+<link rel="stylesheet" href="../css/content.css">
+<link rel="stylesheet" href="../css/code.css">
+<link rel="stylesheet" href="../css/search.css">
+<link rel="stylesheet" href="../css/animations.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+</head>
+<body data-path="/getting-started/first-transaction.html">
+<a class="visually-hidden" href="#main">Skip to content</a>
+<header class="docs-header"><div class="docs-header-inner">
+  <a class="docs-brand" href="../index.html"><img src="../assets/brand/favicon.svg" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
+  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+  <nav class="docs-header-links" aria-label="Primary" id="primary-nav"><a href="../getting-started/">Getting started</a>
+    <a href="../concepts/">Concepts</a>
+    <a href="../api/">API</a>
+    <a href="../webhooks/">Webhooks</a>
+    <a href="../security/">Security</a>
+    <a href="../status/">Status</a></nav>
+  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
+  <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+</div></header>
+
+<main id="main">
+<div class="docs-shell">
+<aside class="docs-sidebar" aria-label="Section navigation"><div class="docs-nav-group"><p>Getting started</p><ul>
+      <li><a href="../getting-started/index.html">Overview</a></li>
+      <li><a href="../getting-started/quickstart.html">Quickstart</a></li>
+      <li><a href="../getting-started/create-account.html">Create an account</a></li>
+      <li><a href="../getting-started/create-api-key.html">Create an API key</a></li>
+      <li><a href="../getting-started/first-request.html">First request</a></li>
+      <li><a href="../getting-started/first-transaction.html">First transaction</a></li>
+      <li><a href="../getting-started/test-environment.html">Test environment</a></li>
+      <li><a href="../getting-started/production-checklist.html">Production checklist</a></li>
+    </ul></div></aside>
+  <article class="docs-article">
+    <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
+          <a href="../index.html">Getting started</a><span aria-hidden="true">/</span>
+          <span>First transaction</span></nav>
+    <p class="docs-eyebrow">Getting started</p>
+    <h1>First transaction <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
+    <p class="docs-lede">A payment becomes a PesaGuard record in three steps: the callback is received and validated, the match is decided against your internal records, and the outcome keeps its evidence.</p>
+    <h2>1 · The callback arrives</h2>
+    <p>Safaricom Daraja delivers a callback to your deployment. Ingestion validates the payload, normalizes it into the canonical payment-event shape, and de-duplicates it on write.</p>
+    <ul>
+      <li>Invalid payloads are quarantined with the reason — never dropped silently.</li>
+      <li>A provider retry of the same event is rejected by idempotency, not processed twice.</li>
+    </ul>
+    <h2>2 · The match is decided</h2>
+    <p>The event is compared against internal records on amount, reference and a timestamp tolerance. Deterministic rules mean the same inputs always produce the same outcome.</p>
+    <ul>
+      <li>Matched — the record carries the evidence that produced the decision.</li>
+      <li>Difference found — an exception is raised with the delta shown.</li>
+      <li>No candidate — the payment queues as unmatched with the reason attached.</li>
+    </ul>
+    <h2>3 · The outcome is recorded</h2>
+    <p>Every outcome is written to the append-only audit trail with its actor and tenant. A reviewer resolving an exception records the decision and the reason, which keeps month-end explainable.</p>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="../concepts/reconciliation.html">Reconciliation concept</a></li>
+      <li><a href="../concepts/idempotency.html">Idempotency</a></li>
+      <li><a href="../concepts/audit-trails.html">Audit trails</a></li>
+    </ul>
+  </article>
+</div>
+</main>
+
+<footer class="docs-footer"><div class="docs-footer-inner">
+  <span>© 2026 PesaGuard</span>
+  <nav aria-label="Footer"><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a> <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
+</div></footer>
+
+<script src="../js/app.js" defer></script>
+</body>
+</html>

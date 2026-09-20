@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Production checklist — PesaGuard docs</title>
+<meta name="description" content="What changes between the staging variant and a production PesaGuard deployment: required settings, secrets handling, proxy and validation.">
+<link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/getting-started/production-checklist.html">
+<meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PesaGuard docs">
+<meta property="og:title" content="Production checklist — PesaGuard docs">
+<meta property="og:description" content="What changes between the staging variant and a production PesaGuard deployment: required settings, secrets handling, proxy and validation.">
+<meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/getting-started/production-checklist.html">
+<meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Production checklist — PesaGuard docs">
+<meta name="twitter:description" content="What changes between the staging variant and a production PesaGuard deployment: required settings, secrets handling, proxy and validation.">
+<meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/navigation.css">
+<link rel="stylesheet" href="../css/content.css">
+<link rel="stylesheet" href="../css/code.css">
+<link rel="stylesheet" href="../css/search.css">
+<link rel="stylesheet" href="../css/animations.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
+</head>
+<body data-path="/getting-started/production-checklist.html">
+<a class="visually-hidden" href="#main">Skip to content</a>
+<header class="docs-header"><div class="docs-header-inner">
+  <a class="docs-brand" href="../index.html"><img src="../assets/brand/favicon.svg" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
+  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+  <nav class="docs-header-links" aria-label="Primary" id="primary-nav">
+    <a href="../getting-started/">Getting started</a>
+    <a href="../concepts/">Concepts</a>
+    <a href="../api/">API</a>
+    <a href="../webhooks/">Webhooks</a>
+    <a href="../security/">Security</a>
+    <a href="../status/">Status</a>
+  </nav>
+  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
+  <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+</div></header>
+
+<main id="main">
+<div class="docs-shell">
+  <aside class="docs-sidebar" aria-label="Section navigation">
+    <div class="docs-nav-group"><p>Getting started</p><ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="quickstart.html">Quickstart</a></li>
+      <li><a href="create-account.html">Create an account</a></li>
+      <li><a href="create-api-key.html">Create an API key</a></li>
+      <li><a href="first-request.html">First request</a></li>
+      <li><a href="first-transaction.html">First transaction</a></li>
+      <li><a href="test-environment.html">Test environment</a></li>
+      <li><a href="production-checklist.html">Production checklist</a></li>
+    </ul></div>
+  </aside>
+
+  <article class="docs-article">
+    <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span><a href="index.html">Getting started</a><span aria-hidden="true">/</span><span>Production checklist</span></nav>
+    <p class="docs-eyebrow">Getting started</p>
+    <h1>Production checklist <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
+    <p class="docs-lede">The base production variant requires these settings before <code>up -d --build</code>. This page mirrors the infrastructure README; the README remains the operational authority.</p>
+
+    <h2>Required settings</h2>
+    <table>
+      <thead><tr><th>Setting</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>POSTGRES_USER</code> / <code>POSTGRES_DB</code> / <code>POSTGRES_PASSWORD</code></td><td>Production database identity and credentials.</td></tr>
+        <tr><td><code>DATABASE_URL_DOCKER</code></td><td>Container-reachable connection URL. Write complete URLs; the backend does not expand <code>${...}</code> references.</td></tr>
+        <tr><td><code>PESAGUARD_API_URL</code></td><td>Public base URL used by the status strip and integrations.</td></tr>
+        <tr><td><code>JWT_SECRET_KEY</code></td><td>Token signing. Treat rotation as a planned operation.</td></tr>
+        <tr><td><code>KAFKA_BOOTSTRAP_SERVERS_DOCKER</code></td><td>Broker address reachable from containers, not host localhost.</td></tr>
+        <tr><td><code>REDIS_URL_DOCKER</code></td><td>Redis connection for asynchronous work.</td></tr>
+        <tr><td><code>PESAGUARD_BIND_HOST_DOCKER</code></td><td>Bind address for the API container.</td></tr>
+        <tr><td><code>API_SERVER_NAME</code> (AWS/tunnel overlays)</td><td>The hostname nginx serves — a hostname, not a URL.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Before you go live</h2>
+    <ol>
+      <li>Validate the merged configuration with <code>config --quiet</code> — never with plain <code>config</code>, which can print resolved secrets.</li>
+      <li>Review actual published ports. The AWS overlay's <code>ports: []</code> does not necessarily remove base-file published ports during Compose merging.</li>
+      <li>Keep the root <code>.env</code> out of images and out of git. Merge new keys into existing deployments; do not replace the file.</li>
+      <li>Confirm the reverse proxy passes <code>X-Forwarded-</code> headers and that TLS terminates in front of the API.</li>
+      <li>Check <a href="../status/">status</a> probes answer after rollout, and that the audit trail records the rollout operator.</li>
+    </ol>
+
+    <div class="callout" data-tone="danger">
+      <strong>Not a certification</strong>
+      <p>This checklist mirrors repository documentation. It does not certify production suitability of network or security controls; review exposure against your own environment before go-live.</p>
+    </div>
+  </article>
+</div>
+</main>
+
+<footer class="docs-footer"><div class="docs-footer-inner">
+  <span>© 2026 PesaGuard</span>
+  <nav aria-label="Footer"><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a> <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
+</div></footer>
+
+<script src="../js/app.js" defer></script>
+</body>
+</html>

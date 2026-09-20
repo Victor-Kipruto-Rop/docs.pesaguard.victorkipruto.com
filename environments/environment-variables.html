@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Environments · Environment variables — PesaGuard docs</title>
+<meta name="description" content="Deployment settings PesaGuard reads: database, Redis, Kafka, JWT and the public API URL.">
+<link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/environments/environment-variables.html">
+<meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PesaGuard docs">
+<meta property="og:title" content="Environments · Environment variables — PesaGuard docs">
+<meta property="og:description" content="Deployment settings PesaGuard reads: database, Redis, Kafka, JWT and the public API URL.">
+<meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/environments/environment-variables.html">
+<meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Environments · Environment variables — PesaGuard docs">
+<meta name="twitter:description" content="Deployment settings PesaGuard reads: database, Redis, Kafka, JWT and the public API URL.">
+<meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/navigation.css">
+<link rel="stylesheet" href="../css/content.css">
+<link rel="stylesheet" href="../css/code.css">
+<link rel="stylesheet" href="../css/search.css">
+<link rel="stylesheet" href="../css/animations.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+</head>
+<body data-path="/environments/environment-variables.html">
+<a class="visually-hidden" href="#main">Skip to content</a>
+<header class="docs-header"><div class="docs-header-inner">
+  <a class="docs-brand" href="../index.html"><img src="../assets/brand/favicon.svg" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
+  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+  <nav class="docs-header-links" aria-label="Primary" id="primary-nav"><a href="../getting-started/">Getting started</a>
+    <a href="../concepts/">Concepts</a>
+    <a href="../api/">API</a>
+    <a href="../webhooks/">Webhooks</a>
+    <a href="../security/">Security</a>
+    <a href="../status/">Status</a></nav>
+  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
+  <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+</div></header>
+
+<main id="main">
+<div class="docs-shell">
+  <article class="docs-article">
+    <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
+          <a href="../index.html">Environments</a><span aria-hidden="true">/</span>
+          <span>Environment variables</span></nav>
+    <p class="docs-eyebrow">Environments</p>
+    <h1>Environment variables <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
+    <p class="docs-lede">These settings live in the ignored root .env — never in images, never in git.</p>
+    <table>
+      <thead><tr><th>Variable</th><th>Used by</th></tr></thead>
+      <tbody>
+        <tr><td><code>POSTGRES_USER</code> / <code>POSTGRES_DB</code> / <code>POSTGRES_PASSWORD</code></td><td>Base and staging variants.</td></tr>
+        <tr><td><code>DATABASE_URL_DOCKER</code></td><td>Base variant; container-reachable complete URL.</td></tr>
+        <tr><td><code>PESAGUARD_API_URL</code></td><td>Public base URL for status probes and integrations.</td></tr>
+        <tr><td><code>JWT_SECRET_KEY</code></td><td>Token signing.</td></tr>
+        <tr><td><code>KAFKA_BOOTSTRAP_SERVERS_DOCKER</code> / <code>REDIS_URL_DOCKER</code></td><td>Base variant brokers.</td></tr>
+        <tr><td><code>KAFKA_BOOTSTRAP_SERVERS_FULL</code> / <code>KAFKA_ADVERTISED_LISTENERS_FULL</code></td><td>Full variant (Kafka, not Redpanda).</td></tr>
+        <tr><td><code>STAGING_POSTGRES_DB</code> / <code>STAGING_KAFKA_ADVERTISED_LISTENERS</code></td><td>Staging variant.</td></tr>
+        <tr><td><code>API_SERVER_NAME</code></td><td>AWS/tunnel overlays; a hostname, not a URL.</td></tr>
+        <tr><td><code>CLOUDFLARE_TUNNEL_TOKEN</code></td><td>Tunnel overlay only.</td></tr>
+      </tbody>
+    </table>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="../environments/index.html">Environments</a></li>
+      <li><a href="../getting-started/test-environment.html">Test environment</a></li>
+    </ul>
+  </article>
+</div>
+</main>
+
+<footer class="docs-footer"><div class="docs-footer-inner">
+  <span>© 2026 PesaGuard</span>
+  <nav aria-label="Footer"><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a> <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
+</div></footer>
+
+<script src="../js/app.js" defer></script>
+</body>
+</html>

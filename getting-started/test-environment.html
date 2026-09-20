@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test environment — PesaGuard docs</title>
+<meta name="description" content="The staging deployment variant: its own database and Kafka listeners, and how to validate configuration without leaking secrets.">
+<link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/getting-started/test-environment.html">
+<meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PesaGuard docs">
+<meta property="og:title" content="Test environment — PesaGuard docs">
+<meta property="og:description" content="The staging deployment variant: its own database and Kafka listeners, and how to validate configuration without leaking secrets.">
+<meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/getting-started/test-environment.html">
+<meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Test environment — PesaGuard docs">
+<meta name="twitter:description" content="The staging deployment variant: its own database and Kafka listeners, and how to validate configuration without leaking secrets.">
+<meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/navigation.css">
+<link rel="stylesheet" href="../css/content.css">
+<link rel="stylesheet" href="../css/code.css">
+<link rel="stylesheet" href="../css/search.css">
+<link rel="stylesheet" href="../css/animations.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
+</head>
+<body data-path="/getting-started/test-environment.html">
+<a class="visually-hidden" href="#main">Skip to content</a>
+<header class="docs-header"><div class="docs-header-inner">
+  <a class="docs-brand" href="../index.html"><img src="../assets/brand/favicon.svg" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
+  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+  <nav class="docs-header-links" aria-label="Primary" id="primary-nav">
+    <a href="../getting-started/">Getting started</a>
+    <a href="../concepts/">Concepts</a>
+    <a href="../api/">API</a>
+    <a href="../webhooks/">Webhooks</a>
+    <a href="../security/">Security</a>
+    <a href="../status/">Status</a>
+  </nav>
+  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
+  <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+</div></header>
+
+<main id="main">
+<div class="docs-shell">
+  <aside class="docs-sidebar" aria-label="Section navigation">
+    <div class="docs-nav-group"><p>Getting started</p><ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="quickstart.html">Quickstart</a></li>
+      <li><a href="create-account.html">Create an account</a></li>
+      <li><a href="create-api-key.html">Create an API key</a></li>
+      <li><a href="first-request.html">First request</a></li>
+      <li><a href="first-transaction.html">First transaction</a></li>
+      <li><a href="test-environment.html">Test environment</a></li>
+      <li><a href="production-checklist.html">Production checklist</a></li>
+    </ul></div>
+  </aside>
+
+  <article class="docs-article">
+    <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span><a href="index.html">Getting started</a><span aria-hidden="true">/</span><span>Test environment</span></nav>
+    <p class="docs-eyebrow">Getting started</p>
+    <h1>Test environment <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
+    <p class="docs-lede">The staging variant is a real deployment with its own database, Redis and Kafka listeners — not a mocked sandbox. You test against the same reconciliation behaviour you will run in production.</p>
+
+    <h2>What staging requires</h2>
+    <p>The <code>docker-compose.staging.yml</code> overlay requires its own settings so staging can never collide with production state:</p>
+    <ul>
+      <li><code>POSTGRES_USER</code>, <code>POSTGRES_PASSWORD</code> — staging-only credentials</li>
+      <li><code>STAGING_POSTGRES_DB</code> — a separate database name</li>
+      <li><code>STAGING_KAFKA_ADVERTISED_LISTENERS</code> — separate broker identity</li>
+    </ul>
+    <p>Configuration comes from the repository-root <code>.env</code>, which is git-ignored. Compose has no top-level <code>env_file</code>; the launcher passes <code>--env-file</code> for interpolation and per-service env files for container variables.</p>
+
+    <h2>Validate without leaking secrets</h2>
+    <div class="code-head"><span class="method">SHELL</span><code>configure.py</code></div>
+    <pre class="docs-code" data-lang="bash"><code>python infra/configure.py --env-file .env.staging compose -- \
+  -f infra/docker/docker-compose.staging.yml config --quiet</code></pre>
+    <p><code>--quiet</code> validates the merged configuration and prints nothing. Plain <code>config</code> without it can render resolved credentials into your terminal — avoid that.</p>
+
+    <h2>Bring it up</h2>
+    <pre class="docs-code" data-lang="bash"><code>python infra/configure.py --env-file .env.staging compose -- \
+  -f infra/docker/docker-compose.staging.yml up -d --build</code></pre>
+    <p>Then confirm health as in the <a href="quickstart.html">quickstart</a>, against the staging value of <code>PESAGUARD_API_URL</code>.</p>
+
+    <div class="callout" data-tone="warn">
+      <strong>Changing init variables does not migrate state</strong>
+      <p>Changing Postgres initialization variables does not rename existing databases or rotate passwords in existing volumes. Treat credential changes as deliberate operations with a recovery path.</p>
+    </div>
+
+    <p>Next: <a href="production-checklist.html">Production checklist</a> and the full <a href="../environments/environment-variables.html">environment variables</a> reference.</p>
+  </article>
+</div>
+</main>
+
+<footer class="docs-footer"><div class="docs-footer-inner">
+  <span>© 2026 PesaGuard</span>
+  <nav aria-label="Footer"><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a> <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
+</div></footer>
+
+<script src="../js/app.js" defer></script>
+</body>
+</html>

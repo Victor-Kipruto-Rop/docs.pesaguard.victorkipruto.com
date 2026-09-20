@@ -1,0 +1,155 @@
+/* Article typography, status pills, tables, callouts, cards. */
+
+.docs-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  font: 500 12px / 1.4 var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--lime-deep);
+}
+
+.docs-eyebrow::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.docs-article h1 {
+  font-size: clamp(2rem, 1.3rem + 3vw, 3.2rem);
+  line-height: 1.04;
+  letter-spacing: -0.045em;
+  margin: 0 0 16px;
+}
+
+.docs-lede { font-size: 1.08rem; line-height: 1.65; color: var(--text-muted); max-width: 58ch; }
+
+.docs-article h2 {
+  font-size: 1.4rem;
+  letter-spacing: -0.02em;
+  margin: 44px 0 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.docs-article h3 { font-size: 1.08rem; margin: 28px 0 8px; }
+.docs-article p { margin: 0 0 14px; }
+.docs-article ul, .docs-article ol { margin: 0 0 16px; padding-left: 22px; }
+.docs-article li { margin-bottom: 6px; }
+.docs-article li::marker { color: var(--lime-deep); }
+.docs-article small { color: var(--text-faint); }
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--line);
+  background: var(--paper-raised);
+  font: 600 11px / 1.5 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  vertical-align: middle;
+}
+
+.status-pill i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+.status-pill[data-tone="live"] { color: var(--lime-ink); border-color: rgba(110, 131, 29, 0.35); background: var(--lime-veil); }
+.status-pill[data-tone="live"] i { background: var(--signal-green); }
+.status-pill[data-tone="draft"] { color: #3d7ea6; border-color: rgba(116, 174, 207, 0.45); }
+.status-pill[data-tone="planned"] { color: #a8641c; border-color: rgba(229, 166, 60, 0.5); }
+
+.docs-article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0 26px;
+  font-size: 13.5px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--paper-raised);
+}
+
+.docs-article th, .docs-article td {
+  text-align: left;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: top;
+}
+
+.docs-article tr:last-child th, .docs-article tr:last-child td { border-bottom: 0; }
+
+.docs-article th {
+  font: 600 11px / 1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  background: var(--paper-sunken);
+}
+
+.docs-article td code, .docs-article p code, .docs-article li code {
+  font: 500 0.86em / 1.5 var(--font-mono);
+  background: var(--paper-sunken);
+  border: 1px solid var(--line-soft);
+  border-radius: 5px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+.callout {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--lime-deep);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  background: var(--paper-raised);
+  padding: 14px 18px;
+  margin: 18px 0 26px;
+  font-size: 13.5px;
+}
+
+.callout[data-tone="warn"] { border-left-color: var(--signal-amber); }
+.callout[data-tone="danger"] { border-left-color: var(--signal-red); }
+.callout[data-tone="info"] { border-left-color: var(--forest); }
+
+.callout strong:first-child {
+  display: block;
+  font: 600 11px / 1.4 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 4px;
+}
+
+.callout p:last-child { margin-bottom: 0; }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+  margin: 22px 0 30px;
+}
+
+.card {
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--paper-raised);
+  padding: 18px 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 140ms var(--ease-out), box-shadow 140ms var(--ease-out), transform 140ms var(--ease-out);
+}
+
+a.card:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.card h3 { margin: 0 0 6px; font-size: 15px; }
+.card p { margin: 0; font-size: 13px; color: var(--text-muted); }
+.card .go { font: 600 12px / 1.5 var(--font-mono); color: var(--lime-deep); display: block; margin-top: 10px; }

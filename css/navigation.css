@@ -1,0 +1,45 @@
+/* Sidebar navigation and breadcrumbs. */
+
+.docs-nav-group { margin-bottom: 22px; }
+
+.docs-nav-group > p {
+  margin: 0 0 6px;
+  font: 600 11px / 1.4 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.docs-nav-group ul { list-style: none; margin: 0; padding: 0; }
+
+.docs-nav-group a {
+  display: block;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+}
+
+.docs-nav-group a:hover { color: var(--text); background: var(--paper-sunken); }
+
+.docs-nav-group a[aria-current="page"] {
+  color: var(--text);
+  font-weight: 700;
+  background: var(--paper-raised);
+  border-left-color: var(--lime-deep);
+}
+
+.docs-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  font: 500 12px / 1.5 var(--font-mono);
+  color: var(--text-faint);
+  margin: 0 0 20px;
+}
+
+.docs-crumbs a { color: var(--text-muted); text-decoration: none; }
+.docs-crumbs a:hover { color: var(--text); }
+.docs-crumbs span[aria-hidden="true"] { opacity: 0.55; }

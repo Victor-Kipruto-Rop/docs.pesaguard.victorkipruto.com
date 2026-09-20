@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concepts · Transaction lifecycle — PesaGuard docs</title>
+<meta name="description" content="The states a payment moves through from callback to reconciled record, and what each state tells your team.">
+<link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/concepts/transaction-lifecycle.html">
+<meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PesaGuard docs">
+<meta property="og:title" content="Concepts · Transaction lifecycle — PesaGuard docs">
+<meta property="og:description" content="The states a payment moves through from callback to reconciled record, and what each state tells your team.">
+<meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/concepts/transaction-lifecycle.html">
+<meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Concepts · Transaction lifecycle — PesaGuard docs">
+<meta name="twitter:description" content="The states a payment moves through from callback to reconciled record, and what each state tells your team.">
+<meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/navigation.css">
+<link rel="stylesheet" href="../css/content.css">
+<link rel="stylesheet" href="../css/code.css">
+<link rel="stylesheet" href="../css/search.css">
+<link rel="stylesheet" href="../css/animations.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+</head>
+<body data-path="/concepts/transaction-lifecycle.html">
+<a class="visually-hidden" href="#main">Skip to content</a>
+<header class="docs-header"><div class="docs-header-inner">
+  <a class="docs-brand" href="../index.html"><img src="../assets/brand/favicon.svg" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
+  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+  <nav class="docs-header-links" aria-label="Primary" id="primary-nav"><a href="../getting-started/">Getting started</a>
+    <a href="../concepts/">Concepts</a>
+    <a href="../api/">API</a>
+    <a href="../webhooks/">Webhooks</a>
+    <a href="../security/">Security</a>
+    <a href="../status/">Status</a></nav>
+  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
+  <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+</div></header>
+
+<main id="main">
+<div class="docs-shell">
+<aside class="docs-sidebar" aria-label="Section navigation"><div class="docs-nav-group"><p>Concepts</p><ul>
+      <li><a href="../concepts/index.html">Overview</a></li>
+      <li><a href="../concepts/architecture.html">Architecture</a></li>
+      <li><a href="../concepts/reconciliation.html">Reconciliation</a></li>
+      <li><a href="../concepts/transaction-lifecycle.html">Transaction lifecycle</a></li>
+      <li><a href="../concepts/idempotency.html">Idempotency</a></li>
+      <li><a href="../concepts/tenants.html">Tenants</a></li>
+      <li><a href="../concepts/anomalies.html">Anomalies</a></li>
+      <li><a href="../concepts/audit-trails.html">Audit trails</a></li>
+    </ul></div></aside>
+  <article class="docs-article">
+    <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
+          <a href="../index.html">Concepts</a><span aria-hidden="true">/</span>
+          <span>Transaction lifecycle</span></nav>
+    <p class="docs-eyebrow">Concepts</p>
+    <h1>Transaction lifecycle <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
+    <p class="docs-lede">Every payment moves through a small set of states. The state names what has been proven so far — and the next state is only reached when its precondition holds.</p>
+    <table>
+      <thead><tr><th>State</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Received</td><td>A callback arrived and passed validation; duplicates were rejected on write.</td></tr>
+        <tr><td>Matched</td><td>A deterministic pairing exists against an internal record, with evidence retained.</td></tr>
+        <tr><td>Unmatched</td><td>No internal candidate was found; the payment queues with the reason.</td></tr>
+        <tr><td>Exception</td><td>A difference exists — amount, reference or tolerance — and awaits review.</td></tr>
+        <tr><td>Resolved</td><td>A reviewer decided with a written reason; the decision is in the audit trail.</td></tr>
+      </tbody>
+    </table>
+    <h2>Related</h2>
+    <ul>
+      <li><a href="../concepts/reconciliation.html">Reconciliation</a></li>
+      <li><a href="../api/errors.html">Errors</a></li>
+    </ul>
+  </article>
+</div>
+</main>
+
+<footer class="docs-footer"><div class="docs-footer-inner">
+  <span>© 2026 PesaGuard</span>
+  <nav aria-label="Footer"><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a> <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
+</div></footer>
+
+<script src="../js/app.js" defer></script>
+</body>
+</html>

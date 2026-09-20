@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create an API key — PesaGuard docs</title>
+<meta name="description" content="What a PesaGuard credential carries: explicit scopes, expiry, rotation metadata, and hashed storage.">
+<link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/getting-started/create-api-key.html">
+<meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PesaGuard docs">
+<meta property="og:title" content="Create an API key — PesaGuard docs">
+<meta property="og:description" content="What a PesaGuard credential carries: explicit scopes, expiry, rotation metadata, and hashed storage.">
+<meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/getting-started/create-api-key.html">
+<meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Create an API key — PesaGuard docs">
+<meta name="twitter:description" content="What a PesaGuard credential carries: explicit scopes, expiry, rotation metadata, and hashed storage.">
+<meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
+<link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/navigation.css">
+<link rel="stylesheet" href="../css/content.css">
+<link rel="stylesheet" href="../css/code.css">
+<link rel="stylesheet" href="../css/search.css">
+<link rel="stylesheet" href="../css/animations.css">
+<link rel="stylesheet" href="../css/responsive.css">
+<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
+</head>
+<body data-path="/getting-started/create-api-key.html">
+<a class="visually-hidden" href="#main">Skip to content</a>
+<header class="docs-header"><div class="docs-header-inner">
+  <a class="docs-brand" href="../index.html"><img src="../assets/brand/favicon.svg" alt="" width="26" height="26">PesaGuard <small>Docs</small></a>
+  <div class="docs-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Search…" aria-label="Search documentation"><kbd>Ctrl K</kbd></div>
+  <nav class="docs-header-links" aria-label="Primary" id="primary-nav">
+    <a href="../getting-started/">Getting started</a>
+    <a href="../concepts/">Concepts</a>
+    <a href="../api/">API</a>
+    <a href="../webhooks/">Webhooks</a>
+    <a href="../security/">Security</a>
+    <a href="../status/">Status</a>
+  </nav>
+  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
+  <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
+</div></header>
+
+<main id="main">
+<div class="docs-shell">
+  <aside class="docs-sidebar" aria-label="Section navigation">
+    <div class="docs-nav-group"><p>Getting started</p><ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="quickstart.html">Quickstart</a></li>
+      <li><a href="create-account.html">Create an account</a></li>
+      <li><a href="create-api-key.html">Create an API key</a></li>
+      <li><a href="first-request.html">First request</a></li>
+      <li><a href="first-transaction.html">First transaction</a></li>
+      <li><a href="test-environment.html">Test environment</a></li>
+      <li><a href="production-checklist.html">Production checklist</a></li>
+    </ul></div>
+    <div class="docs-nav-group"><p>Sections</p><ul>
+      <li><a href="../concepts/">Concepts</a></li>
+      <li><a href="../api/">API</a></li>
+      <li><a href="../webhooks/">Webhooks</a></li>
+      <li><a href="../security/">Security</a></li>
+      <li><a href="../status/">Status</a></li>
+    </ul></div>
+  </aside>
+
+  <article class="docs-article">
+    <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span><a href="index.html">Getting started</a><span aria-hidden="true">/</span><span>Create an API key</span></nav>
+    <p class="docs-eyebrow">Getting started</p>
+    <h1>Create an API key <span class="status-pill" data-tone="draft"><i></i>Pilot-scoped</span></h1>
+    <p class="docs-lede">Credentials are issued with the pilot team, scoped to the integration that needs them. A key is never "full access" — it is a scope, an expiry and a tenant, nothing more.</p>
+
+    <h2>What a credential carries</h2>
+    <table>
+      <thead><tr><th>Property</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td><code>scopes</code></td><td>Explicit resource scopes, e.g. <code>reconciliation:read</code>, <code>transactions:export</code>. Access outside the scope returns <code>403</code>.</td></tr>
+        <tr><td><code>tenant</code></td><td>Every query the key runs is bounded by this tenant at the database layer.</td></tr>
+        <tr><td><code>expiry</code></td><td>Short-lived by default, with rotation metadata.</td></tr>
+        <tr><td><code>last_used</code></td><td>Recorded, so dormant credentials are visible in review.</td></tr>
+        <tr><td>Storage</td><td>Hashed at rest. The raw value is shown once at issuance.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Handling rules</h2>
+    <ul>
+      <li>Keep credentials out of source control. The infra README requires the deployment's <code>.env</code> to be ignored — the same rule applies to your integration's secrets.</li>
+      <li>One credential per integration. A shared "team key" makes rotation pointless.</li>
+      <li>Rotate on a schedule and immediately on suspicion. Revocation takes effect at once; there is no grace window to exploit.</li>
+      <li>Audit entries never contain secret material — tokens are excluded from logs by design.</li>
+    </ul>
+
+    <div class="callout" data-tone="warn">
+      <strong>Issuance is manual today</strong>
+      <p>There is no self-serve key rotation endpoint in the pilot. Ask the team that runs your deployment; treat the request like a production change, with the scope list written down first.</p>
+    </div>
+
+    <h2>Next</h2>
+    <ul>
+      <li><a href="first-request.html">First request</a> — put the credential to work.</li>
+      <li><a href="../security/tenant-isolation.html">Tenant isolation</a> — what your key's tenant bounds.</li>
+    </ul>
+  </article>
+</div>
+</main>
+
+<footer class="docs-footer"><div class="docs-footer-inner">
+  <span>© 2026 PesaGuard</span>
+  <nav aria-label="Footer">
+    <a href="https://pesaguard.victorkipruto.com">Product</a>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a>
+    <a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source</a>
+  </nav>
+</div></footer>
+
+<script src="../js/app.js" defer></script>
+</body>
+</html>

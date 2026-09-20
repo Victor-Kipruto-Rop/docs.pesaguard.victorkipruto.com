@@ -228,8 +228,8 @@ a.card:hover {
 
 .hero-panel {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 30px;
+  grid-template-columns: 1fr;
+  gap: 18px;
   align-items: center;
   margin: 10px 0 26px;
   padding: clamp(22px, 3vw, 36px);
@@ -247,6 +247,10 @@ a.card:hover {
       radial-gradient(circle at top left, rgba(216, 255, 79, 0.12), transparent 26%),
       linear-gradient(135deg, rgba(18, 26, 22, 0.88), rgba(10, 15, 12, 0.98));
   }
+}
+
+.hero-copy {
+  max-width: 900px;
 }
 
 .hero-copy h1 {
@@ -318,12 +322,7 @@ a.card:hover {
 }
 
 .hero-visual {
-  position: relative;
-  min-height: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 0 0;
+  display: none;
 }
 
 .stack-card {

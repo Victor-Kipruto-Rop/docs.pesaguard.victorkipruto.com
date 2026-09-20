@@ -38,7 +38,7 @@ function chrome(file, page, sidebarHtml) {
     .join("\n    ");
   const siteRoot = "https://docs.pesaguard.victorkipruto.com";
   const canonical = siteRoot + page.path;
-  const ogImage = `${siteRoot}/assets/brand/og-image.png`;
+  const ogImage = `${siteRoot}/assets/brand/og-image.jpg`;
   const titleText = page.section && page.section !== page.title
     ? `${page.section} · ${page.title} — PesaGuard docs`
     : `${page.title} — PesaGuard docs`;

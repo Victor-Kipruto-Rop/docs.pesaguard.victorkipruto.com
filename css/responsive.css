@@ -1,5 +1,11 @@
 /* Responsive behaviour: search collapses, sidebar stacks, cards tighten. */
 
+@media (max-width: 1080px) {
+  .docs-header-links { gap: 2px; }
+  .docs-header-links a { padding: 7px 8px; }
+  .header-cta { display: none; }
+}
+
 @media (max-width: 960px) {
   .docs-shell { grid-template-columns: minmax(0, 1fr); }
 
@@ -17,7 +23,10 @@
 @media (max-width: 700px) {
   .docs-search { width: 40px; padding: 8px 10px; }
   .docs-search input, .docs-search kbd { display: none; }
+  .docs-search svg { margin: auto; }
   .docs-brand small { display: none; }
+  .docs-hero { padding: 24px 20px; border-radius: 18px; }
+  .guarantee-grid { grid-template-columns: minmax(0, 1fr); }
 
   .docs-nav-toggle { display: flex; }
 

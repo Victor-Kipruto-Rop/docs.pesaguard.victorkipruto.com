@@ -15,18 +15,19 @@
 .docs-nav-group a {
   display: block;
   padding: 6px 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   color: var(--text-muted);
   text-decoration: none;
   border-left: 2px solid transparent;
+  transition: all .15s var(--ease-out);
 }
 
 .docs-nav-group a:hover { color: var(--text); background: var(--paper-sunken); }
 
 .docs-nav-group a[aria-current="page"] {
-  color: var(--text);
+  color: var(--forest);
   font-weight: 700;
-  background: var(--paper-raised);
+  background: linear-gradient(90deg, var(--lime-veil), rgba(253,253,248,.6));
   border-left-color: var(--lime-deep);
 }
 

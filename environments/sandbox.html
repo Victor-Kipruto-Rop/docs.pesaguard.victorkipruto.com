@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/environments/sandbox.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,24 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Environments</p>
-    <h1>Sandbox <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">There is no mocked sandbox. Staging runs the same reconciliation behaviour, which is what makes testing meaningful.</p>
+    <h1>Sandbox</h1>
+    <p class="docs-lede">PesaGuard does not provide a mocked sandbox in this deployment model. Staging is the test environment: it runs real services and reconciliation behavior with isolated data stores and credentials.</p>
+    <div class="api-hero"><div><strong>Sandbox translation</strong><p>Use staging as the safe testing boundary, not a fictional endpoint that behaves differently from production.</p></div><div class="api-hero-meta"><span>REAL SERVICES</span><span>ISOLATED DATA</span></div></div>
+    <div class="info-grid"><div class="info-panel"><h2>Safe to test</h2><p>Authentication failures, duplicate delivery, malformed payloads, retries, reconciliation exceptions and webhook verification.</p></div><div class="info-panel"><h2>Never copy</h2><p>Production credentials, personal data, production broker topics, signing keys or unreviewed provider connections.</p></div></div>
+    <h2>What “sandbox” means here</h2>
+    <p>Use the word sandbox for a safe testing objective, not for a separate fake runtime. A staging deployment can exercise real authentication, queues, provider adapters, retries and reconciliation without granting access to production data.</p>
+    <h2>Safe test data</h2>
+    <ul><li>Use synthetic identities, references and amounts.</li><li>Do not paste production credentials or personal data into test requests.</li><li>Mark test transactions so reviewers can distinguish them from operational work.</li><li>Clean up test providers, keys and queued work after a test campaign.</li></ul>
+    <h2>Recommended test sequence</h2>
+    <ol><li>Confirm the URL is staging and the credential is staging-only.</li><li>Run an authenticated read check.</li><li>Test valid, invalid, duplicate and delayed events.</li><li>Verify matching, exception, retry and audit outcomes.</li><li>Capture request ids and evidence for the production review.</li></ol>
+    <h2>Boundaries</h2><p>Staging may share code and deployment patterns with production, but it must not share databases, broker topics, secrets or tenant data. See <a href="staging.html">staging</a> for the concrete topology and <a href="../testing/index.html">testing guidance</a> for scenarios.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../environments/index.html">Environments</a></li>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/authentication/api-keys.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,24 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Authentication guides</a><span aria-hidden="true">/</span>
           <span>API keys</span></nav>
     <p class="docs-eyebrow">Authentication guides</p>
-    <h1>API keys <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Scopes, expiry, rotation metadata, and one credential per integration.</p>
+    <h1>API keys</h1>
+    <p class="docs-lede">Use one scoped, expiring API key per integration or service account. Keys identify a workload; tenant membership and scopes determine what that workload may do.</p>
+    <div class="api-hero"><div><strong>Credential rule</strong><p>Separate ownership makes least privilege, rotation and compromise response measurable.</p></div><div class="api-hero-meta"><span>SCOPED</span><span>EXPIRING</span><span>SERVER-SIDE</span></div></div>
+    <h2>Before issuance</h2><ul><li>Name the integration and owner.</li><li>Select environment and tenant.</li><li>List required read, write or export operations.</li><li>Set expiry, rotation date and emergency contact.</li></ul>
+    <h2>Use the key safely</h2><pre class="docs-code" data-lang="http"><code>Authorization: Bearer &lt;api-key&gt;
+  Accept: application/json</code></pre><p>Store the raw value only in an approved secret manager. Log the key id and request id, never the secret.</p>
+    <h2>Verify access</h2><ol><li>Make a read-only staging request.</li><li>Confirm the response belongs to the intended tenant.</li><li>Test an out-of-scope route and expect <code>403</code>.</li><li>Record the result before enabling writes.</li></ol>
     <p>Scopes, expiry, rotation metadata, and one credential per integration.</p>
     <h2>Related</h2>
     <ul>

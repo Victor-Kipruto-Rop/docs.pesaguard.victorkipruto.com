@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/concepts/audit-trails.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -64,13 +62,21 @@
           <a href="../index.html">Concepts</a><span aria-hidden="true">/</span>
           <span>Audit trails</span></nav>
     <p class="docs-eyebrow">Concepts</p>
-    <h1>Audit trails <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Every match, exception, review and configuration change is written to an append-only record that carries its actor, tenant and reason. Entries are added, never rewritten.</p>
+    <h1>Audit trails</h1>
+    <p class="docs-lede">An audit trail is the durable explanation for a system decision. Every match, exception, review, credential event and configuration change records its actor, tenant, reason and correlation context. Entries are added, never rewritten.</p>
     <ul>
       <li><strong>Decisions keep their reason</strong> — accept, reject or escalate is stored with the actor and the transaction context.</li>
       <li><strong>History survives turnover</strong> — institutional knowledge stays queryable when the team changes.</li>
       <li><strong>Secrets are excluded</strong> — tokens, keys and credentials never enter audit entries; sensitive fields are redacted at logging boundaries.</li>
     </ul>
+    <h2>Audit event anatomy</h2>
+    <table><thead><tr><th>Field</th><th>Why it matters</th></tr></thead><tbody><tr><td>Event type</td><td>Identifies the action or decision.</td></tr><tr><td>Actor</td><td>Names the user, service account or worker responsible.</td></tr><tr><td>Tenant</td><td>Constrains the event to the organization it belongs to.</td></tr><tr><td>Resource and event ids</td><td>Connects the decision to the transaction, provider event or request.</td></tr><tr><td>Reason and outcome</td><td>Explains what was decided and why.</td></tr><tr><td>Timestamp</td><td>Supports ordering, investigation and retention policy.</td></tr></tbody></table>
+    <h2>What belongs in the trail</h2>
+    <ul><li>Authentication successes, failures, credential creation, rotation and revocation.</li><li>Tenant membership and permission changes.</li><li>Provider callbacks, matching outcomes, exceptions and reviewer decisions.</li><li>Configuration changes affecting thresholds, routes, providers or notifications.</li><li>Replay, export and administrative actions.</li></ul>
+    <h2>Audit integrity and privacy</h2>
+    <p>Append-only does not mean unrestricted. Enforce tenant-scoped access, protect retention storage, redact secrets and minimize sensitive payload copies. Operators should be able to correlate an audit event with logs and metrics without exposing passwords, raw tokens, API secrets or unnecessary personal data.</p>
+    <h2>Investigation workflow</h2>
+    <ol><li>Start with the request, transaction or provider event id.</li><li>Load the tenant-scoped audit timeline.</li><li>Compare state transitions with worker and API logs.</li><li>Confirm the actor, reason and downstream notification outcome.</li><li>Record the investigation conclusion without rewriting original evidence.</li></ol>
     <p>An audit-ready trail needs three properties more than it needs volume: entries can only be added, each entry identifies who did what, and each entry traces back to the transaction that caused it.</p>
     <h2>Related</h2>
     <ul>

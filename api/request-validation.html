@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/api/request-validation.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -51,13 +49,32 @@
 <div class="docs-shell">
   <article class="docs-article">
     <p class="docs-eyebrow">API</p>
-    <h1>Request validation <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Schema, currency, amount and reference are validated before anything is trusted.</p>
-    <ul>
-      <li>Malformed input returns 400 or 422 with the offending field named.</li>
-      <li>Validation runs before matching, so bad data never reaches reconciliation.</li>
-      <li>Invalid records are never silently converted into plausible successes.</li>
-    </ul>
+    <h1>Request validation</h1>
+    <p class="docs-lede">Requests are validated before they can affect provider state, reconciliation or audit records. Validation rejects malformed, ambiguous and unsafe data instead of silently coercing it into a plausible financial event.</p>
+    <h2>Validation layers</h2>
+    <table><thead><tr><th>Layer</th><th>Examples</th><th>Failure response</th></tr></thead><tbody>
+      <tr><td>Transport</td><td>Method, content type, body size and JSON syntax.</td><td><code>400</code></td></tr>
+      <tr><td>Schema</td><td>Required fields, types, formats and enum values.</td><td><code>400</code> or <code>422</code></td></tr>
+      <tr><td>Domain</td><td>Currency, amount, timestamps, references and state transitions.</td><td><code>422</code></td></tr>
+      <tr><td>Authorization</td><td>Tenant ownership and permitted operation.</td><td><code>401</code> or <code>403</code></td></tr>
+      <tr><td>Conflict</td><td>Duplicate reference or idempotency mismatch.</td><td><code>409</code></td></tr>
+    </tbody></table>
+    <h2>Example validation response</h2>
+    <pre class="docs-code" data-lang="json"><code>{
+  "error": {
+    "code": "VALIDATION_FAILED",
+    "message": "Request validation failed.",
+    "request_id": "request_01J...",
+    "details": [
+      {"field": "amount", "reason": "must be greater than zero"},
+      {"field": "currency", "reason": "must be an ISO 4217 code"}
+    ]
+  }
+}</code></pre>
+    <h2>Client checklist</h2>
+    <ol><li>Validate locally for fast feedback, but treat the server as authoritative.</li><li>Send decimal amounts using the documented representation; never rely on binary floating-point formatting.</li><li>Use UTC timestamps and stable provider references.</li><li>Do not retry unchanged invalid input.</li><li>Preserve the request id when escalating a rejected payload.</li></ol>
+    <h2>Data-quality boundary</h2>
+    <p>Validation runs before matching and reconciliation. Invalid records must remain visible as failures with field-level reasons; they must not be silently dropped, rounded, defaulted or marked successful.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../concepts/reconciliation.html">Data quality concept</a></li>

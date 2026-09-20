@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/transactions/transaction-status.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,22 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Transaction guides</a><span aria-hidden="true">/</span>
           <span>Transaction status</span></nav>
     <p class="docs-eyebrow">Transaction guides</p>
-    <h1>Transaction status <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">See the lifecycle concept page for states and their preconditions.</p>
+    <h1>Transaction status</h1>
+    <p class="docs-lede">A transaction status tells you what has been proven so far, not necessarily that funds have settled. Read the state with its reconciliation result, provider evidence and audit trail.</p>
+    <div class="api-hero"><div><strong>Status is evidence</strong><p>Use state transitions to drive workflow, never to bypass validation or reviewer controls.</p></div><div class="api-hero-meta"><span>STATE</span><span>EVIDENCE</span><span>AUDIT</span></div></div>
+    <h2>State handling</h2><table><thead><tr><th>State</th><th>Client behavior</th></tr></thead><tbody><tr><td>Received</td><td>Wait for matching or follow the documented event flow.</td></tr><tr><td>Matched</td><td>Use the recorded evidence and continue downstream processing.</td></tr><tr><td>Unmatched</td><td>Inspect the reason; do not mark successful manually.</td></tr><tr><td>Exception</td><td>Route to a reviewer with the delta and context.</td></tr><tr><td>Resolved</td><td>Use the recorded decision and audit evidence.</td></tr></tbody></table>
+    <h2>Polling guidance</h2><p>Use bounded polling with backoff for asynchronous state changes. Prefer webhook delivery when available, and always make the consumer idempotent because notifications can be retried.</p>
     <p>See the lifecycle concept page for states and their preconditions.</p>
     <h2>Related</h2>
     <ul>

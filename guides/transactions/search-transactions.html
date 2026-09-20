@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/transactions/search-transactions.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,23 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Transaction guides</a><span aria-hidden="true">/</span>
           <span>Search transactions</span></nav>
     <p class="docs-eyebrow">Transaction guides</p>
-    <h1>Search transactions <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Paginate deterministically and treat unspecified ordering as unstable.</p>
+    <h1>Search transactions</h1>
+    <p class="docs-lede">Search is a bounded, tenant-scoped read. Combine documented filters with stable sorting and pagination so exports and reconciliation scans do not skip or duplicate records.</p>
+    <h2>Search procedure</h2><ol><li>Choose a narrow UTC time window.</li><li>Add documented status, provider or reference filters.</li><li>Set a bounded limit and stable sort.</li><li>Record the complete query and page metadata.</li><li>Retry a failed page without changing the query.</li></ol>
+    <h2>Export-safe query</h2><pre class="docs-code" data-lang="http"><code>GET /api/v1/transactions?status=exception&amp;page=1&amp;limit=50&amp;sort=created_at:asc,id:asc
+  Authorization: Bearer &lt;token&gt;</code></pre>
+    <h2>Search safeguards</h2><ul><li>Never rely on insertion order.</li><li>Do not remove tenant scope from a filter.</li><li>Use a server export or snapshot for long-running complete exports.</li><li>Deduplicate by server resource id when scanning changing collections.</li></ul>
     <p>Paginate deterministically and treat unspecified ordering as unstable.</p>
     <h2>Related</h2>
     <ul>

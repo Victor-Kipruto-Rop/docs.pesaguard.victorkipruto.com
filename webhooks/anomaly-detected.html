@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/webhooks/anomaly-detected.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,18 +42,17 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Webhooks</p>
-    <h1>anomaly.detected <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
+    <h1>anomaly.detected</h1>
     <p class="docs-lede">A named rule or statistical check flagged the transaction for human review.</p>
     <p>Payload fields are still being stabilized; subscribe to the OpenAPI document rather than hard-coding shapes.</p>
-    <h2>Related</h2>
+    <h2>Consumer behavior</h2><p>Use this event to create or update a review task. Display the signal name, severity, evidence window and transaction context; do not label the transaction as confirmed fraud automatically.</p><h2>Assertions</h2><ul><li>Signature is valid before parsing.</li><li>Event id is deduplicated.</li><li>Tenant and transaction context are authorized.</li><li>Reviewer action is recorded separately in the audit trail.</li></ul><h2>Related</h2>
     <ul>
       <li><a href="../webhooks/event-catalog.html">Event catalog</a></li>
       <li><a href="../webhooks/verification.html">Verification</a></li>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/api/errors.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -63,14 +61,24 @@
           <a href="../index.html">API</a><span aria-hidden="true">/</span>
           <span>Errors</span></nav>
     <p class="docs-eyebrow">API</p>
-    <h1>Errors <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Every failure returns the same shape: a code, a human message, and a request id you can quote back to the team that runs the deployment.</p>
+    <h1>Errors</h1>
+    <p class="docs-lede">Every failure should be machine-readable, safe to retry or correct, and traceable through a request id. The error envelope separates client action from server diagnosis without exposing tenant data or credential details.</p>
     <div class="code-head"><span class="method">4XX</span><code>error envelope</code></div>
     <pre class="docs-code" data-lang="json"><code>{
   "error": {
     "code": "TRANSACTION_NOT_FOUND",
     "message": "Transaction could not be found.",
     "request_id": "&lt;uuid&gt;"
+  }
+}</code></pre>
+    <h2>Error envelope</h2>
+    <p>Parse the top-level <code>error</code> object and preserve <code>code</code> and <code>request_id</code>. The message is not a stable programmatic identifier. Validation responses may include field details when the deployment provides them.</p>
+    <pre class="docs-code" data-lang="json"><code>{
+  "error": {
+    "code": "VALIDATION_FAILED",
+    "message": "One or more fields are invalid.",
+    "request_id": "request_01J...",
+    "details": [{"field": "amount", "reason": "must be greater than zero"}]
   }
 }</code></pre>
     <table>
@@ -85,6 +93,15 @@
         <tr><td>500 / 502 / 503 / 504</td><td>Server or gateway problem. Retry with backoff; quote the request id.</td></tr>
       </tbody>
     </table>
+    <h2>Retry decision</h2>
+    <table><thead><tr><th>Class</th><th>Retry?</th><th>Guidance</th></tr></thead><tbody>
+      <tr><td>Validation and authorization</td><td>No</td><td>Correct input or credentials first.</td></tr>
+      <tr><td>Conflict</td><td>Read first</td><td>Resolve the existing resource or inspect the idempotency result.</td></tr>
+      <tr><td>Rate limit</td><td>Later</td><td>Honor <code>Retry-After</code> when supplied and add jitter.</td></tr>
+      <tr><td>Gateway or server failure</td><td>Bounded</td><td>Retry safe reads; retry writes only with an idempotency key.</td></tr>
+    </tbody></table>
+    <h2>Client error handling</h2>
+    <p>Log the request id, route, status and error code. Redact authorization headers, payment data and credentials. Escalate repeated 5xx responses with request ids and deployment timestamps.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/rate-limits.html">Rate limits</a></li>

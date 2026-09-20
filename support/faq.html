@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/support/faq.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,23 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Support</p>
-    <h1>FAQ <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">Straight answers on scope: M-Pesa only today, no self-serve signup, no official SDKs, no certifications claimed.</p>
+    <h1>Frequently asked questions</h1>
+    <p class="docs-lede">Straight answers about scope, access, integrations, support and operational boundaries. When an answer depends on deployment configuration, confirm it against the running OpenAPI contract or environment configuration.</p>
+    <div class="api-hero"><div><strong>Read the boundary before building</strong><p>Knowing what is supported today prevents an integration from depending on an assumed capability.</p></div><div class="api-hero-meta"><span>SCOPE</span><span>ACCESS</span><span>SUPPORT</span></div></div>
+    <h2>Product and access</h2><h3>Is there public self-serve signup?</h3><p>Not currently. Tenant access and reconciliation scope are provisioned with the pilot team.</p><h3>Which payment rails are supported?</h3><p>The current pilot scope is M-Pesa Daraja flows. Airtel Money, bank transfers and card rails require separate scoping.</p><h3>Is there a mocked sandbox?</h3><p>No. Staging is a real isolated deployment with its own data stores, credentials and brokers. See <a href="../environments/staging.html">staging</a>.</p>
+    <h2>Developer questions</h2><h3>Are official SDKs available?</h3><p>Not yet. Use the deployment OpenAPI document with curl, a generated client or the examples in the <a href="../sdks/">SDK section</a>.</p><h3>How should writes be retried?</h3><p>Use one idempotency key for one logical operation, retry with bounded backoff and reconcile if the response is uncertain.</p><h3>Which source is authoritative?</h3><p>The running deployment's OpenAPI document is authoritative for routes and schemas. This documentation explains surrounding behavior and operational expectations.</p>
+    <h2>Security and assurance</h2><h3>Does PesaGuard claim a certification?</h3><p>No certification should be inferred from this documentation. Review the security controls and assess them against your organization's requirements.</p><h3>How do I report a vulnerability?</h3><p>Use the <a href="../security/responsible-disclosure.html">responsible disclosure</a> process and do not publish exploit details or secrets in public issues.</p>
+    <h2>Support and incidents</h2><h3>What should I send with a failure?</h3><p>Send environment, UTC timestamp, route, status, stable error code, request id and a redacted reproduction. Never send raw tokens or passwords.</p>
+    <h2>Environments and operations</h2><h3>How do I know which environment I am calling?</h3><p>Check <code>PESAGUARD_API_URL</code>, credential ownership, database and broker configuration, then run a safe authenticated read. Never infer environment from a key prefix alone.</p><h3>What should I do during a 429?</h3><p>Honor <code>Retry-After</code>, reduce concurrency and use jitter. For writes, preserve the same idempotency key.</p><h3>What should I do after a 5xx or timeout?</h3><p>Treat a write outcome as uncertain. Retry only with the original idempotency key, then retrieve or reconcile the resulting record.</p>
+    <h2>Data and reconciliation</h2><h3>Why is a transaction unmatched?</h3><p>The provider event did not find a valid internal candidate within the configured matching window. Review reference, amount, currency, timing and tenant before replaying.</p><h3>Can support edit a financial record directly?</h3><p>Corrections should use an auditable workflow. Do not rely on ad-hoc database changes that erase the original event or reviewer decision.</p>
+    <h2>Documentation lifecycle</h2><h3>What happens when documentation and runtime behavior differ?</h3><p>Use the running deployment's OpenAPI contract as the route and schema authority, preserve the discrepancy, and report the page URL and observed behavior so the documentation can be corrected.</p><h3>Where are breaking changes announced?</h3><p>Review the <a href="../changelog/">changelog</a>, <a href="../migration/">migration guides</a> and API versioning policy before upgrading a client.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../support/index.html">Support</a></li>

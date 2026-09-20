@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/reconciliation/exceptions.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,22 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Reconciliation guides</a><span aria-hidden="true">/</span>
           <span>Exceptions</span></nav>
     <p class="docs-eyebrow">Reconciliation guides</p>
-    <h1>Exceptions <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Differences are first-class: the delta is stated and a reviewer decides with a written reason.</p>
+    <h1>Exceptions</h1>
+    <p class="docs-lede">An exception means a candidate exists but the evidence does not satisfy the matching contract. The difference remains explicit and a reviewer records the decision, reason and next action.</p>
+    <h2>Exception review workflow</h2><ol><li>Claim or assign the exception without hiding it from other operators.</li><li>Review provider payload, internal record and matching evidence.</li><li>Classify amount, reference, timing, duplicate or configuration difference.</li><li>Accept, reject, correct or escalate with a written reason.</li><li>Verify the state, report and audit trail after resolution.</li></ol>
+    <h2>Review evidence</h2><table><thead><tr><th>Evidence</th><th>Why it matters</th></tr></thead><tbody><tr><td>Amount and currency</td><td>Shows the financial delta without silent rounding.</td></tr><tr><td>Provider reference</td><td>Connects the external event to the internal candidate.</td></tr><tr><td>Timestamp window</td><td>Explains late delivery and clock differences.</td></tr><tr><td>Actor and reason</td><td>Makes the resolution auditable.</td></tr></tbody></table>
+    <h2>Escalate when</h2><p>Escalate repeated exceptions, unexplained financial deltas, cross-tenant anomalies, suspected credential misuse or a rule that would change historical outcomes. Do not resolve uncertainty by editing the database directly.</p>
     <p>Differences are first-class: the delta is stated and a reviewer decides with a written reason.</p>
     <h2>Related</h2>
     <ul>

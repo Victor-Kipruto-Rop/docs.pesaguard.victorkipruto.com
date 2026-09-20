@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/concepts/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -63,8 +61,8 @@
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>Concepts</span></nav>
     <p class="docs-eyebrow">Concepts</p>
-    <h1>Concepts <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Five ideas carry the whole platform. Understand them and every page in this documentation becomes predictable.</p>
+    <h1>Concepts</h1>
+    <p class="docs-lede">These concepts explain how PesaGuard turns provider events into tenant-scoped, auditable reconciliation outcomes. Read them as one system: architecture establishes the flow, lifecycle names what is known, and the safety concepts prevent silent corruption.</p>
     <table>
       <thead><tr><th>Concept</th><th>In one line</th></tr></thead>
       <tbody>
@@ -77,7 +75,11 @@
         <tr><td><a href="audit-trails.html">Audit trails</a></td><td>Append-only evidence for every decision.</td></tr>
       </tbody>
     </table>
-    <p>The reference workflow every capability follows: authenticate the caller or verify the provider signature, resolve tenant identity, validate and normalize, enforce idempotency, persist the durable record and audit event in one transaction, publish through the outbox, then reconcile, notify, measure and expose a traceable result.</p>
+    <h2>Recommended reading path</h2>
+    <ol><li><a href="architecture.html">Architecture</a> to understand the components and durable boundaries.</li><li><a href="transaction-lifecycle.html">Transaction lifecycle</a> to learn what each payment state proves.</li><li><a href="reconciliation.html">Reconciliation</a> to see how provider and internal records become a result.</li><li><a href="idempotency.html">Idempotency</a> and <a href="tenants.html">Tenants</a> to understand safe retries and isolation.</li><li><a href="anomalies.html">Anomalies</a>, <a href="fraud-detection.html">Fraud detection</a> and <a href="audit-trails.html">Audit trails</a> to follow review and evidence.</li></ol>
+    <h2>Reference workflow</h2>
+    <p>Every capability follows the same boundary sequence: authenticate the caller or verify the provider signature, resolve tenant identity, validate and normalize, enforce idempotency, persist the durable record and audit event in one transaction, publish through the outbox, then reconcile, notify, measure and expose a traceable result.</p>
+    <div class="info-grid"><div class="info-card"><h3>Input</h3><p>Provider callbacks and API requests are authenticated, validated and normalized before they are trusted.</p></div><div class="info-card"><h3>Decision</h3><p>Matching, anomaly signals and human review produce explicit states and reasons rather than hidden guesses.</p></div><div class="info-card"><h3>Evidence</h3><p>Tenant context, event identity, request ids and audit records make outcomes explainable later.</p></div></div>
     <h2>Related</h2>
     <ul>
       <li><a href="../getting-started/index.html">Getting started</a></li>

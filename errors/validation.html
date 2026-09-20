@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/errors/validation.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,17 +42,29 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Errors</p>
-    <h1>400 / 422 · Validation <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">The request failed validation; the response names the offending field.</p>
+    <h1>400 / 422 · Validation</h1>
+    <p class="docs-lede">The request was understood but cannot be accepted because its syntax, schema, format or domain values are invalid. Validation errors are actionable: correct the named field rather than retrying unchanged input.</p>
     <p>See <a href="../api/errors.html">API · Errors</a> for the envelope and client behaviour.</p>
+    <h2>400 versus 422</h2><table><thead><tr><th>Status</th><th>Typical meaning</th></tr></thead><tbody><tr><td>400</td><td>Malformed JSON, unsupported query parameter, invalid method or transport-level request.</td></tr><tr><td>422</td><td>Well-formed request violates schema or domain rules such as amount, currency or state.</td></tr></tbody></table>
+    <h2>Example details</h2><pre class="docs-code" data-lang="json"><code>{
+  "error": {
+    "code": "VALIDATION_FAILED",
+    "message": "Request validation failed.",
+    "request_id": "request_01J...",
+    "details": [
+      {"field": "amount", "reason": "must be greater than zero"},
+      {"field": "currency", "reason": "must be an ISO 4217 code"}
+    ]
+  }
+}</code></pre>
+    <h2>Client checklist</h2><ul><li>Validate locally for quick feedback, but treat the server as authoritative.</li><li>Use exact enum, timestamp, currency and identifier formats.</li><li>Represent financial amounts without binary floating-point surprises.</li><li>Do not silently coerce invalid values or retry unchanged input.</li><li>Preserve the request id when asking for help.</li></ul>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">API · Errors</a></li>

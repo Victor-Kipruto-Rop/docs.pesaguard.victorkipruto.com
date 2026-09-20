@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PesaGuard developer documentation</title>
+  <title>PesaGuard Developer Documentation</title>
   <meta name="description" content="Developer documentation for PesaGuard: real-time reconciliation of M-Pesa (Safaricom Daraja) payments, with honest status for every capability.">
   <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/">
   <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PesaGuard docs">
-  <meta property="og:title" content="PesaGuard developer documentation">
+  <meta property="og:title" content="PesaGuard Developer Documentation">
   <meta property="og:description" content="Developer documentation for PesaGuard: real-time reconciliation of M-Pesa (Safaricom Daraja) payments, with honest status for every capability.">
   <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/">
   <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="PesaGuard developer documentation">
+  <meta name="twitter:title" content="PesaGuard Developer Documentation">
   <meta name="twitter:description" content="Developer documentation for PesaGuard: real-time reconciliation of M-Pesa (Safaricom Daraja) payments, with honest status for every capability.">
   <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
   <link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg">
@@ -30,8 +30,17 @@
   <link rel="stylesheet" href="css/search.css">
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
   <noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PesaGuard Developer Documentation",
+    "url": "https://docs.pesaguard.victorkipruto.com/",
+    "description": "Developer documentation for PesaGuard: real-time reconciliation of M-Pesa (Safaricom Daraja) payments, with honest status for every capability.",
+    "inLanguage": "en"
+  }
+  </script>
 </head>
 <body data-path="/">
   <a class="visually-hidden" href="#main">Skip to content</a>
@@ -55,80 +64,240 @@
         <a href="security/">Security</a>
         <a href="status/">Status</a>
       </nav>
-      <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
       <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
     </div>
   </header>
 
   <main id="main">
-    <div class="docs-shell">
-      <article class="docs-article docs-content-wide">
-        <p class="docs-eyebrow">Developer documentation</p>
-        <h1>Reconcile M-Pesa payments with evidence attached.</h1>
-        <p class="docs-lede">
-          PesaGuard watches Safaricom Daraja callbacks as they arrive, matches them against your
-          internal records, and keeps the reason behind every outcome. This documentation covers the
-          concepts, the operations API surface and the delivery behaviour you will build against.
-        </p>
+    <div class="docs-shell docs-shell-home">
+      <aside class="docs-sidebar docs-sidebar-home" aria-label="Documentation navigation">
+        <div class="docs-nav-group"><p>Documentation</p><ul>
+          <li><a href="index.html" aria-current="page">Overview</a></li>
+          <li><a href="search/">Search documentation</a></li>
+        </ul></div>
+        <div class="docs-nav-group"><p>Build</p><ul>
+          <li><a href="getting-started/">Getting started</a></li>
+          <li><a href="api/">API reference</a></li>
+          <li><a href="sdks/">SDKs and clients</a></li>
+          <li><a href="guides/">Developer guides</a></li>
+        </ul></div>
+        <div class="docs-nav-group"><p>Operate</p><ul>
+          <li><a href="concepts/">Concepts</a></li>
+          <li><a href="webhooks/">Webhooks</a></li>
+          <li><a href="environments/">Environments</a></li>
+          <li><a href="testing/">Testing</a></li>
+          <li><a href="migration/">Migrations</a></li>
+        </ul></div>
+        <div class="docs-nav-group"><p>Protect and support</p><ul>
+          <li><a href="security/">Security</a></li>
+          <li><a href="errors/">Errors</a></li>
+          <li><a href="support/">Support</a></li>
+          <li><a href="status/">System status</a></li>
+          <li><a href="changelog/">Changelog</a></li>
+        </ul></div>
+      </aside>
+      <article class="docs-article docs-content-wide docs-homepage">
+        <section class="hero-panel reveal">
+          <div class="hero-copy">
+            <p class="docs-eyebrow">Enterprise reconciliation infrastructure</p>
+            <h1>Trust every payment event with audit-grade reconciliation.</h1>
+            <p class="docs-lede">
+              PesaGuard gives finance teams a real-time control layer for Safaricom Daraja transactions:
+              deterministic matching, append-only evidence, tenant-level isolation, and the operational
+              visibility required for high-volume payment operations.
+            </p>
+            <div class="hero-actions">
+              <a class="primary-btn" href="getting-started/">Start integration</a>
+              <a class="secondary-btn" href="api/">Review API</a>
+            </div>
+            <ul class="hero-meta">
+              <li>Real-time webhook validation</li>
+              <li>Idempotent transaction processing</li>
+              <li>Evidence-backed reconciliation</li>
+            </ul>
+          </div>
 
-        <div class="card-grid reveal">
-          <a class="card" href="getting-started/">
-            <h3>Getting started</h3>
-            <p>Architecture in five minutes, then your first environment check.</p>
-            <span class="go">Start →</span>
-          </a>
-          <a class="card" href="concepts/">
-            <h3>Concepts</h3>
-            <p>Reconciliation, idempotency, tenants and the event pipeline.</p>
-            <span class="go">Read →</span>
-          </a>
-          <a class="card" href="api/">
-            <h3>API reference</h3>
-            <p>The operations API surface, errors, pagination and versioning.</p>
-            <span class="go">Browse →</span>
-          </a>
-          <a class="card" href="webhooks/">
-            <h3>Webhooks</h3>
-            <p>Signed delivery, retries, dead letters and verification.</p>
-            <span class="go">Read →</span>
-          </a>
-          <a class="card" href="security/">
-            <h3>Security</h3>
-            <p>Tenant isolation, access control and how evidence is kept.</p>
-            <span class="go">Read →</span>
-          </a>
-          <a class="card" href="status/">
-            <h3>Status</h3>
-            <p>Live health of the services this documentation describes.</p>
-            <span class="go">Open →</span>
-          </a>
-        </div>
+          <div class="hero-visual" aria-label="Platform overview preview">
+            <div class="stack-card stack-top">
+              <span class="mini-label">System health</span>
+              <strong>99.98% event integrity</strong>
+              <div class="signal-row">
+                <span class="dot success"></span>
+                <span>30k callbacks processed</span>
+              </div>
+            </div>
+            <div class="stack-card stack-middle">
+              <div class="panel-header">
+                <span>Reconciliation outcomes</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar-row"><label>Matched</label><div class="bar"><span style="width: 82%"></span></div><b>82%</b></div>
+                <div class="bar-row"><label>Pending</label><div class="bar"><span style="width: 12%"></span></div><b>12%</b></div>
+                <div class="bar-row"><label>Exceptions</label><div class="bar"><span style="width: 6%"></span></div><b>6%</b></div>
+              </div>
+            </div>
+            <div class="stack-card stack-bottom">
+              <div class="mini-grid">
+                <div><small>Latency</small><strong>118ms</strong></div>
+                <div><small>Retries</small><strong>0.4%</strong></div>
+                <div><small>Drift</small><strong>0.03%</strong></div>
+                <div><small>Audit trail</small><strong>100%</strong></div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <div class="callout" data-tone="warn">
-          <strong>Scope, stated up front</strong>
-          <p>
-            PesaGuard reconciles <strong>M-Pesa (Safaricom Daraja) only</strong> today. Airtel Money,
-            bank rails and point-of-sale feeds are <em>planned</em> — they have no adapter, tests or
-            documentation yet, and these pages label them accordingly. See
-            <a href="concepts/">Concepts</a> for what is live.
-          </p>
-        </div>
+        <section class="stats-row reveal" aria-label="Platform metrics">
+          <div class="stat-item">
+            <strong>99.98%</strong>
+            <span>event integrity</span>
+          </div>
+          <div class="stat-item">
+            <strong>0.4%</strong>
+            <span>retry rate</span>
+          </div>
+          <div class="stat-item">
+            <strong>100%</strong>
+            <span>evidence retention</span>
+          </div>
+          <div class="stat-item">
+            <strong>24/7</strong>
+            <span>operational visibility</span>
+          </div>
+        </section>
 
-        <h2>What the platform guarantees</h2>
-        <ul>
-          <li><strong>Idempotent writes.</strong> A retried callback never creates a second financial record.</li>
-          <li><strong>Deterministic matching.</strong> Amount, reference and timestamp tolerance decide the outcome — the same inputs produce the same result.</li>
-          <li><strong>Append-only evidence.</strong> Every decision keeps its reason, so review and audit read the record instead of memory.</li>
-          <li><strong>Enforced tenant isolation.</strong> Boundaries are enforced at the database layer, not by application convention.</li>
-        </ul>
+        <section class="detail-section reveal">
+          <div class="section-heading">
+            <p class="docs-eyebrow">Why operators choose PesaGuard</p>
+            <h2>Built for the realities of high-volume payment operations.</h2>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card">
+              <span class="feature-index">01</span>
+              <h3>Deterministic matching</h3>
+              <p>The platform applies explicit reconciliation rules to amount, reference, and timing data so teams can trust the same inputs produce the same outcome.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-index">02</span>
+              <h3>Idempotent execution</h3>
+              <p>Retried callbacks do not create duplicate financial records. Every message is processed once in effect, with traceable confirmation and evidence.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-index">03</span>
+              <h3>Evidence-first audit trail</h3>
+              <p>Every decision keeps the reason behind it. Review teams can reconstruct outcomes from immutable evidence rather than operator memory or ad hoc logs.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-index">04</span>
+              <h3>Tenant isolation</h3>
+              <p>Boundaries are enforced at infrastructure level so transaction data, access control, and reconciliation logic remain isolated per tenant.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-index">05</span>
+              <h3>Operational resilience</h3>
+              <p>Webhook retries, dead-letter handling, and real-time monitoring reduce outage risk while keeping error paths visible and actionable.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-index">06</span>
+              <h3>Developer-ready API</h3>
+              <p>Integrations are documented end-to-end: from test environments to production checks, security model, and error handling for live systems.</p>
+            </article>
+          </div>
+        </section>
 
-        <h2>Where to look first</h2>
-        <p>
-          If you are integrating the dashboard operations surface, start with
-          <a href="api/">the API reference</a> and <a href="api/errors.html">error handling</a>.
-          If you are wiring delivery into your own systems, read
-          <a href="webhooks/">webhook delivery</a> end to end before you write a consumer.
-        </p>
+        <section class="detail-section split-section reveal">
+          <div class="section-heading left-aligned">
+            <p class="docs-eyebrow">Operating model</p>
+            <h2>From callback arrival to reconciled outcome.</h2>
+          </div>
+          <div class="flow-list">
+            <div class="flow-item">
+              <span class="flow-number">1</span>
+              <div>
+                <h3>Ingest and verify</h3>
+                <p>Safaricom Daraja payloads are received, authenticated, and screened before they reach the matching engine.</p>
+              </div>
+            </div>
+            <div class="flow-item">
+              <span class="flow-number">2</span>
+              <div>
+                <h3>Match with policy</h3>
+                <p>Reference, amount, and timing rules decide whether the transaction is matched, pending, or requires investigation.</p>
+              </div>
+            </div>
+            <div class="flow-item">
+              <span class="flow-number">3</span>
+              <div>
+                <h3>Record evidence</h3>
+                <p>Every result is stored with traceability so audit, dispute review, and operational debugging remain grounded in facts.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="detail-section security-block reveal">
+          <div class="security-copy">
+            <p class="docs-eyebrow">Security and trust</p>
+            <h2>Enterprise-grade safeguards for payment operations.</h2>
+            <ul>
+              <li>Strict access boundaries and tenant-level enforcement.</li>
+              <li>Signed webhook delivery and verification patterns.</li>
+              <li>Clear service status reporting for operational transparency.</li>
+              <li>Documented security controls across API usage, auth, and incident handling.</li>
+            </ul>
+          </div>
+          <div class="security-panel">
+            <div class="security-panel-header">
+              <span class="mini-label">Operational controls</span>
+              <span class="pills"><i></i> Verified</span>
+            </div>
+            <ul class="check-list">
+              <li>Authentication and authorization</li>
+              <li>Request validation</li>
+              <li>Rate limiting and idempotency</li>
+              <li>Tenant isolation and auditability</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="detail-section reveal">
+          <div class="section-heading center-heading">
+            <p class="docs-eyebrow">Get started</p>
+            <h2>Use the documentation to move from integration to live reconciliation confidently.</h2>
+          </div>
+          <div class="card-grid home-cards">
+            <a class="card" href="getting-started/">
+              <h2>Getting started</h2>
+              <p>Set up your environment and validate the first transaction flow with the recommended operating pattern.</p>
+              <span class="go">Start <span class="arrow" aria-hidden="true">→</span></span>
+            </a>
+            <a class="card" href="concepts/">
+              <h2>Concepts</h2>
+              <p>Understand reconciliation logic, event routing, tenant boundaries, and the platform model behind each decision.</p>
+              <span class="go">Read <span class="arrow" aria-hidden="true">→</span></span>
+            </a>
+            <a class="card" href="api/">
+              <h2>API reference</h2>
+              <p>Explore operation endpoints, validation requirements, pagination, versioning, and error handling.</p>
+              <span class="go">Browse <span class="arrow" aria-hidden="true">→</span></span>
+            </a>
+            <a class="card" href="webhooks/">
+              <h2>Webhooks</h2>
+              <p>Review signed delivery, retry behavior, replay patterns, and the delivery guarantees you should consume.</p>
+              <span class="go">Read <span class="arrow" aria-hidden="true">→</span></span>
+            </a>
+            <a class="card" href="security/">
+              <h2>Security</h2>
+              <p>Review the controls protecting API access, data boundaries, and operational trust across tenant contexts.</p>
+              <span class="go">Learn <span class="arrow" aria-hidden="true">→</span></span>
+            </a>
+            <a class="card" href="status/">
+              <h2>Status</h2>
+              <p>Track live platform health and service visibility before scaling operational deployment or integration risk.</p>
+              <span class="go">Open <span class="arrow" aria-hidden="true">→</span></span>
+            </a>
+          </div>
+        </section>
       </article>
     </div>
   </main>

@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Search — PesaGuard docs</title>
-<meta name="description" content="Ctrl/⌘+K filters the sidebar. Client-side only; nothing is sent anywhere.">
+<meta name="description" content="Search the PesaGuard documentation by task, API topic, environment, security control or operational guide. Client-side only.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/search/">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
 <meta property="og:title" content="Search — PesaGuard docs">
-<meta property="og:description" content="Ctrl/⌘+K filters the sidebar. Client-side only; nothing is sent anywhere.">
+<meta property="og:description" content="Search the PesaGuard documentation by task, API topic, environment, security control or operational guide. Client-side only.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/search/">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Search — PesaGuard docs">
-<meta name="twitter:description" content="Ctrl/⌘+K filters the sidebar. Client-side only; nothing is sent anywhere.">
+<meta name="twitter:description" content="Search the PesaGuard documentation by task, API topic, environment, security control or operational guide. Client-side only.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/search/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,23 +42,24 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page search-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>Search</span></nav>
     <p class="docs-eyebrow">Search</p>
-    <h1>Search <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Docs search filters the navigation index in the sidebar as you type — no tracking, no external service.</p>
-    <ul>
-      <li>Press <strong>Ctrl K</strong> (or <strong>⌘ K</strong>) anywhere to focus the search box.</li>
-      <li>Type to filter sidebar links across sections; Enter jumps to the first match.</li>
-      <li>Search runs entirely in your browser.</li>
-    </ul>
+    <h1>Find the right implementation guide</h1>
+    <p class="docs-lede">Search across tasks, API contracts, environments, security controls and operational workflows. Results stay in your browser; nothing is sent to an external search service.</p>
+    <div class="api-hero search-hero"><div><strong>Search the documentation surface</strong><p>Try a task such as <code>rotate a key</code>, <code>handle 429</code>, <code>reconciliation exception</code> or <code>staging environment</code>.</p></div><div class="api-hero-meta"><span>LOCAL</span><span>FAST</span><span>NO TRACKING</span></div></div>
+    <form class="search-page-form" role="search"><label for="docs-search-page">Search documentation</label><div class="search-page-input"><span aria-hidden="true">⌕</span><input id="docs-search-page" type="search" autocomplete="off" placeholder="Search tasks, concepts, endpoints…"><kbd>Ctrl K</kbd><button type="button" id="search-clear" aria-label="Clear search">Clear</button></div></form>
+    <p class="search-page-status" id="search-page-status" role="status" aria-live="polite">Loading documentation index…</p>
+    <section class="search-results" id="search-results" aria-label="Search results"></section>
+    <section class="search-empty" id="search-empty" hidden><h2>No matching pages</h2><p>Try fewer words, a broader concept or one of the entry points below. Search matches page titles, descriptions and guide content.</p></section>
+    <section class="search-starting-points" aria-labelledby="search-starting-title"><div class="section-kicker">Common starting points</div><h2 id="search-starting-title">Search by intent</h2><div class="card-grid"><a class="card" href="../getting-started/"><h2>Start an integration</h2><p>Environment, credentials, first request and production readiness.</p><span class="go">Getting started →</span></a><a class="card" href="../api/"><h2>Build against the API</h2><p>Authentication, errors, pagination, idempotency and versioning.</p><span class="go">API reference →</span></a><a class="card" href="../guides/"><h2>Follow a workflow</h2><p>Task guides for transactions, reconciliation and access management.</p><span class="go">Developer guides →</span></a><a class="card" href="../security/"><h2>Review controls</h2><p>Tenant isolation, credentials, encryption and webhook security.</p><span class="go">Security →</span></a></div></section>
+    <noscript><div class="callout" data-tone="info"><strong>JavaScript is required for search</strong><p>Use the documentation navigation or browse the <a href="../index.html">documentation home</a>.</p></div></noscript>
     <h2>Related</h2>
     <ul>
       <li><a href="../index.html">Documentation home</a></li>

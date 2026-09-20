@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/changelog/breaking-changes.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -51,8 +49,34 @@
 <div class="docs-shell">
   <article class="docs-article">
     <p class="docs-eyebrow">Changelog</p>
-    <h1>Breaking changes <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">Any breaking change ships behind a new versioned prefix, with at least 90 days of notice for the previous version.</p>
+    <h1>Breaking changes</h1>
+    <p class="docs-lede">Breaking changes alter a request, response, authorization rule or operational guarantee in a way that can make an existing integration fail or produce a different result.</p>
+    <div class="callout callout-warning"><strong>Migration rule.</strong> Do not infer compatibility from a successful HTTP response alone. Compare the OpenAPI contract, validation behavior, error semantics and reconciliation outcomes before promoting a client change.</div>
+    <h2>What counts as breaking</h2>
+    <table><thead><tr><th>Area</th><th>Breaking example</th><th>Migration check</th></tr></thead><tbody>
+      <tr><td>Routes</td><td>Removing a path, method or documented compatibility alias.</td><td>Search all client calls and generated SDK methods.</td></tr>
+      <tr><td>Authentication</td><td>Changing issuer, audience, scopes, headers or token lifetime.</td><td>Test credential issuance, renewal and tenant access.</td></tr>
+      <tr><td>Requests</td><td>Making an optional field required or rejecting an accepted value.</td><td>Run validation cases for every environment.</td></tr>
+      <tr><td>Responses</td><td>Removing fields, changing types or altering pagination metadata.</td><td>Use tolerant deserialization and contract fixtures.</td></tr>
+      <tr><td>Errors</td><td>Changing status codes or retry meaning.</td><td>Review retry, idempotency and alerting logic.</td></tr>
+      <tr><td>Data behavior</td><td>Changing tenant scope, ordering, matching or reconciliation semantics.</td><td>Run a controlled comparison on representative data.</td></tr>
+    </tbody></table>
+    <h2>Notice and support policy</h2>
+    <ol><li>Publish the change with affected versions and migration notes.</li><li>Keep the previous version supported for at least 90 days after notice.</li><li>Expose the new contract and any deprecation signal in the running deployment.</li><li>Monitor old-version traffic and integration failures during migration.</li><li>Remove the old behavior only after the support window and consumer review.</li></ol>
+    <h2>Client migration checklist</h2>
+    <ul><li>Pin the API version in configuration.</li><li>Compare OpenAPI documents in CI.</li><li>Test authentication, tenant boundaries, validation, errors, retries and pagination.</li><li>Deploy behind a measured rollout with rollback prepared.</li><li>Record the migration owner, date and evidence.</li></ul>
+    <h2>Migration test plan</h2>
+    <table><thead><tr><th>Test area</th><th>Minimum evidence</th></tr></thead><tbody>
+      <tr><td>Authentication</td><td>Successful request, expired token, revoked credential and insufficient scope.</td></tr>
+      <tr><td>Reads</td><td>Filtering, sorting, pagination and empty-result behavior remain understood.</td></tr>
+      <tr><td>Writes</td><td>Validation failures, idempotent retry and conflict handling are tested.</td></tr>
+      <tr><td>Tenant safety</td><td>Cross-tenant identifiers cannot return or mutate another tenant's data.</td></tr>
+      <tr><td>Operations</td><td>Request ids, latency, error rates and reconciliation outcomes are observable.</td></tr>
+    </tbody></table>
+    <h2>Rollout and rollback</h2>
+    <p>Start with a low-volume tenant or internal integration. Compare success rate, 4xx and 5xx responses, latency, queue pressure and reconciliation results against the previous version. Keep the old client or route available until the new path is proven. If rollback is required, stop new writes first, preserve idempotency keys, reconcile in-flight operations and then restore the previous client version.</p>
+    <h2>Deprecation communication</h2>
+    <p>A deprecation notice should name the old and replacement routes, affected scopes, behavior differences, first notice date, removal date, test environment availability and support contact. Do not communicate a removal date without confirming consumer traffic and a rollback plan.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../changelog/index.html">Changelog</a></li>

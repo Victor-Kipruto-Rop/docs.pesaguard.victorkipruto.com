@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/reconciliation/unmatched-transactions.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,22 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Reconciliation guides</a><span aria-hidden="true">/</span>
           <span>Unmatched transactions</span></nav>
     <p class="docs-eyebrow">Reconciliation guides</p>
-    <h1>Unmatched transactions <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Queue with the reason attached — never silently discarded.</p>
+    <h1>Unmatched transactions</h1>
+    <p class="docs-lede">An unmatched transaction has no valid internal candidate at the time of evaluation. It remains visible with a reason, tenant context and provider evidence so late data or configuration issues can be investigated.</p>
+    <div class="api-hero"><div><strong>Unmatched is a state, not a loss</strong><p>Keep the event, expose the reason and make reprocessing safe when the missing evidence arrives.</p></div><div class="api-hero-meta"><span>QUEUE</span><span>EXPLAIN</span><span>REPLAY</span></div></div>
+    <h2>Investigation steps</h2><ol><li>Open the provider event and confirm its tenant and identity.</li><li>Read the unmatched reason and candidate-search window.</li><li>Check internal reference, amount, currency and timing.</li><li>Confirm whether the internal record arrived late or belongs to another flow.</li><li>Reprocess with the original event identity after correction.</li></ol>
+    <h2>Do not discard</h2><p>Do not delete an unmatched event, alter its original payload or create a manual success without an audit decision. Unmatched volume and age are operational signals that should appear in queues and reports.</p>
     <p>Queue with the reason attached — never silently discarded.</p>
     <h2>Related</h2>
     <ul>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/concepts/anomalies.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -64,13 +62,19 @@
           <a href="../index.html">Concepts</a><span aria-hidden="true">/</span>
           <span>Anomalies</span></nav>
     <p class="docs-eyebrow">Concepts</p>
-    <h1>Anomalies <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">An anomaly is a named signal, not a verdict. Velocity spikes, amount deviations, duplicate references and timing patterns are scored against the behaviour they came from, and a human decides what happens next.</p>
+    <h1>Anomalies</h1>
+    <p class="docs-lede">An anomaly is a named signal, not a verdict. Velocity spikes, amount deviations, duplicate references and timing patterns are compared with the behavior they came from, then routed to a review decision with context and evidence.</p>
     <ul>
       <li><strong>Signals are named</strong> — each flag states the pattern behind it: amount outside the typical range, N transactions from one account in M minutes, a reference seen before.</li>
       <li><strong>Context beats thresholds</strong> — a large payment is not a problem on its own; it is scored against the account and channel behaviour.</li>
       <li><strong>Review stays with people</strong> — a flag queues a transaction with severity and reason. PesaGuard does not auto-declare fraud, and blocking, if any, is your recorded decision.</li>
     </ul>
+    <h2>Signal anatomy</h2>
+    <table><thead><tr><th>Field</th><th>Purpose</th></tr></thead><tbody><tr><td>Signal name</td><td>States the recognizable pattern, such as velocity spike or duplicate reference.</td></tr><tr><td>Severity</td><td>Prioritizes review without claiming fraud.</td></tr><tr><td>Evidence window</td><td>Defines the account, channel, time range or comparison population.</td></tr><tr><td>Observed values</td><td>Shows the measurements that caused the signal.</td></tr><tr><td>Decision</td><td>Records the human response and reason.</td></tr></tbody></table>
+    <h2>Review workflow</h2>
+    <ol><li>Ingest the event and preserve its identity.</li><li>Evaluate explicit rules and statistical checks.</li><li>Attach the signal to the transaction and tenant.</li><li>Notify the configured owner with delivery evidence.</li><li>Review, resolve or escalate with a written decision.</li></ol>
+    <h2>Tuning without hiding risk</h2>
+    <p>Measure false positives, review age, signal recurrence and confirmed outcomes before changing thresholds. A threshold change must be auditable and evaluated against historical traffic; disabling a noisy signal without recording the reason creates an evidence gap.</p>
     <p>Today this is explicit rules plus statistical checks. These pages describe it that way rather than implying a machine-learning model that has not shipped.</p>
     <h2>Related</h2>
     <ul>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/transactions/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,19 +42,19 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <span>Transaction guides</span></nav>
     <p class="docs-eyebrow">Transaction guides</p>
-    <h1>Transaction guides <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Transaction guides for PesaGuard integrations.</p>
+    <h1>Transaction guides</h1>
+    <p class="docs-lede">Build transaction workflows that are authenticated, tenant-safe, idempotent and observable. Start with a write, then learn how to retrieve, search, interpret and recover its outcome.</p>
+    <div class="api-hero"><div><strong>Transaction workflow</strong><p>Write safely, read within scope, follow state transitions and recover without creating duplicate financial records.</p></div><div class="api-hero-meta"><span>WRITE</span><span>READ</span><span>RECOVER</span></div></div>
     <table>
       <thead><tr><th>Page</th><th>Focus</th></tr></thead>
       <tbody>
@@ -66,6 +65,7 @@
         <tr><td><a href="handle-failures.html">Handle failures</a></td><td>Retry with backoff, match on stable codes, and quote the request id.</td></tr>
       </tbody>
     </table>
+    <h2>Recommended sequence</h2><ol><li>Confirm authentication, tenant and request schema.</li><li>Create with an idempotency key.</li><li>Retrieve the resource and follow its status.</li><li>Search with stable filters, sorting and pagination.</li><li>Handle failures using stable codes and reconcile uncertain writes.</li></ol>
     <h2>Related</h2>
     <ul>
       <li><a href="../../guides/index.html">Guides</a></li>

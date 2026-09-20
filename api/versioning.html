@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/api/versioning.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -63,13 +61,22 @@
           <a href="../index.html">API</a><span aria-hidden="true">/</span>
           <span>Versioning</span></nav>
     <p class="docs-eyebrow">API</p>
-    <h1>Versioning <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">All public routes belong under a versioned namespace — /api/v1 — unless a documented compatibility alias exists.</p>
+    <h1>Versioning</h1>
+    <p class="docs-lede">Versioning gives integrations time to migrate without silently changing financial or reconciliation semantics. Public routes use a versioned namespace where documented; compatibility aliases must be treated as transitional.</p>
+    <h2>Compatibility policy</h2>
     <ul>
       <li>A version remains supported for at least <strong>90 days</strong> after a deprecation notice is published.</li>
-      <li>Breaking changes require a new versioned route prefix — never a silent shape change in place.</li>
-      <li>Deprecations are announced in release notes and in the OpenAPI specification itself.</li>
+      <li>Breaking changes require a new versioned route prefix, never a silent shape change in place.</li>
+      <li>Deprecations are announced in release notes and in the OpenAPI specification.</li>
+      <li>Additive fields can still affect strict deserializers, so clients should tolerate unknown response properties.</li>
     </ul>
+    <h2>Migration procedure</h2>
+    <ol><li>Compare the old and new OpenAPI documents.</li><li>Classify route, schema, validation, error and authorization changes.</li><li>Add compatibility tests against both versions.</li><li>Deploy the new client behind a measured rollout.</li><li>Monitor errors, latency, reconciliation outcomes and old-version traffic.</li><li>Remove the old version only after its consumers have migrated and the support window closes.</li></ol>
+    <h2>Versioned request</h2>
+    <pre class="docs-code" data-lang="http"><code>GET /api/v1/tenant/current
+Authorization: Bearer &lt;token&gt;
+Accept: application/json</code></pre>
+    <p>Do not infer a version from a server error or guess a compatibility alias. Read the deployment's OpenAPI document and release notes, then pin the route version in configuration.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">Errors</a></li>

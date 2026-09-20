@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/testing/sandbox-testing.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,18 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Testing</p>
-    <h1>Testing against staging <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Scope a staging tenant, then drive the same flows production will see.</p>
+    <h1>Testing against staging</h1>
+    <p class="docs-lede">Staging is the realistic safety boundary for integration work: same service behavior, separate data stores, credentials, brokers and operational risk.</p>
+    <div class="api-hero"><div><strong>Production rehearsal, isolated</strong><p>Exercise the workflows production will see without sharing production secrets, tenants, topics or financial data.</p></div><div class="api-hero-meta"><span>ISOLATED</span><span>REAL</span><span>REPEATABLE</span></div></div>
+    <h2>Staging preparation</h2><ul><li>Create or select a staging-only tenant.</li><li>Use staging API keys with short expiry and least privilege.</li><li>Confirm database, Redis and Kafka endpoints are staging-specific.</li><li>Mark all synthetic transactions and provider references as test data.</li><li>Validate the merged configuration quietly before startup.</li></ul>
+    <h2>Promotion evidence</h2><table><thead><tr><th>Area</th><th>Evidence</th></tr></thead><tbody><tr><td>Connectivity</td><td>Health, OpenAPI and authenticated read checks.</td></tr><tr><td>Data</td><td>Matched, unmatched and exception fixtures.</td></tr><tr><td>Reliability</td><td>Duplicate, timeout, retry and replay results.</td></tr><tr><td>Isolation</td><td>Cross-tenant read and write denial tests.</td></tr><tr><td>Operations</td><td>Logs, metrics, audit and reconciliation report links.</td></tr></tbody></table>
     <h2>Related</h2>
     <ul>
       <li><a href="../testing/index.html">Testing</a></li>

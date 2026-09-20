@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/transactions/handle-failures.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,22 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Transaction guides</a><span aria-hidden="true">/</span>
           <span>Handle failures</span></nav>
     <p class="docs-eyebrow">Transaction guides</p>
-    <h1>Handle failures <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Retry with backoff, match on stable codes, and quote the request id.</p>
+    <h1>Handle failures</h1>
+    <p class="docs-lede">Failure handling is part of the transaction workflow. Classify the response, preserve the request id, retry only when safe and reconcile any write whose outcome is uncertain.</p>
+    <div class="api-hero"><div><strong>Recover without duplication</strong><p>Network failure is not proof that a financial operation failed. Preserve identity first, then determine the durable outcome.</p></div><div class="api-hero-meta"><span>CLASSIFY</span><span>BACKOFF</span><span>RECONCILE</span></div></div>
+    <h2>Failure decision table</h2><table><thead><tr><th>Response</th><th>Action</th></tr></thead><tbody><tr><td>400 / 422</td><td>Correct input; do not retry unchanged.</td></tr><tr><td>401 / 403</td><td>Renew credentials or correct permission and tenant context.</td></tr><tr><td>409</td><td>Read the existing operation or state.</td></tr><tr><td>429</td><td>Honor retry guidance and reduce concurrency.</td></tr><tr><td>5xx / timeout</td><td>Bounded retry; same idempotency key for writes; then reconcile.</td></tr></tbody></table>
+    <h2>Operational checklist</h2><ol><li>Log status, stable code, request id, route and environment.</li><li>Redact credentials and sensitive payloads.</li><li>Use exponential backoff with jitter.</li><li>Stop after a bounded retry budget.</li><li>Escalate persistent or financially ambiguous outcomes with evidence.</li></ol>
     <p>Retry with backoff, match on stable codes, and quote the request id.</p>
     <h2>Related</h2>
     <ul>

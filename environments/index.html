@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/environments/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,18 +42,19 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>Environments</span></nav>
     <p class="docs-eyebrow">Environments</p>
-    <h1>Environments <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">PesaGuard does not ship a mocked sandbox. Staging is a real deployment with its own database and brokers; production requires its own credential set and review.</p>
+    <h1>Environments</h1>
+    <p class="docs-lede">Each environment has its own credentials, data stores, brokers and operational risk. Staging is a real deployment for integration testing; production is isolated and change-controlled. Do not treat an environment name as proof of safety: verify the base URL and effective configuration before every test or migration.</p>
+    <div class="api-hero"><div><strong>Deployment map</strong><p>Choose the environment by data sensitivity, integration risk and operational ownership.</p></div><div class="api-hero-meta"><span>STAGING · VERIFY</span><span>PRODUCTION · CONTROLLED</span></div></div>
+    <div class="info-grid"><div class="info-panel"><h2>Staging</h2><p>Real services, isolated data and test credentials. Use it to prove integration behavior before promotion.</p><p><a href="staging.html">Read staging guide →</a></p></div><div class="info-panel"><h2>Production</h2><p>Live tenant data and provider traffic. Changes require approval, observability, rollback and recovery evidence.</p><p><a href="production.html">Read production guide →</a></p></div></div>
     <table>
       <thead><tr><th>Variant</th><th>Purpose</th><th>Owns</th></tr></thead>
       <tbody>
@@ -62,6 +62,10 @@
         <tr><td>Production</td><td>The live deployment the pilot runs on.</td><td>Production credentials, backups and review.</td></tr>
       </tbody>
     </table>
+    <h2>Environment selection checklist</h2>
+    <ol><li>Confirm the base URL and DNS or tunnel target.</li><li>Confirm the credential belongs to the same environment and tenant.</li><li>Check database, Redis and Kafka endpoints before starting workers.</li><li>Use synthetic or approved data in staging; never copy production secrets into it.</li><li>Run an authenticated health or read check before enabling writes.</li></ol>
+    <h2>Promotion path</h2>
+    <p>Promote configuration and application artifacts through staging before production. Re-run migrations, contract tests, retry tests and reconciliation checks in the destination environment. Promotion means issuing destination credentials and validating destination dependencies, not copying a <code>.env</code> file.</p>
     <p>Settings live in the git-ignored root <code>.env</code>. Validate with <code>config --quiet</code>; bring up with <code>up -d --build</code> only after reviewing the merged configuration. Full list: <a href="environment-variables.html">environment variables</a>.</p>
     <h2>Related</h2>
     <ul>

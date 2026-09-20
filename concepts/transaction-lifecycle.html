@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/concepts/transaction-lifecycle.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -64,8 +62,8 @@
           <a href="../index.html">Concepts</a><span aria-hidden="true">/</span>
           <span>Transaction lifecycle</span></nav>
     <p class="docs-eyebrow">Concepts</p>
-    <h1>Transaction lifecycle <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">Every payment moves through a small set of states. The state names what has been proven so far — and the next state is only reached when its precondition holds.</p>
+    <h1>Transaction lifecycle</h1>
+    <p class="docs-lede">A transaction state is a statement about evidence, not a decorative label. Each transition has a precondition, an actor or worker, and an audit event so an operator can explain why the payment is in its current state.</p>
     <table>
       <thead><tr><th>State</th><th>Meaning</th></tr></thead>
       <tbody>
@@ -76,6 +74,12 @@
         <tr><td>Resolved</td><td>A reviewer decided with a written reason; the decision is in the audit trail.</td></tr>
       </tbody>
     </table>
+    <h2>Transition rules</h2>
+    <table><thead><tr><th>From</th><th>To</th><th>Required evidence</th></tr></thead><tbody><tr><td>Received</td><td>Matched</td><td>Deterministic candidate satisfies configured matching rules.</td></tr><tr><td>Received</td><td>Unmatched</td><td>Search completed without a valid candidate.</td></tr><tr><td>Matched</td><td>Exception</td><td>Later evidence exposes an amount, reference or state conflict.</td></tr><tr><td>Exception</td><td>Resolved</td><td>Authorized reviewer records a decision and reason.</td></tr></tbody></table>
+    <h2>Reading a transaction state</h2>
+    <p>Consumers should treat state as a durable workflow signal and use the transaction, provider event, reconciliation result and audit trail together. A state change is not proof that money moved unless the state definition and provider evidence say so.</p>
+    <h2>Operational handling</h2>
+    <ul><li>Poll or subscribe using the documented API and webhook behavior rather than repeatedly creating work.</li><li>Do not skip exception review by writing a final state directly.</li><li>Use idempotency when retrying a state-changing operation.</li><li>Preserve the original event and reviewer reason when correcting a mistake.</li></ul>
     <h2>Related</h2>
     <ul>
       <li><a href="../concepts/reconciliation.html">Reconciliation</a></li>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/concepts/architecture.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -64,8 +62,8 @@
           <a href="../index.html">Concepts</a><span aria-hidden="true">/</span>
           <span>Architecture</span></nav>
     <p class="docs-eyebrow">Concepts</p>
-    <h1>Architecture <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">PesaGuard runs a Flask and SQLAlchemy backend on PostgreSQL, with Redis and RQ for asynchronous work, Kafka for event transport, and Alembic for schema migration.</p>
+    <h1>Architecture</h1>
+    <p class="docs-lede">PesaGuard separates synchronous acceptance from asynchronous processing so provider events can be acknowledged durably, retried safely and reconciled with evidence. Flask and SQLAlchemy expose the API, PostgreSQL owns durable state, Redis and RQ run bounded work, Kafka transports events, and Alembic manages schema change.</p>
     <table>
       <thead><tr><th>Component</th><th>Role</th></tr></thead>
       <tbody>
@@ -76,17 +74,22 @@
         <tr><td>Alembic</td><td>Schema migrations with deliberate compatibility paths.</td></tr>
       </tbody>
     </table>
+    <h2>Event path</h2>
+    <ol><li><strong>Ingress:</strong> authenticate the API caller or verify the provider signature.</li><li><strong>Validation:</strong> normalize the payload and reject malformed or ambiguous data.</li><li><strong>Durability:</strong> write the event, idempotency key and audit record within the transaction boundary.</li><li><strong>Dispatch:</strong> publish an outbox event and let workers process it asynchronously.</li><li><strong>Reconciliation:</strong> match the provider event to the internal record and persist the result.</li><li><strong>Observation:</strong> expose state, metrics, alerts and audit evidence to operators.</li></ol>
+    <h2>Failure boundaries</h2>
+    <table><thead><tr><th>Failure</th><th>Expected protection</th></tr></thead><tbody><tr><td>Process crash after receipt</td><td>Durable event and idempotency record allow safe replay.</td></tr><tr><td>Queue or broker outage</td><td>Accepted work remains visible and is retried or dead-lettered.</td></tr><tr><td>Database failure</td><td>Requests do not claim success before required state commits.</td></tr><tr><td>Consumer failure</td><td>Delivery retries preserve event identity and tenant context.</td></tr></tbody></table>
     <ul>
       <li><strong>Durability first</strong> — work is acknowledged only after the required durable state or idempotency record is written.</li>
       <li><strong>Safe failure</strong> — transient failures retry with bounded backoff; exhausted work is dead-lettered, never discarded.</li>
       <li><strong>Evidence by default</strong> — correlation IDs, structured logs, metrics and append-only audit events explain what happened.</li>
     </ul>
-    <h2>Related</h2>
+    <h2>Design principles</h2>
     <ul>
       <li><a href="../concepts/tenants.html">Tenants</a></li>
       <li><a href="../concepts/idempotency.html">Idempotency</a></li>
       <li><a href="../environments/index.html">Environments</a></li>
     </ul>
+    <p>The architecture is intentionally boring at its boundaries: durable state first, explicit retries, tenant predicates close to data, and audit evidence for decisions. Those constraints make high-volume financial behavior measurable rather than optimistic.</p>
   </article>
 </div>
 </main>

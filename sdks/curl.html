@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/sdks/curl.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,17 +42,28 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">SDKs</p>
-    <h1>curl <span class="status-pill" data-tone="planned"><i></i>Planned</span></h1>
-    <p class="docs-lede">Every example on this site runs with curl against your deployment.</p>
-    <h2>Related</h2>
+    <h1>curl</h1>
+    <p class="docs-lede">Use curl for the smallest reproducible request, deployment health checks and support diagnostics. Every command should identify its environment without exposing credentials.</p>
+    <div class="api-hero"><div><strong>Reproducible HTTP</strong><p>Start with curl before introducing a generated client. It separates API behavior from application-library behavior.</p></div><div class="api-hero-meta"><span>DEBUG</span><span>VERIFY</span><span>REPRODUCE</span></div></div>
+    <h2>Health and contract</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/health"
+curl --fail "$PESAGUARD_API_URL/openapi.json" -o openapi.json</code></pre>
+    <h2>Authenticated request</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/api/v1/tenant/current" \
+  -H "Authorization: Bearer $PESAGUARD_ACCESS_TOKEN" \
+  -H "Accept: application/json" \
+  -H "X-Request-ID: support-check-001"</code></pre>
+    <h2>Safe write pattern</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body -X POST "$PESAGUARD_API_URL/api/v1/transactions" \
+  -H "Authorization: Bearer $PESAGUARD_ACCESS_TOKEN" \
+  -H "Idempotency-Key: transaction-create-001" \
+  -H "Content-Type: application/json" \
+  --data @transaction.json</code></pre><p>Never reuse an idempotency key for a different logical operation. Save the response request id for correlation.</p>
+    <h2>Debugging checklist</h2><ol><li>Confirm the URL and environment.</li><li>Use <code>--fail-with-body</code> so error responses remain visible.</li><li>Inspect status and stable error code, not only prose.</li><li>Redact the Authorization header before sharing output.</li></ol>
     <ul>
       <li><a href="../sdks/index.html">SDKs</a></li>
       <li><a href="../api-reference/openapi.json">OpenAPI document</a></li>

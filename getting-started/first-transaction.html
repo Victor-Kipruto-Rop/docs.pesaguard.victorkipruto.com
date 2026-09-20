@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/getting-started/first-transaction.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -59,13 +57,14 @@
       <li><a href="../getting-started/test-environment.html">Test environment</a></li>
       <li><a href="../getting-started/production-checklist.html">Production checklist</a></li>
     </ul></div></aside>
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../index.html">Getting started</a><span aria-hidden="true">/</span>
           <span>First transaction</span></nav>
     <p class="docs-eyebrow">Getting started</p>
-    <h1>First transaction <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
+    <h1>First transaction</h1>
     <p class="docs-lede">A payment becomes a PesaGuard record in three steps: the callback is received and validated, the match is decided against your internal records, and the outcome keeps its evidence.</p>
+    <div class="api-hero"><div><strong>Follow the evidence</strong><p>Your first transaction is successful when the complete path is visible: callback, durable record, match decision, audit event and downstream notification.</p></div><div class="api-hero-meta"><span>INGEST</span><span>MATCH</span><span>EXPLAIN</span></div></div>
     <h2>1 · The callback arrives</h2>
     <p>Safaricom Daraja delivers a callback to your deployment. Ingestion validates the payload, normalizes it into the canonical payment-event shape, and de-duplicates it on write.</p>
     <ul>
@@ -81,6 +80,8 @@
     </ul>
     <h2>3 · The outcome is recorded</h2>
     <p>Every outcome is written to the append-only audit trail with its actor and tenant. A reviewer resolving an exception records the decision and the reason, which keeps month-end explainable.</p>
+    <h2>First-transaction verification</h2><table><thead><tr><th>Evidence</th><th>What to confirm</th></tr></thead><tbody><tr><td>Provider event</td><td>Raw callback is authenticated, validated and assigned an event identity.</td></tr><tr><td>Durable record</td><td>Duplicate delivery does not create a second financial record.</td></tr><tr><td>Match result</td><td>Amount, reference and time evidence explain the outcome.</td></tr><tr><td>Audit event</td><td>Tenant, actor, reason and correlation ids are present.</td></tr><tr><td>Notification</td><td>Downstream delivery is observable and retry-safe.</td></tr></tbody></table>
+    <h2>If the first transaction does not match</h2><p>Do not edit the record to force success. Inspect the exception reason, confirm the internal reference and amount, then follow the reviewer workflow in <a href="../concepts/reconciliation.html">Reconciliation</a>.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../concepts/reconciliation.html">Reconciliation concept</a></li>

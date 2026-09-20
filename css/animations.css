@@ -1,7 +1,75 @@
-/* Reveal-on-scroll, kept subtle; disabled under reduced motion. */
+/* Motion layer. All site-wide animation and state-transition styles live here;
+   structural styles stay in layout/content/search/code. Every effect is subtle
+   and is disabled under prefers-reduced-motion (block at the bottom). */
 
-.reveal { opacity: 0; transform: translateY(14px); transition: opacity 460ms var(--ease-out), transform 460ms var(--ease-out); }
+/* --- Reveal on scroll ------------------------------------------------------ */
+
+.reveal { opacity: 0; transform: translateY(12px); transition: opacity 380ms var(--ease-out), transform 380ms var(--ease-out); }
 .reveal.is-visible { opacity: 1; transform: none; }
+
+/* --- Header scrolled state ---------------------------------------------------
+ * Toggled by js/app.js once the page is scrolled; the base transition lives on
+ * .docs-header in layout.css. */
+
+.docs-header.is-scrolled { border-bottom-color: var(--line-strong); box-shadow: var(--shadow-sm); }
+
+/* --- Search focus ------------------------------------------------------------
+ * The box in search.css keeps its structural styles; this adds the animated
+ * focus treatment and dims the shortcut hint while the field is active. */
+
+.docs-search {
+  transition: border-color 180ms var(--ease-out), box-shadow 180ms var(--ease-out);
+}
+
+.docs-search:focus-within {
+  border-color: var(--line-strong);
+  box-shadow: 0 0 0 3px var(--lime-wash), var(--shadow-xs);
+}
+
+.docs-search kbd { transition: opacity 160ms var(--ease-out); }
+.docs-search:focus-within kbd { opacity: 0.4; }
+
+/* --- Cards: focus parity and arrow nudge -------------------------------------
+ * The hover lift/colour transition itself lives in content.css; this adds
+ * keyboard parity and moves only the arrow glyph inside .go. */
+
+a.card:focus-visible {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+  outline: 2px solid var(--lime-deep);
+  outline-offset: 2px;
+}
+
+.card .go .arrow { display: inline-block; transition: transform 160ms var(--ease-out); }
+a.card:hover .go .arrow, a.card:focus-visible .go .arrow { transform: translateX(4px); }
+
+/* --- Code-copy feedback -------------------------------------------------------
+ * js/app.js toggles .is-copied for ~1.4s after a copy; the pop keyframe gives
+ * the button a small press-in-and-out pulse. */
+
+.code-copy {
+  transition: color 140ms var(--ease-out), border-color 140ms var(--ease-out), background-color 140ms var(--ease-out), transform 140ms var(--ease-out);
+}
+
+.code-copy:active { transform: scale(0.96); }
+
+.code-copy.is-copied {
+  color: var(--lime-ink);
+  border-color: rgba(110, 131, 29, 0.45);
+  background: var(--lime-veil);
+  animation: copy-pop 260ms var(--ease-out);
+}
+
+@keyframes copy-pop {
+  0% { transform: scale(0.94); }
+  60% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* --- Reduced motion -----------------------------------------------------------
+ * The duration override above does not zero transition-delay, so delays used
+ * for the reveal cascade and the mobile-menu link stagger are killed here too. */
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -11,4 +79,5 @@
     scroll-behavior: auto !important;
   }
   .reveal { opacity: 1; transform: none; }
+  .docs-header-links, .docs-header-links a, .reveal { transition-delay: 0s !important; }
 }

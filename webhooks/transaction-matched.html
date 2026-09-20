@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/webhooks/transaction-matched.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,18 +42,17 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Webhooks</p>
-    <h1>transaction.matched <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
+    <h1>transaction.matched</h1>
     <p class="docs-lede">A deterministic pairing succeeded and the evidence is retained with the record.</p>
     <p>Payload fields are still being stabilized; subscribe to the OpenAPI document rather than hard-coding shapes.</p>
-    <h2>Related</h2>
+    <h2>Consumer behavior</h2><p>Update downstream state only after verifying the event and preserve the matching evidence. A matched event should link to the transaction, provider reference, amount and reconciliation result.</p><h2>Assertions</h2><ul><li>Match event is processed once.</li><li>Evidence is retained for later reporting.</li><li>Later exception or correction events can be handled without losing history.</li></ul><h2>Related</h2>
     <ul>
       <li><a href="../webhooks/event-catalog.html">Event catalog</a></li>
       <li><a href="../webhooks/verification.html">Verification</a></li>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/transactions/create-transaction.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,22 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Transaction guides</a><span aria-hidden="true">/</span>
           <span>Create a transaction</span></nav>
     <p class="docs-eyebrow">Transaction guides</p>
-    <h1>Create a transaction <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">The write path is documented in the OpenAPI contract — confirm the schema against your deployment.</p>
+    <h1>Create a transaction</h1>
+    <p class="docs-lede">Create a transaction only after confirming the running deployment's OpenAPI schema, authentication scope and idempotency contract. A write must be safe to retry and traceable to its source.</p>
+    <div class="api-hero"><div><strong>Safe write pattern</strong><p>Validate locally, send one logical operation with one idempotency key, then reconcile the durable outcome.</p></div><div class="api-hero-meta"><span>VALIDATE</span><span>WRITE ONCE</span><span>RECONCILE</span></div></div>
+    <h2>Request checklist</h2><ul><li>Use the correct environment and tenant credential.</li><li>Send exact amount, currency, reference and timestamp formats.</li><li>Generate and persist an idempotency key for the logical operation.</li><li>Set a client timeout without assuming timeout means rejection.</li></ul>
+    <h2>Write sequence</h2><ol><li>Validate the payload against the deployment contract.</li><li>Send the authenticated request.</li><li>Persist the response or request id.</li><li>On uncertainty, retry with the same key.</li><li>Retrieve and reconcile the resulting transaction.</li></ol>
     <p>The write path is documented in the OpenAPI contract — confirm the schema against your deployment.</p>
     <h2>Related</h2>
     <ul>

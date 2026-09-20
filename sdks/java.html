@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/sdks/java.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,17 +42,25 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">SDKs</p>
-    <h1>Java <span class="status-pill" data-tone="planned"><i></i>Planned</span></h1>
-    <p class="docs-lede">Generate a Java client from the OpenAPI document; no official SDK yet.</p>
-    <h2>Related</h2>
+    <h1>Java</h1>
+    <p class="docs-lede">Generate a Java client from the deployment's OpenAPI document, then wrap it with explicit timeouts, authentication, error mapping and idempotent write handling.</p>
+    <h2>Generate a Java client</h2><pre class="docs-code" data-lang="bash"><code>curl --fail "$PESAGUARD_API_URL/openapi.json" -o openapi.json
+java -jar openapi-generator-cli.jar generate \
+  -i openapi.json -g java -o ./generated/pesaguard \
+  --library okhttp-gson</code></pre>
+    <h2>Client configuration</h2><pre class="docs-code" data-lang="java"><code>ApiClient client = new ApiClient();
+client.setBasePath(System.getenv("PESAGUARD_API_URL"));
+client.setApiKey(System.getenv("PESAGUARD_ACCESS_TOKEN"));
+client.setConnectTimeout(10_000);
+client.setReadTimeout(10_000);</code></pre>
+    <h2>Review before production</h2><table><thead><tr><th>Area</th><th>Review</th></tr></thead><tbody><tr><td>Serialization</td><td>Dates, decimal amounts, nulls and unknown fields.</td></tr><tr><td>Transport</td><td>TLS verification, connection pooling and timeouts.</td></tr><tr><td>Errors</td><td>Stable code, status, request id and retry classification.</td></tr><tr><td>Writes</td><td>Idempotency header and reconciliation after timeout.</td></tr></tbody></table>
     <ul>
       <li><a href="../sdks/index.html">SDKs</a></li>
       <li><a href="../api-reference/openapi.json">OpenAPI document</a></li>

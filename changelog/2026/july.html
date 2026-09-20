@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Changelog · July 2026 — PesaGuard docs</title>
-<meta name="description" content="No public changelog entries were published for this month.">
+<meta name="description" content="July 2026 documentation baseline for PesaGuard integrations, API behavior, security and versioning.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/changelog/2026/july.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
 <meta property="og:title" content="Changelog · July 2026 — PesaGuard docs">
-<meta property="og:description" content="No public changelog entries were published for this month.">
+<meta property="og:description" content="July 2026 documentation baseline for PesaGuard integrations, API behavior, security and versioning.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/changelog/2026/july.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Changelog · July 2026 — PesaGuard docs">
-<meta name="twitter:description" content="No public changelog entries were published for this month.">
+<meta name="twitter:description" content="July 2026 documentation baseline for PesaGuard integrations, API behavior, security and versioning.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
 <link rel="icon" type="image/svg+xml" href="../../assets/brand/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/changelog/2026/july.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -51,8 +49,16 @@
 <div class="docs-shell">
   <article class="docs-article">
     <p class="docs-eyebrow">Changelog</p>
-    <h1>July 2026 <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">No public changelog entries were published for this month.</p>
+    <h1>July 2026</h1>
+    <p class="docs-lede">July records the initial public documentation structure for PesaGuard integrations and platform operators.</p>
+    <h2>Recorded changes</h2>
+    <article class="change-entry"><p class="change-meta">DOCUMENTATION · INITIAL RELEASE</p><h3>Public docs structure introduced</h3><p>Introduced the documentation navigation for getting started, API behavior, concepts, security, webhooks, testing, environments, migration and service status.</p><p><strong>Audience:</strong> Developers integrating provider callbacks, reconciliation workflows and tenant-scoped operational tooling.</p></article>
+    <article class="change-entry"><p class="change-meta">COMPATIBILITY · POLICY</p><h3>Versioning expectations documented</h3><p>Defined the expectation that breaking API changes use a new versioned prefix and that deprecations include a support window and migration notice.</p></article>
+    <h2>Release impact</h2><p>This entry describes the documentation baseline. It does not substitute for the running deployment's API contract or status information.</p>
+    <h2>What integrators could do after this release</h2>
+    <ul><li>Find onboarding instructions for accounts, API keys, first requests and test environments.</li><li>Review API authentication, errors, pagination and versioning before building an integration.</li><li>Understand tenant boundaries, reconciliation lifecycle and webhook delivery behavior.</li><li>Use security and testing guidance to prepare failure scenarios before production access.</li></ul>
+    <h2>Verification checklist</h2>
+    <table><thead><tr><th>Check</th><th>Expected result</th></tr></thead><tbody><tr><td>Navigation</td><td>Each primary documentation section is reachable from the shared header.</td></tr><tr><td>API contract</td><td>The reference points to the deployment OpenAPI document as authority.</td></tr><tr><td>Migration policy</td><td>Breaking changes are versioned and announced with a support window.</td></tr></tbody></table>
     <h2>Related</h2>
     <ul>
       <li><a href="../../changelog/index.html">Changelog</a></li>

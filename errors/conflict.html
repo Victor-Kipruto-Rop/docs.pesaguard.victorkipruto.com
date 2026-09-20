@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/errors/conflict.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,17 +42,18 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Errors</p>
-    <h1>409 · Conflict <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Usually a duplicate under idempotency. Read the existing record instead of re-sending.</p>
+    <h1>409 · Conflict</h1>
+    <p class="docs-lede">The request is valid but cannot be applied to the current resource state. In write paths, this commonly means an idempotency key or provider reference already represents an existing operation.</p>
     <p>See <a href="../api/errors.html">API · Errors</a> for the envelope and client behaviour.</p>
+    <h2>Conflict categories</h2><table><thead><tr><th>Category</th><th>Example</th><th>Correct response</th></tr></thead><tbody><tr><td>Duplicate operation</td><td>Same idempotency key with the same or completed request.</td><td>Retrieve or return the original outcome.</td></tr><tr><td>Key mismatch</td><td>Same key reused with a different request body.</td><td>Stop and create a new logical operation.</td></tr><tr><td>State conflict</td><td>Attempt to resolve an already resolved record.</td><td>Read current state and preserve history.</td></tr></tbody></table>
+    <h2>Safe recovery</h2><ol><li>Preserve the response body and request id.</li><li>Read the resource using the same tenant and authorization context.</li><li>Compare the server outcome with the intended operation.</li><li>Never create a second record merely because the first response was lost.</li><li>Escalate ambiguous financial state for reconciliation review.</li></ol>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">API · Errors</a></li>

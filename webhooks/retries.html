@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/webhooks/retries.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -55,12 +53,12 @@
       <li><a href="../webhooks/verification.html">Verification</a></li>
       <li><a href="../webhooks/retries.html">Retries</a></li>
     </ul></div></aside>
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../index.html">Webhooks</a><span aria-hidden="true">/</span>
           <span>Retries</span></nav>
     <p class="docs-eyebrow">Webhooks</p>
-    <h1>Retries and dead letters <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
+    <h1>Retries and dead letters</h1>
     <p class="docs-lede">Transient failures are retried with bounded backoff. When retries are exhausted the delivery moves to the dead-letter path, where it stays visible and replayable — a failed delivery never disappears.</p>
     <ul>
       <li>Each attempt is recorded with its outcome, so you can answer what was sent and when.</li>
@@ -69,6 +67,8 @@
       <li>Retry schedules are bounded on purpose; unbounded retries only hide an outage.</li>
     </ul>
     <p>The ops API surfaces these delivery events with retry counts and error details under the <code>integrations:read</code> scope.</p>
+    <h2>Retry decision</h2><table><thead><tr><th>Failure</th><th>Retry behavior</th><th>Receiver action</th></tr></thead><tbody><tr><td>Network timeout</td><td>Retry with bounded backoff.</td><td>Keep processing idempotent.</td></tr><tr><td>5xx response</td><td>Retry and record response status.</td><td>Investigate dependency or receiver health.</td></tr><tr><td>4xx signature failure</td><td>Do not blindly retry.</td><td>Fix secret or verification configuration.</td></tr><tr><td>Exhausted attempts</td><td>Move to dead letter.</td><td>Inspect, correct and replay deliberately.</td></tr></tbody></table>
+    <h2>Replay procedure</h2><ol><li>Inspect delivery payload, error, attempt count and tenant context.</li><li>Correct receiver, secret or dependency behavior.</li><li>Replay using the original event and delivery identity.</li><li>Confirm one downstream effect and a successful acknowledgement.</li><li>Close the dead-letter record with an operator reason.</li></ol>
     <h2>Related</h2>
     <ul>
       <li><a href="../webhooks/index.html">Delivery overview</a></li>

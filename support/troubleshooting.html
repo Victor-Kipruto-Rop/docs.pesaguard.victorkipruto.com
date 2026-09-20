@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/support/troubleshooting.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,28 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Support</p>
-    <h1>Troubleshooting <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">Start with the request id, then the status classes in Errors. Most failures are scope, tenant or an unverified assumption about a payload.</p>
+    <h1>Troubleshooting</h1>
+    <p class="docs-lede">A structured path from symptom to evidence. Start with the request id and environment, classify the status, then follow the narrowest recovery action instead of repeating an unknown failure.</p>
+    <div class="api-hero"><div><strong>Diagnose in layers</strong><p>Environment first, identity second, contract third, durable outcome last.</p></div><div class="api-hero-meta"><span>CONTEXT</span><span>CLASSIFY</span><span>RECOVER</span></div></div>
+    <h2>Quick triage</h2><div class="info-grid"><div class="info-panel"><h2>1. Context</h2><p>Confirm environment, URL, tenant-safe identity, UTC time and whether the issue affects reads, writes or callbacks.</p></div><div class="info-panel"><h2>2. Classification</h2><p>Use status and stable error code to choose a recovery path. Do not retry an unknown failure indefinitely.</p></div><div class="info-panel"><h2>3. Evidence</h2><p>Preserve request, transaction or event ids, then compare the durable state and audit trail.</p></div></div>
+    <h2>Decision tree</h2><table><thead><tr><th>Symptom</th><th>Check</th><th>Next move</th></tr></thead><tbody><tr><td>No response or timeout</td><td>Base URL, DNS, TLS, health and network path.</td><td>Check environment status before retrying.</td></tr><tr><td><code>401</code></td><td>Header, token expiry, issuer, audience and environment.</td><td>Renew or replace the credential once.</td></tr><tr><td><code>403</code></td><td>Tenant membership, role and scope.</td><td>Correct authorization; do not retry unchanged.</td></tr><tr><td><code>400</code> / <code>422</code></td><td>Field details, formats, amounts and enums.</td><td>Correct the payload and resubmit as a new attempt only if appropriate.</td></tr><tr><td><code>409</code></td><td>Idempotency key and current resource state.</td><td>Read the existing outcome instead of creating another.</td></tr><tr><td><code>429</code> or <code>5xx</code></td><td>Retry guidance, concurrency and dependency health.</td><td>Back off with jitter; preserve write identity.</td></tr></tbody></table>
+    <h2>Diagnostic capture</h2><pre class="docs-code" data-lang="text"><code>Environment: staging | production
+  UTC time: 2026-09-20T12:00:00Z
+  Method and route: GET /api/v1/tenant/current
+  Status and code: 401 AUTHENTICATION_FAILED
+  Request id: request_01J...
+  Expected: authenticated tenant configuration
+  Actual: credential rejected
+  Secrets redacted: yes</code></pre>
+    <h2>When the issue is a data outcome</h2><p>Do not repair an uncertain transaction by issuing another write. Retrieve the current state, inspect provider and reconciliation evidence, preserve the idempotency key and escalate with the transaction or event id.</p>
+    <h2>Escalate immediately</h2><ul><li>Cross-tenant data appears in a response, export or log.</li><li>A retry may have produced duplicate financial records.</li><li>Credentials or signing secrets may be exposed.</li><li>Reconciliation results differ without an explainable rule change.</li></ul>
     <h2>Related</h2>
     <ul>
       <li><a href="../support/index.html">Support</a></li>

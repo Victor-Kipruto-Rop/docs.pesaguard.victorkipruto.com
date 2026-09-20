@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Changelog · August 2026 — PesaGuard docs</title>
-<meta name="description" content="No public changelog entries were published for this month.">
+<meta name="description" content="August 2026 API documentation foundation and operational guidance for PesaGuard integrations.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/changelog/2026/august.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
 <meta property="og:title" content="Changelog · August 2026 — PesaGuard docs">
-<meta property="og:description" content="No public changelog entries were published for this month.">
+<meta property="og:description" content="August 2026 API documentation foundation and operational guidance for PesaGuard integrations.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/changelog/2026/august.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Changelog · August 2026 — PesaGuard docs">
-<meta name="twitter:description" content="No public changelog entries were published for this month.">
+<meta name="twitter:description" content="August 2026 API documentation foundation and operational guidance for PesaGuard integrations.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
 <link rel="icon" type="image/svg+xml" href="../../assets/brand/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/changelog/2026/august.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -51,8 +49,15 @@
 <div class="docs-shell">
   <article class="docs-article">
     <p class="docs-eyebrow">Changelog</p>
-    <h1>August 2026 <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">No public changelog entries were published for this month.</p>
+    <h1>August 2026</h1>
+    <p class="docs-lede">August records the preparation of the documentation and operational contract that supports the public PesaGuard integration surface.</p>
+    <h2>Recorded changes</h2>
+    <article class="change-entry"><p class="change-meta">DOCUMENTATION · FOUNDATION</p><h3>API reference structure prepared</h3><p>Established the API overview and topic structure for authentication, errors, idempotency, pagination, rate limits, filtering, sorting, request validation, versioning and the OpenAPI reference.</p><p><strong>Why it matters:</strong> Integrations now have a consistent place to verify request behavior, recovery rules and operational constraints.</p></article>
+    <article class="change-entry"><p class="change-meta">OPERATIONS · GUIDANCE</p><h3>Tenant and reconciliation principles made explicit</h3><p>Documentation emphasizes tenant isolation, durable writes, idempotent retries, stable ordering, bounded pagination, auditability and reconciliation correctness.</p><p><strong>Action:</strong> Use these principles when reviewing client retries, exports and background workers.</p></article>
+    <h2>Release impact</h2><p>No runtime endpoint change is asserted by this documentation record. Check the <a href="../../api-reference/openapi.json">OpenAPI contract</a> and deployment release notes for implementation-specific changes.</p>
+    <h2>Operational review checklist</h2>
+    <table><thead><tr><th>Concern</th><th>Review question</th></tr></thead><tbody><tr><td>Isolation</td><td>Are reads, writes, exports, caches and replay workers tenant-scoped?</td></tr><tr><td>Retries</td><td>Do workers preserve idempotency keys and avoid duplicate financial records?</td></tr><tr><td>Ordering</td><td>Do exports use stable sorting and bounded pagination?</td></tr><tr><td>Recovery</td><td>Can operators trace an outcome using request, event and reconciliation ids?</td></tr><tr><td>Secrets</td><td>Are production credentials scoped, stored server-side and rotatable?</td></tr></tbody></table>
+    <h2>Adoption guidance</h2><p>Teams adopting the documentation should turn the principles into integration tests and operational checks. The guidance is most valuable when it is attached to deployment reviews, background-worker capacity tests and reconciliation runbooks.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../../changelog/index.html">Changelog</a></li>

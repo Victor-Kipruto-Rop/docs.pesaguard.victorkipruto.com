@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/errors/server-errors.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,17 +42,18 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Errors</p>
-    <h1>5xx · Server errors <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Server or gateway failure. Retry with backoff and quote the request id to the operator.</p>
+    <h1>5xx · Server errors</h1>
+    <p class="docs-lede">A service, dependency or gateway could not complete the request. Treat the outcome as uncertain for writes: retry with the same idempotency key, then reconcile instead of creating a second operation.</p>
     <p>See <a href="../api/errors.html">API · Errors</a> for the envelope and client behaviour.</p>
+    <h2>Failure classes</h2><table><thead><tr><th>Status</th><th>Likely boundary</th><th>Client action</th></tr></thead><tbody><tr><td>500</td><td>Unhandled application failure.</td><td>Bounded retry; escalate repeated request ids.</td></tr><tr><td>502</td><td>Gateway or upstream response invalid.</td><td>Retry with backoff and check dependency health.</td></tr><tr><td>503</td><td>Service unavailable or overloaded.</td><td>Reduce load and honor retry guidance.</td></tr><tr><td>504</td><td>Gateway timeout.</td><td>Assume uncertain write outcome and query safely.</td></tr></tbody></table>
+    <h2>Recovery sequence</h2><ol><li>Capture status, request id, timestamp, route and environment.</li><li>Wait using bounded exponential backoff with jitter.</li><li>Retry reads only when safe; retry writes with the same idempotency key.</li><li>Check the resulting resource or reconciliation record.</li><li>Escalate a persistent failure with correlated logs and metrics.</li></ol>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">API · Errors</a></li>

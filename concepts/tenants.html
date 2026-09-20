@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/concepts/tenants.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -64,13 +62,19 @@
           <a href="../index.html">Concepts</a><span aria-hidden="true">/</span>
           <span>Tenants</span></nav>
     <p class="docs-eyebrow">Concepts</p>
-    <h1>Tenants <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Every query, mutation, export, cache key, event and audit record carries an authorized tenant scope — enforced at the database layer, so application mistakes cannot leak one organization's data into another's view.</p>
+    <h1>Tenants</h1>
+    <p class="docs-lede">A tenant is the security and data boundary for one organization. Every query, mutation, export, cache key, event and audit record carries an authorized tenant scope, with database enforcement protecting against application omissions.</p>
     <ul>
       <li><strong>Tenant predicates are part of the data access</strong> — a query without an authorized tenant resolves to nothing, not to everything.</li>
       <li><strong>IDs are not globally trusted</strong> — detail lookups must include tenant and account predicates.</li>
       <li><strong>Measured, not assumed</strong> — the committed load test exercised 100 tenants concurrently and recorded zero cross-tenant rows.</li>
     </ul>
+    <h2>Tenant context flow</h2>
+    <ol><li>Authenticate the user or service identity.</li><li>Resolve its organization membership and permitted roles.</li><li>Attach one tenant context to the request or worker message.</li><li>Apply the context to reads, writes, exports, cache keys and events.</li><li>Record the tenant with audit and operational evidence.</li></ol>
+    <h2>Isolation checklist</h2>
+    <table><thead><tr><th>Surface</th><th>Required control</th></tr></thead><tbody><tr><td>Database</td><td>Tenant predicates or row-level policy are applied to every access path.</td></tr><tr><td>Background work</td><td>Jobs carry tenant context and cannot fall back to a global query.</td></tr><tr><td>Cache</td><td>Keys include tenant scope and invalidation respects that boundary.</td></tr><tr><td>Exports</td><td>Export jobs and files are authorized for one tenant.</td></tr><tr><td>Events</td><td>Published messages retain tenant identity through retries and replay.</td></tr></tbody></table>
+    <h2>Testing tenant safety</h2>
+    <p>Run concurrent tests with multiple tenants, identical resource ids and overlapping filters. Verify that reads return zero rows across boundaries, writes cannot target another tenant, and logs and exports do not disclose identifiers from unrelated organizations.</p>
     <p>The reason this lives in the database rather than the application: handlers change constantly, and one missed check is enough to leak data. A boundary that only protects reads is not a boundary — isolation covers writes, exports, cache keys, events and replays too.</p>
     <h2>Related</h2>
     <ul>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/webhooks/verification.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -55,12 +53,12 @@
       <li><a href="../webhooks/verification.html">Verification</a></li>
       <li><a href="../webhooks/retries.html">Retries</a></li>
     </ul></div></aside>
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../index.html">Webhooks</a><span aria-hidden="true">/</span>
           <span>Verification</span></nav>
     <p class="docs-eyebrow">Webhooks</p>
-    <h1>Verification <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
+    <h1>Verification</h1>
     <p class="docs-lede">Every outbound delivery is signed. Your consumer should reject any delivery whose signature does not verify — the signature is what turns an HTTP POST into a trustworthy event.</p>
     <ol>
       <li>Read the signature header from the delivery.</li>
@@ -68,6 +66,9 @@
       <li>Compare with a constant-time comparison; reject on mismatch with 401.</li>
       <li>Only then parse the body and act — and act idempotently.</li>
     </ol>
+    <div class="api-hero"><div><strong>Trust boundary</strong><p>Signature verification must happen before parsing, persistence or business logic.</p></div><div class="api-hero-meta"><span>RAW BODY</span><span>CONSTANT TIME</span><span>FAIL CLOSED</span></div></div>
+    <h2>Verification checklist</h2><table><thead><tr><th>Step</th><th>Requirement</th></tr></thead><tbody><tr><td>Read raw bytes</td><td>Do not reserialize JSON before calculating the digest.</td></tr><tr><td>Resolve secret</td><td>Use the environment-specific signing secret from protected storage.</td></tr><tr><td>Calculate</td><td>Apply the documented algorithm and canonicalization exactly.</td></tr><tr><td>Compare</td><td>Use constant-time comparison and reject malformed headers.</td></tr><tr><td>Process</td><td>Parse and act only after verification; retain delivery identity.</td></tr></tbody></table>
+    <h2>Failure response</h2><p>Reject an invalid signature before parsing or invoking business logic. Record a safe delivery id and verification outcome, but never log the shared secret, full signature or sensitive payload.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../webhooks/retries.html">Retries</a></li>

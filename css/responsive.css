@@ -21,8 +21,15 @@
 
   .docs-nav-toggle { display: flex; }
 
+  /* Larger touch targets in the compact header. */
+  .docs-nav-toggle { width: 40px; height: 40px; }
+
+  /* Hidden state transitions to .is-open (and back) — opacity/transform for
+     the panel, a staggered cascade for the links, with visibility delayed so
+     the close animation can play before the panel stops hit-testing. */
+
   .docs-header-links {
-    display: none;
+    display: flex;
     position: absolute;
     top: var(--header-h);
     left: 0;
@@ -34,11 +41,37 @@
     background: var(--paper);
     border-bottom: 1px solid var(--line);
     box-shadow: var(--shadow-md);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out), visibility 0s linear 200ms;
   }
 
-  .docs-header-links.is-open { display: flex; }
+  .docs-header-links.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+    transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out), visibility 0s;
+  }
 
-  .docs-header-links a { padding: 10px 8px; font-size: 14px; }
+  .docs-header-links a {
+    padding: 10px 8px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out), color 120ms var(--ease-out), background-color 120ms var(--ease-out);
+  }
+
+  .docs-header-links.is-open a { opacity: 1; transform: none; }
+
+  .docs-header-links.is-open a:nth-child(1) { transition-delay: 30ms; }
+  .docs-header-links.is-open a:nth-child(2) { transition-delay: 60ms; }
+  .docs-header-links.is-open a:nth-child(3) { transition-delay: 90ms; }
+  .docs-header-links.is-open a:nth-child(4) { transition-delay: 120ms; }
+  .docs-header-links.is-open a:nth-child(5) { transition-delay: 150ms; }
+  .docs-header-links.is-open a:nth-child(6) { transition-delay: 180ms; }
 
   .card-grid { grid-template-columns: minmax(0, 1fr); }
 

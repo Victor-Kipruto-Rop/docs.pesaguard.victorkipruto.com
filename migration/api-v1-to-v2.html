@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Migration · API v1 to v2 — PesaGuard docs</title>
-<meta name="description" content="No public v1-to-v2 transition has been announced. The public contract remains /api/v1; the dashboard spec is versioned 2.0.0.">
+<meta name="description" content="Developer runbook for comparing and migrating a future PesaGuard API v1 to v2 contract without breaking authentication, tenant safety, retries or reconciliation.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/migration/api-v1-to-v2.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
 <meta property="og:title" content="Migration · API v1 to v2 — PesaGuard docs">
-<meta property="og:description" content="No public v1-to-v2 transition has been announced. The public contract remains /api/v1; the dashboard spec is versioned 2.0.0.">
+<meta property="og:description" content="Developer runbook for comparing and migrating a future PesaGuard API v1 to v2 contract without breaking authentication, tenant safety, retries or reconciliation.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/migration/api-v1-to-v2.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Migration · API v1 to v2 — PesaGuard docs">
-<meta name="twitter:description" content="No public v1-to-v2 transition has been announced. The public contract remains /api/v1; the dashboard spec is versioned 2.0.0.">
+<meta name="twitter:description" content="Developer runbook for comparing and migrating a future PesaGuard API v1 to v2 contract without breaking authentication, tenant safety, retries or reconciliation.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.png">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/migration/api-v1-to-v2.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,45 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Migration</p>
-    <h1>API v1 to v2 <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">No public v1-to-v2 transition has been announced. The public contract remains /api/v1; the dashboard spec is versioned 2.0.0.</p>
+    <h1>API v1 to v2</h1>
+    <p class="docs-lede">A developer runbook for a future route-version migration. It explains how to compare contracts, introduce compatibility, test tenant-safe behavior and retire v1 without duplicating financial work.</p>
+    <div class="api-hero"><div><strong>Current contract boundary</strong><p>The documented public route remains <code>/api/v1</code>. The OpenAPI document version <code>2.0.0</code> describes the specification; it does not create an <code>/api/v2</code> route.</p></div><div class="api-hero-meta"><span>COMPARE</span><span>DUAL-RUN</span><span>RETIRE</span></div></div>
+    <div class="callout" data-tone="info"><strong>No v2 migration announced</strong><p>Do not change a client from <code>/api/v1</code> to <code>/api/v2</code> until the deployment publishes the route, OpenAPI contract, compatibility window and migration owner. Treat a guessed v2 URL as an integration defect.</p></div>
+    <h2>What changes in a route migration</h2>
+    <p>A route version is a compatibility boundary for client-visible behavior. Compare more than paths: authentication, tenant context, validation, response shape, error semantics, ordering, pagination, rate limits, idempotency and reconciliation meaning can all break a client even when the HTTP method stays the same.</p>
+    <table><thead><tr><th>Surface</th><th>Developer comparison</th><th>Breaking signal</th></tr></thead><tbody><tr><td>Route</td><td>Path, method, parameters and content types.</td><td>Removed method, renamed path or changed parameter meaning.</td></tr><tr><td>Authentication</td><td>Issuer, audience, scopes, expiry and tenant claims.</td><td>Existing credential cannot authenticate or authorize.</td></tr><tr><td>Request</td><td>Required fields, formats, enums, defaults and validation.</td><td>Previously accepted payload is rejected or interpreted differently.</td></tr><tr><td>Response</td><td>Types, nullability, pagination, ordering and unknown fields.</td><td>Deserializer fails or business logic changes meaning.</td></tr><tr><td>Failure</td><td>Status codes, stable error codes and retry semantics.</td><td>Client retries unsafe work or stops recovering a safe failure.</td></tr><tr><td>Financial behavior</td><td>Idempotency, state transitions and reconciliation evidence.</td><td>Duplicate record, changed match or unexplained outcome.</td></tr></tbody></table>
+    <h2>Before coding</h2>
+    <ol><li>Identify every caller, SDK, background worker, export job and webhook consumer using v1.</li><li>Record the environment, tenant, credential scopes and traffic volume for each caller.</li><li>Fetch the running v1 contract and preserve it as a versioned build artifact.</li><li>Obtain the announced v2 contract from the same deployment or staging target.</li><li>Generate a machine-readable diff, then review behavioral changes manually.</li><li>Assign an owner for client rollout, support, rollback and v1 retirement.</li></ol>
+    <h2>Contract comparison commands</h2>
+    <p>Compare contracts from the environment being migrated. Do not compare a local static document with a production route and assume they describe the same deployment.</p>
+    <pre class="docs-code" data-lang="bash"><code>curl --fail "$PESAGUARD_API_URL/api/v1/openapi.json" -o openapi-v1.json
+curl --fail "$PESAGUARD_API_URL/api/v2/openapi.json" -o openapi-v2.json
+node ./scripts/compare-openapi.js openapi-v1.json openapi-v2.json</code></pre>
+    <p>The comparison command is illustrative until a v2 contract and diff tool are published. The important control is to store both inputs and review the resulting route, schema, security and response changes in version control.</p>
+    <h2>Compatibility patterns</h2>
+    <h3>Client-side version switch</h3><p>Keep v1 and v2 adapters behind one application interface. Select the adapter through deployment configuration, not scattered path strings, so rollback changes one controlled value.</p>
+    <pre class="docs-code" data-lang="javascript"><code>const api = process.env.PESAGUARD_API_VERSION === "v2"
+  ? createV2Client(config)
+  : createV1Client(config);
+
+return api.retrieveTransaction(transactionId);</code></pre>
+    <h3>Read compatibility</h3><p>When response fields differ, normalize both versions into one internal model and preserve the source version for debugging. Do not silently map a missing financial field to zero or an unknown status to success.</p>
+    <h3>Write compatibility</h3><p>Send writes to one version at a time unless the migration contract explicitly requires dual-write. If dual-write is required, use separate idempotency namespaces, reconcile both outcomes and define which version is authoritative.</p>
+    <h2>Staging test plan</h2>
+    <table><thead><tr><th>Scenario</th><th>Evidence required</th></tr></thead><tbody><tr><td>Authentication</td><td>Valid token, expired token, revoked credential and insufficient scope.</td></tr><tr><td>Tenant isolation</td><td>Same resource id across two tenants cannot cross-read or cross-write.</td></tr><tr><td>Validation</td><td>Required fields, enum boundaries, amount and timestamp failures match the new contract.</td></tr><tr><td>Retries</td><td>Timeout and 5xx retry with the same key produces one durable outcome.</td></tr><tr><td>Pagination</td><td>Stable sort, complete iteration and changing-collection behavior are understood.</td></tr><tr><td>Reconciliation</td><td>Matched, unmatched, exception and resolved outcomes retain equivalent evidence.</td></tr><tr><td>Operational load</td><td>Rate limits, latency, queue lag, error rates and request ids are observable.</td></tr></tbody></table>
+    <h2>Rollout sequence</h2>
+    <ol><li>Deploy the v2-capable client without enabling v2 traffic.</li><li>Run contract and integration tests against staging.</li><li>Enable v2 for an internal or low-volume tenant.</li><li>Compare status, latency, error codes, duplicate rates and reconciliation outcomes with v1.</li><li>Increase traffic in measured stages while monitoring v1 usage.</li><li>Publish the deprecation notice and keep v1 supported for at least 90 days.</li><li>Retire v1 only after consumer traffic reaches zero and the support owner approves.</li></ol>
+    <h2>Rollback decision</h2>
+    <p>Rollback if authentication failures, authorization denials, validation rejects, duplicate writes, reconciliation differences or unexplained latency exceed the agreed threshold. Switch new traffic back to the v1 adapter, preserve v2 request and event ids, and reconcile any in-flight writes before declaring the rollback complete.</p>
+    <h2>Developer migration checklist</h2>
+    <ul><li>Version routes in configuration, not in copied snippets.</li><li>Keep unknown response fields non-fatal.</li><li>Match on stable error codes, never message prose.</li><li>Preserve idempotency keys across retries and migration adapters.</li><li>Record the API version with request, transaction and audit telemetry.</li><li>Delete compatibility code only after the published sunset date and traffic review.</li></ul>
     <h2>Related</h2>
     <ul>
       <li><a href="../migration/index.html">Migration</a></li>

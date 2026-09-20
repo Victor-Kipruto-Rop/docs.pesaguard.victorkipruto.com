@@ -40,15 +40,12 @@
 }
 
 /* --- Dark theme -----------------------------------------------------------
- * Applied when the OS prefers dark AND the user has not explicitly chosen
- * light, or when the user has explicitly chosen dark via the toggle
- * (persisted to localStorage as data-theme on <html>). The declarations are
- * intentionally duplicated between the media query and the explicit
- * attribute selector — plain CSS has no mixins, and this keeps both paths
- * trivially auditable side by side.
+ * Device-driven only: the OS preference (prefers-color-scheme) decides the
+ * palette. There is no in-page toggle and no data-theme override — this
+ * media query is the single source of the dark token values.
  * ------------------------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root {
     color-scheme: dark;
     --paper: #0b100d;
     --paper-raised: #121a16;
@@ -71,30 +68,6 @@
     --shadow-sm: 0 6px 18px -10px rgba(0, 0, 0, 0.55);
     --shadow-md: 0 18px 40px -24px rgba(0, 0, 0, 0.6);
   }
-}
-
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --paper: #0b100d;
-  --paper-raised: #121a16;
-  --paper-sunken: #070a08;
-  --paper-deep: #050806;
-  --text: #edf1ea;
-  --text-muted: #a4b0a8;
-  --text-faint: #6d7973;
-  --line: #23302a;
-  --line-soft: #19231f;
-  --line-strong: #3a4a41;
-  --forest: #7ddc8f;
-  --forest-soft: #58b571;
-  --lime-ink: #d8ff4f;
-  --lime-deep: #bce85a;
-  --lime-wash: rgba(216, 255, 79, 0.14);
-  --lime-veil: rgba(216, 255, 79, 0.09);
-  --header-bg: rgba(11, 16, 13, 0.86);
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 6px 18px -10px rgba(0, 0, 0, 0.55);
-  --shadow-md: 0 18px 40px -24px rgba(0, 0, 0, 0.6);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -121,6 +94,36 @@ a:hover { color: var(--lime-ink); }
 .visually-hidden {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* Keyboard focus is always visible: a brand-coloured ring replaces the default
+   outline wherever the browser would show one. (The search input opts out via
+   the more specific outline:none in search.css — its container carries the
+   focus style instead.) */
+:focus-visible {
+  outline: 2px solid var(--lime-deep);
+  outline-offset: 2px;
+}
+
+/* The skip link is hidden only until it receives keyboard focus. */
+.visually-hidden:focus-visible {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 50;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 10px 16px;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background: var(--paper-raised);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-md);
+  font-weight: 700;
+  text-decoration: none;
 }
 
 ::selection { background: var(--lime); color: var(--ink); }

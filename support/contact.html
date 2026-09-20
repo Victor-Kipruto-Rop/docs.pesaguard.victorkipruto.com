@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/support/contact.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,32 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Support</p>
-    <h1>Contact <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">Pilots are supported personally. Use the source repository for documentation issues and private advisories for security reports.</p>
+    <h1>Contact support</h1>
+    <p class="docs-lede">Use the right channel for the kind of help you need. Pilot support is handled directly today; documentation and security reports follow separate paths so sensitive information stays private.</p>
+    <div class="api-hero"><div><strong>Send the right context</strong><p>A concise, redacted report reaches resolution faster than a screenshot without an environment or request id.</p></div><div class="api-hero-meta"><span>TECHNICAL</span><span>DOCUMENTATION</span><span>SECURITY</span></div></div>
+    <h2>Contact routes</h2><table><thead><tr><th>Need</th><th>Channel</th><th>Include</th></tr></thead><tbody><tr><td>Integration or production help</td><td>Pilot team conversation</td><td>Environment, tenant-safe identifier, UTC time, route, status and request id.</td></tr><tr><td>Documentation correction</td><td><a href="https://github.com/Victor-Kipruto-Rop/pesaguard">Source repository</a></td><td>Page URL, incorrect statement and suggested correction.</td></tr><tr><td>Security vulnerability</td><td><a href="../security/responsible-disclosure.html">Private responsible disclosure</a></td><td>Impact, reproduction and safe contact path; no public exploit details.</td></tr><tr><td>Service incident</td><td><a href="../status/">Status page</a></td><td>Check scope and duration before opening a duplicate report.</td></tr></tbody></table>
+    <h2>Technical report template</h2><pre class="docs-code" data-lang="text"><code>Summary:
+  Environment:
+  UTC time window:
+  Tenant-safe identifier:
+  Method and route:
+  Status and stable error code:
+  Request / transaction / event id:
+  Expected behavior:
+  Actual behavior:
+  Reproduction steps:
+  Secrets and personal data redacted: yes</code></pre>
+    <h2>Do not send</h2><ul><li>Passwords, API keys, bearer tokens or signing secrets.</li><li>Full authorization headers or unredacted payment payloads.</li><li>Personal data that is not required to reproduce the issue.</li><li>Public issue posts containing vulnerability details.</li></ul>
+    <h2>Priority and escalation</h2><table><thead><tr><th>Priority</th><th>Example</th><th>Include</th></tr></thead><tbody><tr><td>Critical</td><td>Cross-tenant exposure, suspected credential compromise or duplicate financial records.</td><td>Immediate time window, affected tenant-safe identifier and preserved evidence.</td></tr><tr><td>High</td><td>Production writes failing, provider callbacks accumulating or reconciliation outcomes unavailable.</td><td>Impact, start time, request/event ids and current mitigation.</td></tr><tr><td>Normal</td><td>Integration question, documentation gap or staging failure.</td><td>Reproduction, expected behavior and relevant page or contract.</td></tr></tbody></table>
+    <h2>Before you contact support</h2><ol><li>Check the <a href="../status/">status page</a> for an active incident.</li><li>Reproduce in the same environment without changing the request repeatedly.</li><li>Capture one representative request id and stable error code.</li><li>Remove credentials and unnecessary personal or payment data.</li><li>State whether the issue is blocking writes, delaying reconciliation or limited to a read.</li></ol>
+    <h2>Security report procedure</h2><p>Use private responsible disclosure for vulnerabilities. Describe the affected component, security impact, minimal reproduction, prerequisites and remediation suggestion. Allow the team to acknowledge and investigate before publishing details.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../support/index.html">Support</a></li>

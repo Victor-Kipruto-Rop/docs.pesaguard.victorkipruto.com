@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/transactions/retrieve-transaction.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,24 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Transaction guides</a><span aria-hidden="true">/</span>
           <span>Retrieve a transaction</span></nav>
     <p class="docs-eyebrow">Transaction guides</p>
-    <h1>Retrieve a transaction <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Detail lookups always include tenant predicates; IDs are not globally trusted.</p>
+    <h1>Retrieve a transaction</h1>
+    <p class="docs-lede">Retrieve a transaction by its server-issued identifier within the authenticated tenant. Resource ids are not globally trusted and a not-found response must not be used to probe another organization.</p>
+    <h2>Read pattern</h2><pre class="docs-code" data-lang="http"><code>GET /api/v1/transactions/{transaction_id}
+  Authorization: Bearer &lt;token&gt;
+  Accept: application/json</code></pre>
+    <h2>Interpret the response</h2><table><thead><tr><th>Check</th><th>Why</th></tr></thead><tbody><tr><td>Tenant</td><td>Confirm the response belongs to the expected organization.</td></tr><tr><td>State</td><td>Use lifecycle state rather than assuming creation means settlement.</td></tr><tr><td>Evidence</td><td>Read provider reference, match result and audit correlation.</td></tr></tbody></table>
+    <h2>When it returns 404</h2><p>Check the environment, route version, id format and authenticated tenant. For asynchronous writes, use bounded polling or webhook delivery rather than an unbounded read loop.</p>
     <p>Detail lookups always include tenant predicates; IDs are not globally trusted.</p>
     <h2>Related</h2>
     <ul>

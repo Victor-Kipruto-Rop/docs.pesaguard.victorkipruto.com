@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/sdks/python.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,17 +42,31 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">SDKs</p>
-    <h1>Python <span class="status-pill" data-tone="planned"><i></i>Planned</span></h1>
-    <p class="docs-lede">Use requests or a client generated from the OpenAPI document; no official Python SDK yet.</p>
-    <h2>Related</h2>
+    <h1>Python</h1>
+    <p class="docs-lede">Use a small requests-based adapter or generate a client from OpenAPI. Python workers should make timeouts, retries, idempotency and tenant context explicit.</p>
+    <h2>Authenticated read</h2><pre class="docs-code" data-lang="python"><code>import os
+  import requests
+
+  response = requests.get(
+    f"{os.environ['PESAGUARD_API_URL']}/api/v1/tenant/current",
+    headers={"Authorization": f"Bearer {os.environ['PESAGUARD_ACCESS_TOKEN']}"},
+    timeout=10,
+  )
+  response.raise_for_status()</code></pre>
+    <h2>Retry boundary</h2><pre class="docs-code" data-lang="python"><code>from requests.adapters import HTTPAdapter
+  from urllib3.util.retry import Retry
+
+  retry = Retry(total=3, backoff_factor=0.5, status_forcelist=[429, 502, 503, 504], allowed_methods=["GET"])
+  session = requests.Session()
+  session.mount("https://", HTTPAdapter(max_retries=retry))</code></pre><p>Restrict automatic retries to safe reads unless the write uses a stable idempotency key and the application can reconcile an uncertain outcome.</p>
+    <h2>Worker checklist</h2><ul><li>Use one session policy for timeouts and TLS verification.</li><li>Keep credentials out of job payloads and logs.</li><li>Record request and transaction ids.</li><li>Use UTC-aware timestamps and exact decimal handling for money.</li><li>Bound pagination and worker concurrency.</li></ul>
     <ul>
       <li><a href="../sdks/index.html">SDKs</a></li>
       <li><a href="../api-reference/openapi.json">OpenAPI document</a></li>

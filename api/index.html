@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/api/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -62,21 +60,30 @@
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>API</span></nav>
     <p class="docs-eyebrow">API</p>
-    <h1>API reference <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">The service publishes its own OpenAPI 3.0.3 document at <code>/openapi.json</code>; these pages explain the behaviour around it. The base path for public routes is <code>/api/v1</code> unless a documented compatibility alias exists.</p>
+    <h1>API reference</h1>
+    <p class="docs-lede">The PesaGuard API exposes tenant-scoped operations for provider configuration, reconciliation, communications and operational telemetry. The OpenAPI document defines the request surface; this guide explains the behavior clients must preserve in production.</p>
     <div class="code-head"><span class="method">GET</span><code>/openapi.json</code></div>
     <pre class="docs-code" data-lang="bash"><code>curl -sS "$PESAGUARD_API_URL/openapi.json" | python -m json.tool | head</code></pre>
+    <h2>Start with the contract</h2>
+    <p>Fetch the specification from the same deployment you intend to call. A checked-in copy is useful for review, but the running deployment is authoritative because routes, security configuration and compatibility aliases can vary by environment.</p>
     <table>
       <thead><tr><th>Topic</th><th>Page</th></tr></thead>
       <tbody>
-        <tr><td><a href="authentication.html">Authentication</a></td><td>Bearer tokens, scopes, tenant claims.</td></tr>
-        <tr><td><a href="pagination.html">Pagination</a></td><td>Page and limit parameters, list metadata.</td></tr>
-        <tr><td><a href="versioning.html">Versioning</a></td><td>The /v1 namespace and the 90-day deprecation policy.</td></tr>
+        <tr><td><a href="authentication.html">Authentication</a></td><td>Credentials, bearer tokens, scopes and tenant context.</td></tr>
+        <tr><td><a href="request-validation.html">Request validation</a></td><td>Shape, type, currency and business-rule validation.</td></tr>
+        <tr><td><a href="filtering.html">Filtering</a></td><td>Tenant-safe query filters and bounded result sets.</td></tr>
+        <tr><td><a href="sorting.html">Sorting</a></td><td>Stable ordering for reproducible reads and exports.</td></tr>
+        <tr><td><a href="pagination.html">Pagination</a></td><td>Page metadata, limits and complete iteration.</td></tr>
+        <tr><td><a href="versioning.html">Versioning</a></td><td>Version prefixes, compatibility and deprecation.</td></tr>
         <tr><td><a href="rate-limits.html">Rate limits</a></td><td>Bounded request rates and 429 handling.</td></tr>
-        <tr><td><a href="idempotency.html">Idempotency</a></td><td>Safe retries for every write.</td></tr>
-        <tr><td><a href="errors.html">Errors</a></td><td>The normalized error envelope and status codes.</td></tr>
+        <tr><td><a href="idempotency.html">Idempotency</a></td><td>Safe retries for writes and replayable operations.</td></tr>
+        <tr><td><a href="errors.html">Errors</a></td><td>The normalized error envelope and recovery semantics.</td></tr>
       </tbody>
     </table>
+    <h2>Request lifecycle</h2>
+    <ol><li>Resolve the correct environment base URL.</li><li>Authenticate and establish tenant context.</li><li>Validate the request before reading or mutating state.</li><li>Apply authorization, rate limits and idempotency policy.</li><li>Process the operation and return a correlation id.</li><li>Handle errors according to status and retry semantics.</li></ol>
+    <h2>Operational expectations</h2>
+    <div class="info-grid"><div class="info-card"><h3>Tenant isolation</h3><p>Credentials and server-side membership determine data visibility. A client filter cannot widen a tenant boundary.</p></div><div class="info-card"><h3>Durable writes</h3><p>Use idempotency keys for retried writes and persist the response or outcome needed to reconcile a retry.</p></div><div class="info-card"><h3>Observable calls</h3><p>Record method, route, status, latency and request id without logging authorization headers or sensitive payloads.</p></div></div>
     <p>A static copy of the contract lives at <a href="../api-reference/openapi.json">api-reference/openapi.json</a>. The running deployment is authoritative if the two ever differ.</p>
     <h2>Related</h2>
     <ul>

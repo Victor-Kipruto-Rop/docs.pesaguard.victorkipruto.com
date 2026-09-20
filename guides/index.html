@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,28 +42,57 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+<aside class="docs-sidebar" aria-label="Guides navigation">
+  <div class="docs-nav-group"><p>Guides</p><ul>
+    <li><a href="index.html" aria-current="page">Overview</a></li>
+  </ul></div>
+  <div class="docs-nav-group"><p>Authentication</p><ul>
+    <li><a href="authentication/">Authentication overview</a></li>
+    <li><a href="authentication/api-keys.html">API keys</a></li>
+    <li><a href="authentication/bearer-tokens.html">Bearer tokens</a></li>
+    <li><a href="authentication/key-rotation.html">Key rotation</a></li>
+    <li><a href="authentication/oauth.html">OAuth support</a></li>
+  </ul></div>
+  <div class="docs-nav-group"><p>Reconciliation</p><ul>
+    <li><a href="reconciliation/">Reconciliation overview</a></li>
+    <li><a href="reconciliation/configure-reconciliation.html">Configure reconciliation</a></li>
+    <li><a href="reconciliation/matching-rules.html">Matching rules</a></li>
+    <li><a href="reconciliation/unmatched-transactions.html">Unmatched transactions</a></li>
+    <li><a href="reconciliation/exceptions.html">Exceptions</a></li>
+    <li><a href="reconciliation/reconciliation-reports.html">Reconciliation reports</a></li>
+  </ul></div>
+  <div class="docs-nav-group"><p>Transactions</p><ul>
+    <li><a href="transactions/">Transaction overview</a></li>
+    <li><a href="transactions/create-transaction.html">Create a transaction</a></li>
+    <li><a href="transactions/retrieve-transaction.html">Retrieve a transaction</a></li>
+    <li><a href="transactions/search-transactions.html">Search transactions</a></li>
+    <li><a href="transactions/transaction-status.html">Transaction status</a></li>
+    <li><a href="transactions/handle-failures.html">Handle failures</a></li>
+  </ul></div>
+</aside>
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>Guides</span></nav>
     <p class="docs-eyebrow">Guides</p>
-    <h1>Guides <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">Guides are written against shipped behaviour first. Where a guide would describe an unshipped capability, it is listed as planned rather than fabricated.</p>
-    <table>
-      <thead><tr><th>Task</th><th>Where it is covered</th></tr></thead>
-      <tbody>
-        <tr><td>Authenticate a request</td><td><a href="../getting-started/first-request.html">First request</a>.</td></tr>
-        <tr><td>Follow a transaction</td><td><a href="../getting-started/first-transaction.html">First transaction</a>.</td></tr>
-        <tr><td>Build a webhook consumer</td><td><a href="../webhooks/">Webhook delivery</a> + <a href="../webhooks/verification.html">verification</a>.</td></tr>
-        <tr><td>Handle failures</td><td><a href="../api/errors.html">Errors</a> + <a href="../concepts/idempotency.html">idempotency</a>.</td></tr>
-        <tr><td>Test against staging</td><td><a href="../getting-started/test-environment.html">Test environment</a>.</td></tr>
-      </tbody>
-    </table>
+    <h1>Guides</h1>
+    <p class="docs-lede">Task-oriented playbooks for building, operating and troubleshooting a PesaGuard integration. Each guide starts from a concrete outcome, identifies the evidence to collect and links to the API or concept contract behind the workflow.</p>
+    <div class="api-hero guide-overview-hero"><div><strong>The PesaGuard operating loop</strong><p>Authenticate the actor, move a durable transaction, compare it with provider evidence, and leave an explanation another person can trust.</p></div><div class="api-hero-meta"><span>IDENTITY</span><span>STATE</span><span>EVIDENCE</span></div></div>
+    <p class="guide-overview-lead">These guides are organized around the work teams perform after integration begins. The sidebar gives you direct access to every playbook; this overview gives you the system-level judgment needed to use them correctly.</p>
+    <section class="guide-routes" aria-labelledby="guide-routes-title">
+      <div class="section-kicker">Three connected responsibilities</div>
+      <h2 id="guide-routes-title">Follow the evidence across the platform</h2>
+      <div class="guide-route"><span class="guide-route-index">01</span><div><h3>Establish identity</h3><p>Provision a tenant-scoped credential, send it through the documented bearer boundary, and rotate it without exposing secrets.</p><a href="authentication/">Authentication playbooks <span aria-hidden="true">→</span></a></div><span class="guide-route-owner">Developers + security</span></div>
+      <div class="guide-route"><span class="guide-route-index">02</span><div><h3>Move a transaction</h3><p>Validate the request, create one logical operation, retrieve its state and recover from uncertainty without duplicating financial records.</p><a href="transactions/">Transaction playbooks <span aria-hidden="true">→</span></a></div><span class="guide-route-owner">Integrators + operators</span></div>
+      <div class="guide-route"><span class="guide-route-index">03</span><div><h3>Explain the outcome</h3><p>Apply deterministic matching, keep unmatched work visible, resolve exceptions with reasons and report from durable records.</p><a href="reconciliation/">Reconciliation playbooks <span aria-hidden="true">→</span></a></div><span class="guide-route-owner">Finance + operations</span></div>
+    </section>
+    <section aria-labelledby="operating-loop-title"><div class="section-kicker">Implementation sequence</div><h2 id="operating-loop-title">The operating loop</h2><ol class="guide-operating-loop"><li><span>01</span><div><strong>Choose the environment</strong><p>Confirm the base URL, tenant, credential and data boundary before sending a request.</p></div></li><li><span>02</span><div><strong>Read the contract</strong><p>Use the running OpenAPI document for route, schema, scope and error behavior.</p></div></li><li><span>03</span><div><strong>Make one safe change</strong><p>Use validation, idempotency and bounded retries for every state-changing operation.</p></div></li><li><span>04</span><div><strong>Verify the durable result</strong><p>Check state, provider evidence, audit events, request ids and reconciliation outcome.</p></div></li><li><span>05</span><div><strong>Promote with proof</strong><p>Carry test evidence, secret ownership, rollback and observability into production review.</p></div></li></ol></section>
+    <section class="guide-principles" aria-labelledby="guide-principles-title"><div class="section-kicker">Working contract</div><h2 id="guide-principles-title">Guidelines that do not change between workflows</h2><div class="guide-principle-grid"><div><strong>Tenant first</strong><p>Identity determines which organization a request may see. Client filters never widen that boundary.</p></div><div><strong>Durability before acknowledgement</strong><p>Do not claim success before the required record, idempotency state or audit evidence is durable.</p></div><div><strong>Exceptions stay visible</strong><p>Unmatched events and differences are work queues with reasons, not errors to hide.</p></div><div><strong>Every decision is traceable</strong><p>Keep request, event, transaction and audit identifiers connected through retries and review.</p></div></div></section>
+    <div class="callout" data-tone="info"><strong>Start here</strong><p>New integration? Begin with <a href="../getting-started/index.html">Getting started</a>. Need an exact route or response shape? Use the <a href="../api/index.html">API reference</a>. Investigating a business outcome? Start with <a href="../concepts/index.html">Concepts</a> before opening a task guide.</p></div>
     <h2>Related</h2>
     <ul>
       <li><a href="../getting-started/index.html">Getting started</a></li>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
 </head>
 <body data-path="/getting-started/create-api-key.html">
@@ -46,7 +45,6 @@
     <a href="../security/">Security</a>
     <a href="../status/">Status</a>
   </nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -72,11 +70,12 @@
     </ul></div>
   </aside>
 
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span><a href="index.html">Getting started</a><span aria-hidden="true">/</span><span>Create an API key</span></nav>
     <p class="docs-eyebrow">Getting started</p>
-    <h1>Create an API key <span class="status-pill" data-tone="draft"><i></i>Pilot-scoped</span></h1>
+    <h1>Create an API key</h1>
     <p class="docs-lede">Credentials are issued with the pilot team, scoped to the integration that needs them. A key is never "full access" — it is a scope, an expiry and a tenant, nothing more.</p>
+    <div class="api-hero"><div><strong>One integration, one credential</strong><p>Separate keys make ownership, rotation, incident response and usage review possible.</p></div><div class="api-hero-meta"><span>SCOPED</span><span>EXPIRING</span><span>AUDITABLE</span></div></div>
 
     <h2>What a credential carries</h2>
     <table>
@@ -89,6 +88,7 @@
         <tr><td>Storage</td><td>Hashed at rest. The raw value is shown once at issuance.</td></tr>
       </tbody>
     </table>
+    <h2>Issuance procedure</h2><ol><li>Describe the integration, owner, environment and required operations.</li><li>Choose the smallest scope set that supports the workflow.</li><li>Set expiry and rotation dates before issuance.</li><li>Store the secret server-side and verify one authenticated read.</li><li>Record the key id and owner, never the raw secret.</li></ol>
 
     <h2>Handling rules</h2>
     <ul>
@@ -97,6 +97,7 @@
       <li>Rotate on a schedule and immediately on suspicion. Revocation takes effect at once; there is no grace window to exploit.</li>
       <li>Audit entries never contain secret material — tokens are excluded from logs by design.</li>
     </ul>
+    <h2>Rotation procedure</h2><p>Issue the replacement before revoking the current key, deploy it, observe successful traffic, then revoke the old key and verify failure. If compromise is suspected, revoke immediately and accept a controlled interruption rather than leaving an exposed key active.</p>
 
     <div class="callout" data-tone="warn">
       <strong>Issuance is manual today</strong>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/api/rate-limits.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -63,13 +61,24 @@
           <a href="../index.html">API</a><span aria-hidden="true">/</span>
           <span>Rate limits</span></nav>
     <p class="docs-eyebrow">API</p>
-    <h1>Rate limits <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">Rate limits exist to protect durability — a flood of writes must never be served at the cost of reconciliation correctness.</p>
-    <ul>
-      <li>Exceeding a limit returns <code>429</code> with the standard error envelope.</li>
-      <li>Back off and retry; retries are safe because writes are idempotent.</li>
-      <li>Numeric limits are deployment configuration, not documentation constants — ask the operator for the values that apply to your tenant.</li>
-    </ul>
+    <h1>Rate limits</h1>
+    <p class="docs-lede">Rate limits protect database, queue and provider capacity so a traffic spike cannot compromise reconciliation correctness. Limits are deployment configuration and may differ by environment, tenant, credential and operation class.</p>
+    <h2>What is limited</h2>
+    <table><thead><tr><th>Dimension</th><th>Why it matters</th><th>Client behavior</th></tr></thead><tbody>
+      <tr><td>Credential or tenant</td><td>Prevents one integration from consuming shared capacity.</td><td>Control concurrency per credential and tenant.</td></tr>
+      <tr><td>Route or operation</td><td>Protects expensive queries and mutation paths.</td><td>Use smaller pages and avoid polling loops.</td></tr>
+      <tr><td>Authentication</td><td>Slows credential guessing and failure storms.</td><td>Stop repeated attempts and investigate the source.</td></tr>
+      <tr><td>Provider or downstream</td><td>Prevents retries from amplifying an outage.</td><td>Use bounded backoff and circuit breaking.</td></tr>
+    </tbody></table>
+    <h2>Handling 429</h2>
+    <pre class="docs-code" data-lang="http"><code>HTTP/1.1 429 Too Many Requests
+Retry-After: 10
+Content-Type: application/json
+
+{"error":{"code":"RATE_LIMITED","message":"Try again later.","request_id":"request_01J..."}}</code></pre>
+    <ol><li>Stop sending requests to the limited route.</li><li>Honor <code>Retry-After</code> when present.</li><li>Otherwise use exponential backoff with jitter.</li><li>Reduce concurrency and page size before resuming.</li><li>Alert on sustained throttling instead of increasing retry volume.</li></ol>
+    <h2>Capacity-aware clients</h2>
+    <p>Use a shared rate limiter for workers, not one limiter per thread. Keep read polling separate from write traffic, cache stable configuration, and schedule bulk reconciliation outside peak periods. Ask the deployment operator for the effective numeric limits rather than hard-coding values from another environment.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">Errors</a></li>

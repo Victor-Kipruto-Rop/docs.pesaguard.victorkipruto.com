@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/errors/rate-limit.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,17 +42,20 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Errors</p>
-    <h1>429 · Rate limit <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Too many requests. Back off and retry — writes are idempotent, so a retry is safe.</p>
+    <h1>429 · Rate limit</h1>
+    <p class="docs-lede">The request budget for a credential, tenant, route or downstream dependency has been exhausted. Stop sending work, reduce concurrency and resume only after the server's retry guidance permits it.</p>
     <p>See <a href="../api/errors.html">API · Errors</a> for the envelope and client behaviour.</p>
+    <h2>Response handling</h2><pre class="docs-code" data-lang="http"><code>HTTP/1.1 429 Too Many Requests
+  Retry-After: 10
+  Content-Type: application/json</code></pre><ol><li>Honor <code>Retry-After</code> when present.</li><li>Otherwise use exponential backoff with jitter.</li><li>Share a limiter across workers so concurrency actually decreases.</li><li>Retry writes only with the original idempotency key.</li><li>Alert on sustained throttling instead of increasing retry volume.</li></ol>
+    <h2>What not to do</h2><ul><li>Do not retry every worker at the same fixed interval.</li><li>Do not increase page size or concurrency after a limit response.</li><li>Do not treat a 429 as proof that the request was never accepted; inspect idempotent outcomes for writes.</li></ul>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">API · Errors</a></li>

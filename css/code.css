@@ -1,6 +1,6 @@
 /* Code blocks, method tags, inline code inside code context. */
 
-pre[class*="language-"], pre.docs-code {
+pre.docs-code {
   margin: 18px 0 26px;
   padding: 18px 20px;
   overflow-x: auto;
@@ -12,7 +12,7 @@ pre[class*="language-"], pre.docs-code {
   tab-size: 2;
 }
 
-pre.docs-code code, pre[class*="language-"] code { font: inherit; color: inherit; }
+pre.docs-code code { font: inherit; color: inherit; }
 
 .code-head {
   display: flex;
@@ -47,10 +47,3 @@ pre.docs-code code, pre[class*="language-"] code { font: inherit; color: inherit
 }
 
 .code-copy:hover { color: var(--text); border-color: var(--line-strong); }
-
-/* Simple token colours for the tiny highlighter in js/code/syntax.js. */
-.tok-key { color: var(--lime-ink); }
-.tok-str { color: var(--forest-soft); }
-.tok-num { color: #a8641c; }
-.tok-com { color: var(--text-faint); font-style: italic; }
-.tok-cmd { color: var(--forest); font-weight: 600; }

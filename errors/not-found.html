@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/errors/not-found.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,17 +42,18 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Errors</p>
-    <h1>404 · Not found <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">No such resource within the caller's tenant scope.</p>
+    <h1>404 · Not found</h1>
+    <p class="docs-lede">The requested resource is not available within the caller's authorized tenant scope. The response intentionally does not reveal whether an identifier exists in another organization.</p>
     <p>See <a href="../api/errors.html">API · Errors</a> for the envelope and client behaviour.</p>
+    <h2>What to check</h2><ul><li>Use the correct environment base URL and versioned route.</li><li>Check path parameter spelling, encoding and resource id format.</li><li>Confirm the resource was created successfully before retrieving it.</li><li>Confirm the credential belongs to the tenant that owns the resource.</li><li>Do not probe other tenant ids to distinguish absence from isolation.</li></ul>
+    <h2>Read-after-write behavior</h2><p>A successful asynchronous write may not be immediately visible in every read model. Follow the documented status or webhook flow, use bounded polling and preserve the original request id rather than issuing unbounded reads.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">API · Errors</a></li>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/concepts/idempotency.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -64,14 +62,22 @@
           <a href="../index.html">Concepts</a><span aria-hidden="true">/</span>
           <span>Idempotency</span></nav>
     <p class="docs-eyebrow">Concepts</p>
-    <h1>Idempotency <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Retries are expected in payment systems — from Daraja, from your consumers, from operators. Idempotency is enforced where writes happen, so a repeated operation is safe by construction.</p>
+    <h1>Idempotency</h1>
+    <p class="docs-lede">Retries are expected in payment systems: providers redeliver callbacks, clients retry timeouts and operators replay failed work. Idempotency binds those attempts to one logical operation so a duplicate cannot become a second financial record.</p>
     <ul>
       <li><strong>Enforced at the write</strong> — a duplicate event is rejected by the database, not by an application check that can be forgotten.</li>
       <li><strong>Events persist before processing</strong> — so a crash between receipt and processing leaves a record, not a gap.</li>
       <li><strong>Replay-safe operations</strong> — dead-letter replay, manual reprocessing and provider retries all run under the same rule.</li>
       <li><strong>Acknowledge only what persisted</strong> — a success response never claims durable processing that did not happen.</li>
     </ul>
+    <h2>Identity of an operation</h2>
+    <p>An idempotency key is meaningful only with its tenant, operation, authenticated principal and request payload. The same key with a different body is a conflict, not a new request. A new logical transaction requires a new key.</p>
+    <h2>Failure timeline</h2>
+    <ol><li>The client sends a request with a unique key.</li><li>The service stores the key and durable outcome before acknowledging success.</li><li>A network timeout leaves the client uncertain.</li><li>The client retries with the same key.</li><li>The service returns or resumes the original outcome instead of creating another record.</li></ol>
+    <h2>Where the invariant applies</h2>
+    <table><thead><tr><th>Source</th><th>Duplicate risk</th><th>Protection</th></tr></thead><tbody><tr><td>Provider callback</td><td>Provider redelivery after timeout.</td><td>Persist provider event identity before processing.</td></tr><tr><td>API client</td><td>Client retry after lost response.</td><td>Require an idempotency key on writes.</td></tr><tr><td>Worker</td><td>Job retry after process failure.</td><td>Use durable outcome and event identity.</td></tr><tr><td>Operator replay</td><td>Manual reprocessing of dead-letter work.</td><td>Reuse original identity and record the replay actor.</td></tr></tbody></table>
+    <h2>What idempotency does not solve</h2>
+    <p>It does not authorize a caller, validate a payload, guarantee provider settlement or resolve a reconciliation mismatch. Those checks still run on every attempt before the stored outcome is returned.</p>
     <p>The invariant in one line: <em>the same logical event, delivered twice, produces one financial record and one audit entry.</em></p>
     <h2>Related</h2>
     <ul>

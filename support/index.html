@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/support/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,24 +42,36 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+<aside class="docs-sidebar" aria-label="Support navigation">
+  <div class="docs-nav-group"><p>Support</p><ul>
+    <li><a href="index.html" aria-current="page">Overview</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+    <li><a href="contact.html">Contact support</a></li>
+  </ul></div>
+  <div class="docs-nav-group"><p>Reference</p><ul>
+    <li><a href="../api/errors.html">API errors</a></li>
+    <li><a href="../status/">Service status</a></li>
+    <li><a href="../security/responsible-disclosure.html">Responsible disclosure</a></li>
+  </ul></div>
+</aside>
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>Support</span></nav>
     <p class="docs-eyebrow">Support</p>
-    <h1>Support <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">PesaGuard is deployed and supported with the pilot team. There is no ticket portal yet — the fastest paths are the source repository and the pilot conversation.</p>
-    <ul>
-      <li><strong>Documentation feedback</strong> — open an issue on the <a href="https://github.com/Victor-Kipruto-Rop/pesaguard">source repository</a>.</li>
-      <li><strong>Production issues</strong> — quote the <code>request_id</code> from the error response; it is the correlation key operators search for.</li>
-      <li><strong>Security issues</strong> — follow <a href="../security/responsible-disclosure.html">responsible disclosure</a>; use private advisories, not public issues.</li>
-      <li><strong>Status questions</strong> — check <a href="../status/">status</a> first; incidents carry scope and duration.</li>
-    </ul>
+    <h1>Support</h1>
+    <p class="docs-lede">A practical support center for developers, operators and pilot teams. Start with the right evidence, follow the relevant runbook and escalate with enough context for an operator to reproduce the problem.</p>
+    <div class="api-hero"><div><strong>Support without guesswork</strong><p>Check service state, classify the failure, preserve correlation ids and send a concise reproduction.</p></div><div class="api-hero-meta"><span>DIAGNOSE</span><span>DOCUMENT</span><span>ESCALATE</span></div></div>
+    <div class="info-grid"><div class="info-panel"><h2>Technical support</h2><p>For API failures, integration questions and production behavior. Start with <a href="troubleshooting.html">Troubleshooting</a>, then send request ids and redacted evidence.</p></div><div class="info-panel"><h2>Documentation</h2><p>For unclear or incorrect guidance, check the running <a href="../api/reference.html">API contract</a> and report the page plus the expected correction.</p></div><div class="info-panel"><h2>Security</h2><p>For vulnerabilities, exposed credentials or tenant-isolation concerns, use <a href="../security/responsible-disclosure.html">private disclosure</a>, never a public issue.</p></div></div>
+    <h2>First five minutes</h2><ol><li>Check <a href="../status/">service status</a> and confirm the environment.</li><li>Capture the UTC time, route, status, stable error code and request id.</li><li>Check the matching <a href="../errors/">error guide</a> before retrying.</li><li>Preserve the same idempotency key for an uncertain write.</li><li>Escalate with a redacted reproduction and clear impact statement.</li></ol>
+    <h2>Choose a support path</h2><table><thead><tr><th>Situation</th><th>First action</th><th>Escalation evidence</th></tr></thead><tbody><tr><td>Documentation question</td><td>Search this site and check the API contract.</td><td>Page URL, unclear wording and expected guidance.</td></tr><tr><td>API request failure</td><td>Read the status-specific error guide.</td><td>Status, stable code, request id, route and timestamp.</td></tr><tr><td>Production incident</td><td>Check status and protect in-flight writes.</td><td>Environment, affected tenant, time window and impact.</td></tr><tr><td>Security concern</td><td>Use private responsible disclosure.</td><td>Reproduction, impact and safe contact path; never publish secrets.</td></tr></tbody></table>
+    <h2>What to include in every report</h2><ol><li>Environment and base URL, without credentials.</li><li>Tenant or service identity, using a safe identifier.</li><li>UTC timestamp and request, event or transaction id.</li><li>HTTP method, route, status and stable error code.</li><li>Minimal redacted request and response example.</li><li>Expected result, actual result and whether a retry was attempted.</li></ol>
+    <h2>Support boundaries</h2><p>PesaGuard is currently supported through the pilot team and repository channels rather than a public ticket portal. Never send passwords, API keys, bearer tokens, personal data or full authorization headers in a support request.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">Errors</a></li>

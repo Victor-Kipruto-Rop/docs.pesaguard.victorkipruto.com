@@ -1,4 +1,4 @@
-/* Header, shell grid, sidebar, footer. */
+﻿/* Header, shell grid, sidebar, footer. */
 
 .docs-header {
   position: sticky;
@@ -9,7 +9,7 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
-  transition: background-color 0.2s var(--ease-out);
+  transition: background-color 0.2s var(--ease-out), border-color 0.2s var(--ease-out), box-shadow 0.28s var(--ease-out);
 }
 
 .docs-header-inner {
@@ -66,36 +66,6 @@
   background: var(--paper-sunken);
 }
 
-/* --- Theme toggle -------------------------------------------------------- */
-
-.docs-theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: var(--r-full);
-  border: 1px solid var(--line);
-  background: var(--paper-raised);
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 15px;
-  line-height: 1;
-  flex: none;
-}
-
-.docs-theme-toggle:hover { color: var(--text); border-color: var(--line-strong); }
-
-.docs-theme-toggle .icon-light { display: none; }
-.docs-theme-toggle .icon-dark { display: inline; }
-:root[data-theme="dark"] .docs-theme-toggle .icon-light { display: inline; }
-:root[data-theme="dark"] .docs-theme-toggle .icon-dark { display: none; }
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .docs-theme-toggle .icon-light { display: inline; }
-  :root:not([data-theme="light"]) .docs-theme-toggle .icon-dark { display: none; }
-}
-
 /* --- Mobile nav toggle (hamburger) --------------------------------------- */
 
 .docs-nav-toggle {
@@ -137,7 +107,7 @@
 }
 
 /* Pages with no <aside class="docs-sidebar"> must not inherit the sidebar
-   column — without this, the lone .docs-article child falls into grid
+   column â€” without this, the lone .docs-article child falls into grid
    track 1 (272px) instead of the flexible content track, and the entire
    page renders squeezed into a narrow column with a large empty void. */
 .docs-shell:not(:has(.docs-sidebar)) {
@@ -167,14 +137,42 @@
   max-width: 1340px;
   margin-inline: auto;
   padding: 28px clamp(20px, 4vw, 44px);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 28px;
-  align-items: center;
+  display: block;
   font-size: 12.5px;
   color: var(--text-faint);
 }
 
-.docs-footer-inner nav { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-left: auto; }
+.docs-footer-brand { padding-bottom: 28px; border-bottom: 1px solid var(--line-soft); }
+.docs-footer-logo { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
+.docs-footer-logo img { display: block; width: 28px; height: 28px; }
+.docs-footer-logo strong { font-size: 1rem; }
+.docs-footer-logo small { margin-left: 4px; color: var(--text-faint); font: 500 10px / 1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; }
+.docs-footer-brand p { max-width: 52ch; margin: 12px 0 16px; color: var(--text-muted); line-height: 1.55; }
+.docs-footer-meta { display: flex; flex-wrap: wrap; gap: 8px 24px; color: var(--text-faint); font: 500 11px / 1.5 var(--font-mono); }
+.docs-footer-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; padding: 30px 0; border-bottom: 1px solid var(--line-soft); }
+.docs-footer-grid section { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; }
+.docs-footer-grid h2 { margin: 0 0 6px; color: var(--text); font: 600 11px / 1.4 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; }
+.docs-footer-grid a, .docs-footer-utility a { color: var(--text-muted); text-decoration: none; }
+.docs-footer-grid a:hover, .docs-footer-utility a:hover { color: var(--text); }
+.docs-footer-status { padding: 18px 0; border-bottom: 1px solid var(--line-soft); }
+.docs-footer-status a { display: inline-flex; align-items: center; gap: 9px; color: var(--text); text-decoration: none; }
+.docs-footer-status a span:last-child { color: var(--text-faint); font-size: 12px; margin-left: 4px; }
+.docs-status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--signal-green); box-shadow: 0 0 0 4px var(--lime-veil); }
+.docs-footer-utility { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 28px; padding-top: 20px; }
+.docs-footer-utility nav { display: flex; flex-wrap: wrap; gap: 6px 20px; }
 .docs-footer-inner a { color: var(--text-muted); text-decoration: none; }
 .docs-footer-inner a:hover { color: var(--text); }
+
+.docs-footer-brand { display: flex; flex-direction: column; gap: 2px; }
+.docs-footer-brand strong { color: var(--text); font-size: 13px; }
+.docs-footer-brand span { color: var(--text-faint); font-size: 12px; }
+
+@media (max-width: 700px) {
+  .docs-footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 18px; }
+  .docs-footer-utility { align-items: flex-start; flex-direction: column; }
+  .docs-footer-utility nav { gap: 8px 16px; }
+}
+
+@media (max-width: 460px) {
+  .docs-footer-grid { grid-template-columns: 1fr; }
+}

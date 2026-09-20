@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/testing/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,24 +42,42 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+<aside class="docs-sidebar" aria-label="Testing navigation">
+  <div class="docs-nav-group"><p>Testing</p><ul>
+    <li><a href="index.html" aria-current="page">Overview</a></li>
+    <li><a href="sandbox-testing.html">Testing against staging</a></li>
+    <li><a href="integration-testing.html">Integration testing</a></li>
+    <li><a href="test-transactions.html">Test transactions</a></li>
+    <li><a href="failure-scenarios.html">Failure scenarios</a></li>
+    <li><a href="webhook-testing.html">Webhook testing</a></li>
+  </ul></div>
+  <div class="docs-nav-group"><p>Foundations</p><ul>
+    <li><a href="../environments/staging.html">Staging</a></li>
+    <li><a href="../concepts/idempotency.html">Idempotency</a></li>
+    <li><a href="../concepts/tenants.html">Tenant isolation</a></li>
+    <li><a href="../api/errors.html">API errors</a></li>
+  </ul></div>
+</aside>
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>Testing</span></nav>
     <p class="docs-eyebrow">Testing</p>
-    <h1>Testing <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
+    <h1>Testing</h1>
     <p class="docs-lede">The platform is validated with focused tests for normal paths, boundary conditions, cross-tenant isolation, retries and failure recovery. Test your integration the same way: against real staging.</p>
+    <div class="api-hero"><div><strong>Test the invariants</strong><p>A green happy path is not enough. Prove that duplicates stay singular, failures remain visible and tenant boundaries hold under pressure.</p></div><div class="api-hero-meta"><span>ISOLATE</span><span>BREAK</span><span>VERIFY</span></div></div>
     <ul>
       <li>Use the <a href="../getting-started/test-environment.html">staging variant</a> — same code, separate state.</li>
       <li>Drive the idempotency path: deliver the same callback twice and assert one record.</li>
       <li>Exercise failure recovery: stop a consumer, watch retries land in dead letters, replay, assert one outcome.</li>
       <li>Verify tenant scope: a request without tenant predicates must return nothing.</li>
     </ul>
+    <h2>Testing pyramid</h2><table><thead><tr><th>Layer</th><th>Purpose</th><th>Evidence</th></tr></thead><tbody><tr><td>Contract</td><td>Routes, schemas, authentication and error shapes.</td><td>OpenAPI fixtures and status assertions.</td></tr><tr><td>Integration</td><td>Database, queues, brokers, provider adapters and tenant scope.</td><td>Durable records, event identity and audit entries.</td></tr><tr><td>Workflow</td><td>Transaction, reconciliation and webhook journeys.</td><td>State transitions and downstream effects.</td></tr><tr><td>Failure</td><td>Timeouts, duplicates, malformed input, outage and replay.</td><td>Bounded recovery with no duplicate financial outcome.</td></tr></tbody></table>
+    <h2>Release gate</h2><ol><li>Run contract tests against the target deployment.</li><li>Run staging integration tests with synthetic tenant data.</li><li>Exercise duplicate, invalid, delayed and out-of-order events.</li><li>Confirm logs, metrics, audit events and reconciliation reports agree.</li><li>Attach evidence to the release review before production promotion.</li></ol>
     <h2>Related</h2>
     <ul>
       <li><a href="../getting-started/test-environment.html">Test environment</a></li>

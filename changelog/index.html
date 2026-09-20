@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/changelog/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -53,13 +51,45 @@
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>Changelog</span></nav>
     <p class="docs-eyebrow">Changelog</p>
-    <h1>Changelog <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">A public changelog is not published yet. Until it exists, changes are visible where engineers already look: the source repository.</p>
+    <h1>Changelog</h1>
+    <p class="docs-lede">A dated record of documentation, API contract and operational changes that can affect an integration. Each entry identifies the audience, migration impact and source of truth so teams can decide whether action is required.</p>
+    <div class="callout"><strong>How to read this page.</strong> Product behavior changes require an implementation source or release reference. Documentation-only entries improve guidance without changing runtime behavior. When a release affects compatibility, also read <a href="breaking-changes.html">breaking changes</a> and the relevant API page.</div>
+    <h2>Release archive</h2>
+    <table><thead><tr><th>Period</th><th>Focus</th><th>Audience</th></tr></thead><tbody>
+      <tr><td><a href="2026/september.html">September 2026</a></td><td>Public documentation baseline and API guidance</td><td>All integrators</td></tr>
+      <tr><td><a href="2026/august.html">August 2026</a></td><td>Documentation and operational contract preparation</td><td>Platform and integration teams</td></tr>
+      <tr><td><a href="2026/july.html">July 2026</a></td><td>Initial API and security documentation structure</td><td>Early adopters</td></tr>
+    </tbody></table>
+    <h2>Change categories</h2>
+    <table><thead><tr><th>Category</th><th>Meaning</th><th>Expected action</th></tr></thead><tbody>
+      <tr><td>Added</td><td>New endpoint, guide, field, capability or supported workflow.</td><td>Adopt when useful; check permissions and limits.</td></tr>
+      <tr><td>Changed</td><td>Existing behavior, guidance, default or operational expectation changed.</td><td>Review integration tests and deployment configuration.</td></tr>
+      <tr><td>Deprecated</td><td>Still available but scheduled for removal or replacement.</td><td>Plan migration within the announced support window.</td></tr>
+      <tr><td>Fixed</td><td>Incorrect behavior, contract wording or documentation gap corrected.</td><td>Re-test affected workflows.</td></tr>
+      <tr><td>Security</td><td>Credential, tenant isolation, audit or exposure-related change.</td><td>Review access, secrets and incident procedures immediately.</td></tr>
+    </tbody></table>
+    <h2>Release sources</h2>
     <ul>
-      <li>Commit history: <a href="https://github.com/Victor-Kipruto-Rop/pesaguard/commits">github.com/Victor-Kipruto-Rop/pesaguard</a>.</li>
-      <li>Deprecations follow the <a href="../api/versioning.html">90-day versioning policy</a> and are announced in the OpenAPI document.</li>
-      <li>This page will carry dated, human-written entries once the release cadence is public.</li>
+      <li>Runtime contract: <a href="../api-reference/openapi.json">OpenAPI document</a>.</li>
+      <li>Compatibility policy: <a href="../api/versioning.html">API versioning</a>.</li>
+      <li>Repository history: <a href="https://github.com/Victor-Kipruto-Rop/pesaguard/commits">GitHub commits</a>.</li>
+      <li>Service incidents: <a href="../status/index.html">status documentation</a>.</li>
     </ul>
+    <h2>How releases are communicated</h2>
+    <ol>
+      <li>The changelog identifies the affected surface and whether the entry is documentation, contract, security or runtime behavior.</li>
+      <li>The OpenAPI document records the route and schema contract for the running deployment.</li>
+      <li>Migration notes explain required client changes, rollout order and rollback conditions.</li>
+      <li>Security-sensitive changes include credential, tenant, audit and incident-response actions.</li>
+      <li>Status incidents remain separate from planned releases and are recorded in the status documentation.</li>
+    </ol>
+    <h2>Before adopting a change</h2>
+    <table><thead><tr><th>Question</th><th>Where to verify</th></tr></thead><tbody>
+      <tr><td>Does the route or schema exist?</td><td>Fetch the deployment's <a href="../api-reference/openapi.json">OpenAPI document</a>.</td></tr>
+      <tr><td>Will credentials or scopes change?</td><td>Review <a href="../api/authentication.html">authentication</a> and security guidance.</td></tr>
+      <tr><td>Can the client retry safely?</td><td>Review <a href="../api/idempotency.html">idempotency</a>, errors and rate limits.</td></tr>
+      <tr><td>Could data visibility change?</td><td>Review <a href="../concepts/tenants.html">tenant isolation</a> and authorization behavior.</td></tr>
+    </tbody></table>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/versioning.html">Versioning</a></li>

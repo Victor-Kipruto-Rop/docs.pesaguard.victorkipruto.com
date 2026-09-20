@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/api/sorting.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -51,9 +49,20 @@
 <div class="docs-shell">
   <article class="docs-article">
     <p class="docs-eyebrow">API</p>
-    <h1>Sorting <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">Where an endpoint supports ordering it is documented in its OpenAPI entry.</p>
-    <p>Treat unspecified ordering as unstable. Paginate deterministically and do not rely on insertion order surviving a filter change.</p>
+    <h1>Sorting</h1>
+    <p class="docs-lede">Sorting makes collection reads reproducible. Use only fields and directions documented for the endpoint, and always pair an order with pagination when scanning or exporting data.</p>
+    <h2>Ordering rules</h2>
+    <table><thead><tr><th>Rule</th><th>Reason</th></tr></thead><tbody>
+      <tr><td>Unspecified order is unstable</td><td>Insertion order can change after writes, retries, indexing or reconciliation.</td></tr>
+      <tr><td>Use a deterministic tie-breaker</td><td>Equal timestamps or amounts need a unique id to prevent page drift.</td></tr>
+      <tr><td>Sort before paginating</td><td>Changing order between pages can duplicate or skip records.</td></tr>
+      <tr><td>Keep filters and sort fixed</td><td>An export is reproducible only when its full query remains unchanged.</td></tr>
+    </tbody></table>
+    <h2>Example</h2>
+    <pre class="docs-code" data-lang="http"><code>GET /api/v1/discrepancies?status=open&amp;sort=created_at:asc,id:asc&amp;page=1&amp;limit=50</code></pre>
+    <p>If an endpoint does not publish a <code>sort</code> parameter, do not invent one. Use the endpoint's documented default and ask for a contract update when a stable export order is required.</p>
+    <h2>Reconciliation scans</h2>
+    <p>For long-running scans, use a bounded time window and record the final cursor or last-seen unique id. Re-run overlapping windows when necessary, then deduplicate by the server resource id rather than assuming page boundaries are immutable.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/pagination.html">Pagination</a></li>

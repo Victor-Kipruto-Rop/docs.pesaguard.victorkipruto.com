@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/sdks/javascript.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,17 +42,26 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">SDKs</p>
-    <h1>JavaScript <span class="status-pill" data-tone="planned"><i></i>Planned</span></h1>
-    <p class="docs-lede">Use fetch or a generated client; no official JavaScript SDK yet.</p>
-    <h2>Related</h2>
+    <h1>JavaScript</h1>
+    <p class="docs-lede">Use the platform fetch API or a generated client from OpenAPI. Keep the HTTP boundary server-side, centralize authentication and make write retries idempotent.</p>
+    <h2>Minimal client boundary</h2><pre class="docs-code" data-lang="javascript"><code>async function getTenant(baseUrl, token) {
+  const response = await fetch(`${baseUrl}/api/v1/tenant/current`, {
+    headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+    signal: AbortSignal.timeout(10000)
+  });
+  const body = await response.json();
+  if (!response.ok) throw new Error(`${body.error?.code ?? "HTTP_ERROR"} (${response.status})`);
+  return body;
+}</code></pre>
+    <h2>Production client rules</h2><ul><li>Inject tokens from a server-side secret boundary, never browser bundles.</li><li>Use one timeout policy and bounded retry policy for all calls.</li><li>Retry writes only with the same idempotency key.</li><li>Preserve response request ids in structured logs.</li><li>Handle <code>401</code>, <code>403</code>, <code>409</code>, <code>429</code> and 5xx separately.</li></ul>
+    <h2>Generated JavaScript clients</h2><p>Inspect generated fetch configuration, serialization of dates and amounts, pagination helpers and error types. Add a thin adapter so the rest of the application does not depend on generator-specific classes.</p>
     <ul>
       <li><a href="../sdks/index.html">SDKs</a></li>
       <li><a href="../api-reference/openapi.json">OpenAPI document</a></li>

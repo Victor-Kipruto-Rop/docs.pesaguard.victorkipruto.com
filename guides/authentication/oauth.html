@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/authentication/oauth.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,22 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Authentication guides</a><span aria-hidden="true">/</span>
           <span>OAuth</span></nav>
     <p class="docs-eyebrow">Authentication guides</p>
-    <h1>OAuth <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Not supported today. Service access uses scoped bearer tokens issued per deployment.</p>
+    <h1>OAuth</h1>
+    <p class="docs-lede">OAuth is not supported as a public PesaGuard integration flow today. Service access uses scoped bearer tokens or provisioned API credentials issued per deployment.</p>
+    <div class="callout" data-tone="warn"><strong>Do not implement from assumption</strong><p>Do not send OAuth client credentials, authorization codes or refresh-token requests to an endpoint unless the deployment publishes that contract.</p></div>
+    <h2>Supported alternative</h2><ol><li>Request a tenant-scoped service credential through the pilot or deployment operator.</li><li>Store it server-side and assign least-privilege scopes.</li><li>Send it with the documented bearer header.</li><li>Rotate and revoke it using the key lifecycle procedure.</li></ol>
+    <h2>When OAuth becomes available</h2><p>An OAuth release would need a documented authorization server, issuer and audience, grant types, redirect policy, token lifetime, scopes, revocation behavior and migration plan. Treat those as explicit contract requirements, not implied functionality.</p>
     <p>Not supported today. Service access uses scoped bearer tokens issued per deployment.</p>
     <h2>Related</h2>
     <ul>

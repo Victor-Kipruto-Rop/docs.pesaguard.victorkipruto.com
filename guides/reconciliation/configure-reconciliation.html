@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/reconciliation/configure-reconciliation.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,22 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Reconciliation guides</a><span aria-hidden="true">/</span>
           <span>Configure reconciliation</span></nav>
     <p class="docs-eyebrow">Reconciliation guides</p>
-    <h1>Configure reconciliation <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Match keys and timestamp tolerance are configured per flow, scoped with the pilot team.</p>
+    <h1>Configure reconciliation</h1>
+    <p class="docs-lede">Configure each provider flow with explicit matching keys, time tolerance, review ownership and retention expectations. Configuration is part of the financial control surface, not a cosmetic preference.</p>
+    <div class="api-hero"><div><strong>Configuration goal</strong><p>Make a match explainable, repeatable and safe to change without silently altering historical outcomes.</p></div><div class="api-hero-meta"><span>FLOW</span><span>KEYS</span><span>TOLERANCE</span></div></div>
+    <h2>Configuration workshop</h2><ol><li>Identify provider flow, shortcode and internal ledger source.</li><li>Choose stable references and amount fields.</li><li>Define currency and timestamp assumptions.</li><li>Set tolerance with examples from real timing variance.</li><li>Assign exception reviewers and escalation channels.</li><li>Test the configuration in staging before production approval.</li></ol>
+    <h2>Change controls</h2><p>Record the previous and new values, approver, effective time and expected impact. Re-run representative matches after changing keys or tolerance, and never rewrite historical evidence to make a new rule appear retroactive.</p>
     <p>Match keys and timestamp tolerance are configured per flow, scoped with the pilot team.</p>
     <h2>Related</h2>
     <ul>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/authentication/bearer-tokens.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,25 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Authentication guides</a><span aria-hidden="true">/</span>
           <span>Bearer tokens</span></nav>
     <p class="docs-eyebrow">Authentication guides</p>
-    <h1>Bearer tokens <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">The Authorization header, tenant claims, and what a rejected token returns.</p>
+    <h1>Bearer tokens</h1>
+    <p class="docs-lede">Send the access token in the HTTP Authorization header. The service validates its issuer, audience, expiry, tenant context and granted scopes before route authorization.</p>
+    <div class="api-hero"><div><strong>Every protected request</strong><p>Authentication establishes identity; authorization then decides whether that identity may use the requested resource.</p></div><div class="api-hero-meta"><span>ISSUER</span><span>AUDIENCE</span><span>EXPIRY</span></div></div>
+    <h2>Request pattern</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/api/v1/tenant/current" \
+  -H "Authorization: Bearer $PESAGUARD_ACCESS_TOKEN" \
+  -H "Accept: application/json"</code></pre>
+    <h2>Token checks</h2><table><thead><tr><th>Check</th><th>Failure</th></tr></thead><tbody><tr><td>Signature and issuer</td><td>Reject if token was not issued by the configured authority.</td></tr><tr><td>Audience and expiry</td><td>Reject tokens for another API or past their expiration.</td></tr><tr><td>Tenant and scope</td><td>Authenticate successfully but return <code>403</code> when policy denies access.</td></tr></tbody></table>
+    <h2>When a token is rejected</h2><ol><li>Check environment and header format.</li><li>Renew or replace once.</li><li>Preserve the request id if the failure remains.</li><li>Never log or send the raw token to support.</li></ol>
     <p>The Authorization header, tenant claims, and what a rejected token returns.</p>
     <h2>Related</h2>
     <ul>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/webhooks/event-catalog.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -55,12 +53,12 @@
       <li><a href="../webhooks/verification.html">Verification</a></li>
       <li><a href="../webhooks/retries.html">Retries</a></li>
     </ul></div></aside>
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../index.html">Webhooks</a><span aria-hidden="true">/</span>
           <span>Event catalog</span></nav>
     <p class="docs-eyebrow">Webhooks</p>
-    <h1>Event catalog <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
+    <h1>Event catalog</h1>
     <p class="docs-lede">Events come from the reconciliation pipeline and the operations surface. The catalog below names the families; exact payload schemas come from the OpenAPI document on your deployment.</p>
     <table>
       <thead><tr><th>Family</th><th>Produced when</th></tr></thead>
@@ -71,6 +69,16 @@
         <tr><td>Notification events</td><td>An alert is routed to SMS, email, Slack or a webhook consumer.</td></tr>
       </tbody>
     </table>
+    <h2>Common event envelope</h2><pre class="docs-code" data-lang="json"><code>{
+  "id": "event_01J...",
+  "type": "transaction.matched",
+  "tenant_id": "tenant_123",
+  "occurred_at": "2026-09-20T12:00:00Z",
+  "data": {},
+  "delivery_id": "delivery_01J..."
+}</code></pre>
+    <p>Field names and payload schemas are deployment contracts. Consumers should preserve event identity, tolerate additive fields, validate required fields and avoid assuming delivery order.</p>
+    <h2>Consumer routing</h2><table><thead><tr><th>Event family</th><th>Consumer action</th></tr></thead><tbody><tr><td>Delivery</td><td>Update integration delivery state and alert on repeated failure.</td></tr><tr><td>Reconciliation</td><td>Update workflow state and link the outcome to the transaction.</td></tr><tr><td>Anomaly</td><td>Create or update a review task without declaring fraud automatically.</td></tr><tr><td>Notification</td><td>Route the message through a user-facing channel with delivery evidence.</td></tr></tbody></table>
     <h2>Related</h2>
     <ul>
       <li><a href="../webhooks/index.html">Delivery overview</a></li>

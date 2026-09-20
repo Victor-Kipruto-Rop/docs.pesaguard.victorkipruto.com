@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/testing/failure-scenarios.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,27 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Testing</p>
-    <h1>Failure scenarios <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Test duplicate delivery, malformed payloads, consumer downtime and tenant-scope violations.</p>
+    <h1>Failure scenarios</h1>
+    <p class="docs-lede">Failure tests prove that bad input, duplicate delivery, dependency outages and tenant mistakes become visible, recoverable outcomes rather than silent corruption.</p>
+    <div class="api-hero"><div><strong>Break it deliberately</strong><p>Inject one failure at a time, capture the evidence and assert the durable result before moving to the next scenario.</p></div><div class="api-hero-meta"><span>INJECT</span><span>OBSERVE</span><span>RECOVER</span></div></div>
+    <h2>Failure matrix</h2><table><thead><tr><th>Scenario</th><th>Inject</th><th>Assert</th></tr></thead><tbody><tr><td>Duplicate delivery</td><td>Send the same event or idempotency key twice.</td><td>One durable record, one audit outcome and a safe duplicate response.</td></tr><tr><td>Malformed payload</td><td>Remove required fields or change types.</td><td>400/422 with field reason; no reconciliation side effect.</td></tr><tr><td>Consumer downtime</td><td>Stop the worker or receiver.</td><td>Retry and dead-letter state preserve event identity.</td></tr><tr><td>Tenant violation</td><td>Use another tenant's identifier or filter.</td><td>Empty or forbidden result with no data disclosure.</td></tr><tr><td>Timeout after write</td><td>Drop the client response after submission.</td><td>Same-key retry returns one original outcome.</td></tr><tr><td>Out-of-order event</td><td>Deliver state changes in reverse order.</td><td>State guards prevent regression and preserve audit evidence.</td></tr></tbody></table>
+    <h2>Failure test record</h2><pre class="docs-code" data-lang="text"><code>Scenario:
+  Environment and tenant:
+  Injected failure:
+  Expected durable outcome:
+  Observed status / error code:
+  Request, event and transaction ids:
+  Retry count and backoff:
+  Audit and reconciliation evidence:
+  Result: pass | fail</code></pre>
+    <h2>Pass criteria</h2><ul><li>No duplicate financial record.</li><li>No cross-tenant data exposure.</li><li>No silently discarded event or exception.</li><li>Recovery remains bounded and observable.</li><li>Operator can explain the outcome from retained evidence.</li></ul>
     <h2>Related</h2>
     <ul>
       <li><a href="../testing/index.html">Testing</a></li>

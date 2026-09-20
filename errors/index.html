@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/errors/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,24 +42,37 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>Errors</span></nav>
     <p class="docs-eyebrow">Errors</p>
-    <h1>Errors and error codes <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Every failure uses the same envelope: a stable code, a human message, and a request id.</p>
+    <h1>Errors and error codes</h1>
+    <p class="docs-lede">PesaGuard errors are designed to help a client decide what to fix, what to retry and what to escalate. Every failure carries a stable code, a human-readable message and a request id for operator correlation.</p>
+    <div class="api-hero"><div><strong>Failure handling model</strong><p>Classify the status, preserve the request id, apply the documented recovery rule, and never retry a write without idempotency protection.</p></div><div class="api-hero-meta"><span>CLASSIFY</span><span>RECOVER</span><span>TRACE</span></div></div>
     <p>Full reference: <a href="../api/errors.html">API · Errors</a> — envelope, status classes and client behaviour from 400 through 504.</p>
     <ul>
       <li>Stable codes are part of the public contract; message copy is not.</li>
       <li>409 conflicts usually mean a duplicate under idempotency — re-read rather than re-send.</li>
       <li>Quote the request id in support conversations; it is the correlation key operators search for.</li>
     </ul>
+    <h2>Error envelope</h2>
+    <pre class="docs-code" data-lang="json"><code>{
+  "error": {
+    "code": "VALIDATION_FAILED",
+    "message": "Request validation failed.",
+    "request_id": "request_01J...",
+    "details": [{"field": "amount", "reason": "must be greater than zero"}]
+  }
+}</code></pre>
+    <h2>Status family guide</h2>
+    <table><thead><tr><th>Family</th><th>Meaning</th><th>Default client action</th></tr></thead><tbody><tr><td><code>400</code> / <code>422</code></td><td>Request cannot be accepted.</td><td>Correct input; do not retry unchanged.</td></tr><tr><td><code>401</code> / <code>403</code></td><td>Identity or permission problem.</td><td>Renew credentials or correct scope and tenant context.</td></tr><tr><td><code>404</code> / <code>409</code></td><td>Resource or state conflict.</td><td>Re-read within tenant scope and reconcile state.</td></tr><tr><td><code>429</code></td><td>Capacity or abuse limit.</td><td>Back off, reduce concurrency and honor retry guidance.</td></tr><tr><td><code>5xx</code></td><td>Service or gateway failure.</td><td>Bounded retry with correlation and escalation.</td></tr></tbody></table>
+    <h2>Client error-handling sequence</h2>
+    <ol><li>Capture status, code, request id and safe request context.</li><li>Redact authorization headers, secrets and sensitive payloads.</li><li>Apply the status-specific action below.</li><li>Use the same idempotency key for an uncertain write retry.</li><li>Escalate repeated failures with timestamps, environment and request ids.</li></ol>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">API · Errors</a></li>

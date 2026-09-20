@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/authentication/key-rotation.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,23 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Authentication guides</a><span aria-hidden="true">/</span>
           <span>Key rotation</span></nav>
     <p class="docs-eyebrow">Authentication guides</p>
-    <h1>Key rotation <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Rotate on a schedule and on suspicion; revocation takes effect immediately.</p>
+    <h1>Key rotation</h1>
+    <p class="docs-lede">Rotate credentials before expiry and immediately when compromise is suspected. The safe sequence issues the replacement first, verifies it, then revokes the old key.</p>
+    <div class="api-hero"><div><strong>Rotation without downtime</strong><p>Use a short overlap window, observe the replacement, and keep an auditable record of who changed what.</p></div><div class="api-hero-meta"><span>ISSUE</span><span>VERIFY</span><span>REVOKE</span></div></div>
+    <h2>Standard rotation</h2><ol><li>Inventory the current key id, owner, tenant, scopes and expiry.</li><li>Issue a replacement with equal or narrower scopes.</li><li>Deploy it through the server-side secret path.</li><li>Run authenticated read and write smoke tests in the target environment.</li><li>Observe old-key traffic, then revoke it.</li><li>Record completion and remove the old secret from runtime configuration.</li></ol>
+    <h2>Compromise response</h2><p>Revoke first when exposure is suspected; do not wait for a replacement. Preserve audit and access evidence, assess affected tenants and scopes, issue a replacement, and review activity during the exposure window.</p>
+    <h2>Rotation evidence</h2><table><thead><tr><th>Record</th><th>Why</th></tr></thead><tbody><tr><td>Key id and owner</td><td>Identifies the credential without exposing its value.</td></tr><tr><td>Scopes and environment</td><td>Defines blast radius.</td></tr><tr><td>Issue and revoke times</td><td>Shows overlap and closure.</td></tr><tr><td>Verification request ids</td><td>Proves the replacement worked.</td></tr></tbody></table>
     <p>Rotate on a schedule and on suspicion; revocation takes effect immediately.</p>
     <h2>Related</h2>
     <ul>

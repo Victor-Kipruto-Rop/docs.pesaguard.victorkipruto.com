@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/api/filtering.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -51,13 +49,27 @@
 <div class="docs-shell">
   <article class="docs-article">
     <p class="docs-eyebrow">API</p>
-    <h1>Filtering <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Query parameters narrow list endpoints; exact names come from the endpoint contract.</p>
-    <ul>
-      <li>Filters are scoped to the caller's tenant and cannot widen it.</li>
-      <li>Unknown parameters are ignored or rejected per endpoint — read the spec, do not assume.</li>
-      <li>Tenant identifiers are never trusted from the client.</li>
-    </ul>
+    <h1>Filtering</h1>
+    <p class="docs-lede">Filtering narrows a collection before pagination and sorting. Use the exact parameter names and value formats published for each route; filters are a query aid, never a substitute for authorization or tenant isolation.</p>
+    <h2>Filter behavior</h2>
+    <table><thead><tr><th>Rule</th><th>Client guidance</th></tr></thead><tbody>
+      <tr><td>Tenant scope</td><td>Every result is constrained by the authenticated tenant even when no tenant filter is supplied.</td></tr>
+      <tr><td>Unknown parameters</td><td>Do not depend on ignored parameters. Remove them unless the route contract accepts them.</td></tr>
+      <tr><td>Exact values</td><td>Use canonical ids, ISO-8601 timestamps, documented enum values and exact currency codes.</td></tr>
+      <tr><td>Ranges</td><td>Confirm whether boundaries are inclusive and use UTC for time ranges.</td></tr>
+      <tr><td>Empty filters</td><td>Expect a bounded default page rather than an unbounded export.</td></tr>
+    </tbody></table>
+    <h2>Example query</h2>
+    <pre class="docs-code" data-lang="bash"><code>curl --get "$PESAGUARD_API_URL/api/v1/discrepancies" \
+  --data-urlencode "status=open" \
+  --data-urlencode "provider_id=provider_123" \
+  --data-urlencode "created_from=2026-09-01T00:00:00Z" \
+  --data-urlencode "created_to=2026-09-02T00:00:00Z" \
+  --data-urlencode "page=1" \
+  --data-urlencode "limit=50" \
+  -H "Authorization: Bearer $PESAGUARD_ACCESS_TOKEN"</code></pre>
+    <h2>Safe filtering workflow</h2>
+    <ol><li>Start with a narrow time range and a small limit.</li><li>Confirm response metadata and tenant context.</li><li>Add one filter at a time and record the resulting count.</li><li>Use pagination and stable sorting for exports or reconciliation jobs.</li></ol>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/pagination.html">Pagination</a></li>

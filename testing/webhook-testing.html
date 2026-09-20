@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/testing/webhook-testing.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,19 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Testing</p>
-    <h1>Webhook testing <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Stand up a consumer in staging, verify the signature, force a failure and replay from the dead letter.</p>
+    <h1>Webhook testing</h1>
+    <p class="docs-lede">Test the receiver as an independent reliability boundary: verify signatures before parsing, acknowledge only durable acceptance, handle duplicates and prove replay from failure states.</p>
+    <div class="api-hero"><div><strong>Receiver readiness</strong><p>A webhook consumer is ready when it is secure, idempotent, observable and safe to replay.</p></div><div class="api-hero-meta"><span>VERIFY</span><span>ACKNOWLEDGE</span><span>REPLAY</span></div></div>
+    <h2>Webhook test matrix</h2><table><thead><tr><th>Scenario</th><th>Expected behavior</th></tr></thead><tbody><tr><td>Valid signature</td><td>Raw body verifies, event is durably accepted and acknowledgement follows persistence.</td></tr><tr><td>Invalid signature</td><td>Reject before parsing or business processing.</td></tr><tr><td>Duplicate delivery</td><td>One durable event and one downstream effect.</td></tr><tr><td>Consumer outage</td><td>Provider retry or dead letter preserves delivery identity.</td></tr><tr><td>Malformed payload</td><td>Safe rejection with evidence and no partial financial effect.</td></tr><tr><td>Out-of-order event</td><td>State guards prevent a transaction from regressing.</td></tr></tbody></table>
+    <h2>Test procedure</h2><ol><li>Deploy the staging consumer with a staging signing secret.</li><li>Capture the raw body before JSON parsing.</li><li>Send a valid event and assert signature, persistence and acknowledgement.</li><li>Repeat the delivery and confirm idempotent handling.</li><li>Force a consumer failure and observe retry or dead-letter behavior.</li><li>Replay the event and compare final state, audit and notification evidence.</li></ol>
+    <h2>Observability checklist</h2><ul><li>Delivery id, event id and tenant are logged safely.</li><li>Signature failures are counted without logging secrets.</li><li>Retry count, age and dead-letter volume are measurable.</li><li>Processing latency and acknowledgement status are visible.</li><li>Replayed events remain linked to their original identity.</li></ul>
     <h2>Related</h2>
     <ul>
       <li><a href="../testing/index.html">Testing</a></li>

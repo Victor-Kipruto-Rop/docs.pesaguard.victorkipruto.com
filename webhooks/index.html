@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/webhooks/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -54,12 +52,17 @@
       <li><a href="../webhooks/event-catalog.html">Event catalog</a></li>
       <li><a href="../webhooks/verification.html">Verification</a></li>
       <li><a href="../webhooks/retries.html">Retries</a></li>
+      <li><a href="../webhooks/transaction-created.html">transaction.created</a></li>
+      <li><a href="../webhooks/transaction-matched.html">transaction.matched</a></li>
+      <li><a href="../webhooks/transaction-unmatched.html">transaction.unmatched</a></li>
+      <li><a href="../webhooks/reconciliation-completed.html">reconciliation.completed</a></li>
+      <li><a href="../webhooks/anomaly-detected.html">anomaly.detected</a></li>
     </ul></div></aside>
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>Webhooks</span></nav>
     <p class="docs-eyebrow">Webhooks</p>
-    <h1>Webhook delivery <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
+    <h1>Webhook delivery</h1>
     <p class="docs-lede">Outbound webhooks carry exceptions and notifications to systems you run. Every delivery is signed, retried on failure with bounded backoff, and dead-lettered when exhausted — never silently dropped.</p>
     <ul>
       <li><strong>Signed by default</strong> — consumers verify the sender before trusting the payload.</li>
@@ -68,6 +71,9 @@
       <li><strong>Replay is safe</strong> — idempotency applies to delivery exactly as it does to ingestion.</li>
     </ul>
     <p>The ops API exposes webhook delivery events (event id, type, source, received and processing times, status, HTTP status, retry count, error and the related transaction) under the integrations scopes — see <a href="../api/index.html">the API reference</a> and the contract at <a href="../api-reference/openapi.json">api-reference/openapi.json</a>.</p>
+    <div class="api-hero"><div><strong>Receiver contract</strong><p>Verify the sender, accept durably, process idempotently and expose every attempt for investigation.</p></div><div class="api-hero-meta"><span>VERIFY</span><span>ACKNOWLEDGE</span><span>REPLAY</span></div></div>
+    <h2>Delivery lifecycle</h2><ol><li>PesaGuard creates an event with a stable event and delivery identity.</li><li>The payload is signed and sent to the configured receiver.</li><li>The receiver verifies the raw body before parsing.</li><li>The receiver persists the event and acknowledges only after durable acceptance.</li><li>Failures are retried with bounded backoff, then retained in a dead-letter path.</li><li>Operators can inspect and replay the delivery without losing its identity.</li></ol>
+    <h2>Minimum receiver requirements</h2><table><thead><tr><th>Requirement</th><th>Why</th></tr></thead><tbody><tr><td>Raw-body signature verification</td><td>Prevents a modified payload from being trusted.</td></tr><tr><td>Fast acknowledgement after persistence</td><td>Prevents timeouts while avoiding data loss.</td></tr><tr><td>Idempotent event handling</td><td>Provider retries must not create duplicate effects.</td></tr><tr><td>Unknown-field tolerance</td><td>Additive payload changes remain compatible.</td></tr><tr><td>Observable delivery identity</td><td>Operators can trace attempts, retries and replay.</td></tr></tbody></table>
     <h2>Related</h2>
     <ul>
       <li><a href="../webhooks/event-catalog.html">Event catalog</a></li>

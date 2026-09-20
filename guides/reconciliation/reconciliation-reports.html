@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/reconciliation/reconciliation-reports.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,22 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Reconciliation guides</a><span aria-hidden="true">/</span>
           <span>Reconciliation reports</span></nav>
     <p class="docs-eyebrow">Reconciliation guides</p>
-    <h1>Reconciliation reports <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Reports read the reconciled record and its exceptions, so the queue and the numbers agree.</p>
+    <h1>Reconciliation reports</h1>
+    <p class="docs-lede">A reconciliation report should be a view of durable reconciled records, not a second matching engine. Reports must agree with exception queues, audit decisions and the tenant-scoped API.</p>
+    <div class="api-hero"><div><strong>One source of truth</strong><p>Build reports from the reconciled outcome and preserve the filters, time window, sort and generation timestamp.</p></div><div class="api-hero-meta"><span>CONSISTENT</span><span>TRACEABLE</span><span>REPRODUCIBLE</span></div></div>
+    <h2>Report definition</h2><table><thead><tr><th>Field</th><th>Required context</th></tr></thead><tbody><tr><td>Scope</td><td>Tenant, provider flow and environment.</td></tr><tr><td>Window</td><td>UTC start and end boundaries.</td></tr><tr><td>Outcome counts</td><td>Matched, unmatched, exception and resolved totals.</td></tr><tr><td>Evidence</td><td>Generation time, filters, sort and source query or export id.</td></tr></tbody></table>
+    <h2>Reconcile report totals</h2><ol><li>Freeze the query and record its filters.</li><li>Use stable sorting and complete pagination.</li><li>Compare totals with the exception queue and audit events.</li><li>Investigate mismatches before publishing the report.</li><li>Retain the report evidence according to tenant retention policy.</li></ol>
     <p>Reports read the reconciled record and its exceptions, so the queue and the numbers agree.</p>
     <h2>Related</h2>
     <ul>

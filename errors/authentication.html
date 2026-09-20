@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/errors/authentication.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,17 +42,23 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Errors</p>
-    <h1>401 · Authentication <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">The caller was not authenticated. Refresh or reissue the credential.</p>
+    <h1>401 · Authentication</h1>
+    <p class="docs-lede">The server could not establish a valid identity for the request. The credential may be missing, malformed, expired, revoked, issued for another audience or sent to the wrong environment.</p>
     <p>See <a href="../api/errors.html">API · Errors</a> for the envelope and client behaviour.</p>
+    <h2>Common causes</h2><ul><li>No <code>Authorization</code> header was sent.</li><li>The scheme is not <code>Bearer</code> or the token contains extra whitespace.</li><li>The token is expired, revoked, signed by an unknown issuer or intended for another audience.</li><li>A sandbox credential was sent to production or the reverse.</li></ul>
+    <h2>Recovery procedure</h2><ol><li>Confirm the base URL and environment.</li><li>Check the header without logging the secret.</li><li>Renew or replace the credential once.</li><li>Retry the original request only after authentication succeeds.</li><li>Escalate repeated failures with the request id and token metadata, never the raw token.</li></ol>
+    <h2>Example</h2><pre class="docs-code" data-lang="http"><code>HTTP/1.1 401 Unauthorized
+  WWW-Authenticate: Bearer
+  Content-Type: application/json
+
+  {"error":{"code":"AUTHENTICATION_FAILED","message":"Credentials were rejected.","request_id":"request_01J..."}}</code></pre>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">API · Errors</a></li>

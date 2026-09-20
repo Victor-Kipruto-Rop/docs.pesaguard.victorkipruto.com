@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/sdks/typescript.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,17 +42,31 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">SDKs</p>
-    <h1>TypeScript <span class="status-pill" data-tone="planned"><i></i>Planned</span></h1>
-    <p class="docs-lede">Generate typed models from the OpenAPI document for compile-time safety.</p>
-    <h2>Related</h2>
+    <h1>TypeScript</h1>
+    <p class="docs-lede">Generate typed models from the OpenAPI document, then keep runtime validation and error handling at the client boundary. Compile-time types reduce mistakes but cannot validate untrusted responses by themselves.</p>
+    <h2>Generate a client</h2><pre class="docs-code" data-lang="bash"><code>curl --fail "$PESAGUARD_API_URL/openapi.json" -o openapi.json
+npx @openapitools/openapi-generator-cli generate \
+  -i openapi.json -g typescript-fetch -o ./generated/pesaguard</code></pre>
+    <h2>Typed request wrapper</h2><pre class="docs-code" data-lang="typescript"><code>type PesaGuardConfig = {
+  baseUrl: string;
+  token: string;
+};
+
+export async function getTenant(config: PesaGuardConfig) {
+  const response = await fetch(`${config.baseUrl}/api/v1/tenant/current`, {
+    headers: { Authorization: `Bearer ${config.token}` }
+  });
+  if (!response.ok) throw new Error(`PesaGuard HTTP ${response.status}`);
+  return response.json();
+}</code></pre>
+    <h2>Type safety checklist</h2><ul><li>Pin the OpenAPI document used for generation.</li><li>Regenerate in CI and review the diff.</li><li>Validate dates, amounts and enum values at runtime.</li><li>Model unknown response fields as forward-compatible.</li><li>Keep generated code separate from business logic.</li></ul>
     <ul>
       <li><a href="../sdks/index.html">SDKs</a></li>
       <li><a href="../api-reference/openapi.json">OpenAPI document</a></li>

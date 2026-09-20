@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/migration/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,23 +42,36 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+<aside class="docs-sidebar" aria-label="Migration navigation">
+  <div class="docs-nav-group"><p>Migration</p><ul>
+    <li><a href="index.html" aria-current="page">Overview</a></li>
+    <li><a href="api-v1-to-v2.html">API v1 to v2</a></li>
+    <li><a href="deprecated-endpoints.html">Deprecated endpoints</a></li>
+    <li><a href="webhook-migrations.html">Webhook migrations</a></li>
+  </ul></div>
+</aside>
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>Migration</span></nav>
     <p class="docs-eyebrow">Migration</p>
-    <h1>Migrations <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Migrations use Alembic revisions with deliberate compatibility paths; API deprecations follow the documented 90-day policy.</p>
+    <h1>Migrations</h1>
+    <p class="docs-lede">Migration guidance for changes that can affect stored data, API clients, webhook consumers or deployment topology. Treat migration as a controlled operation with evidence, compatibility checks and a rollback decision.</p>
+    <div class="api-hero"><div><strong>Change without losing context</strong><p>Separate schema, API and consumer changes, then move them through staging before production.</p></div><div class="api-hero-meta"><span>COMPARE</span><span>VERIFY</span><span>ROLL BACK</span></div></div>
     <ul>
       <li><strong>Schema</strong> — Alembic revisions, safe backfills, no production schema creation outside migrations.</li>
       <li><strong>API</strong> — breaking changes require a new versioned prefix; the previous version stays supported for at least 90 days after notice.</li>
       <li><strong>Deprecations</strong> — announced in release notes and the OpenAPI document.</li>
     </ul>
+    <h2>Migration tracks</h2><table><thead><tr><th>Track</th><th>Use when</th><th>Guide</th></tr></thead><tbody><tr><td>API version</td><td>Routes, schemas, scopes or response semantics change.</td><td><a href="api-v1-to-v2.html">API v1 to v2</a></td></tr><tr><td>Endpoint deprecation</td><td>An existing route will be replaced or removed.</td><td><a href="deprecated-endpoints.html">Deprecated endpoints</a></td></tr><tr><td>Webhook consumer</td><td>Signature, payload, retry or event behavior changes.</td><td><a href="webhook-migrations.html">Webhook migrations</a></td></tr><tr><td>Database schema</td><td>Persistent data shape or index changes.</td><td><a href="../concepts/architecture.html">Architecture and durable boundaries</a></td></tr></tbody></table>
+    <h2>Universal migration sequence</h2><ol><li>Identify affected tenants, clients, workers and consumers.</li><li>Compare the old and new contract or schema.</li><li>Make the change additive and backward-compatible where possible.</li><li>Test data, authorization, retries, idempotency and reconciliation outcomes in staging.</li><li>Roll out gradually with metrics and rollback ready.</li><li>Remove compatibility behavior only after the support window and traffic review.</li></ol>
+    <h2>Change classification</h2><table><thead><tr><th>Class</th><th>Example</th><th>Required control</th></tr></thead><tbody><tr><td>Additive</td><td>New optional response field or new event type.</td><td>Tolerant consumers and contract tests.</td></tr><tr><td>Behavioral</td><td>Same route, but changed defaults, ordering or validation.</td><td>Representative data comparison and operator review.</td></tr><tr><td>Breaking</td><td>Removed field, route, scope or accepted request format.</td><td>New version, notice and supported migration window.</td></tr><tr><td>Data migration</td><td>Backfill, index or persistent shape change.</td><td>Backup, reversible migration and capacity test.</td></tr></tbody></table>
+    <h2>Go / no-go review</h2><ul><li>Go only when the affected consumer inventory is complete.</li><li>Go only when staging tests cover success, failure, retry and replay.</li><li>Go only when dashboards show errors, latency, queue lag and reconciliation outcomes.</li><li>No-go when rollback would lose event identity, duplicate a write or hide an exception.</li></ul>
+    <h2>Migration evidence</h2><p>Retain the contract versions, test results, owner, approval, deployment timestamp, request ids and rollback decision. A successful deployment is not proof that consumers have migrated.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/versioning.html">Versioning</a></li>

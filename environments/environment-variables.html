@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/environments/environment-variables.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,33 +42,40 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../index.html">Environments</a><span aria-hidden="true">/</span>
           <span>Environment variables</span></nav>
     <p class="docs-eyebrow">Environments</p>
-    <h1>Environment variables <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">These settings live in the ignored root .env — never in images, never in git.</p>
+    <h1>Environment variables</h1>
+    <p class="docs-lede">Environment variables configure identity, storage, brokers, public routing and optional infrastructure overlays. Keep values in the ignored root <code>.env</code> or an approved secret manager; never bake secrets into images or commit them to git.</p>
+    <div class="callout" data-tone="danger"><strong>Secret boundary</strong><p>Variable names may be documented. Secret values must remain in runtime configuration and must never appear in screenshots, logs, container images, commits or support tickets.</p></div>
+    <div class="api-hero"><div><strong>Configuration layers</strong><p>Base settings establish connectivity; environment overlays select the correct database, listeners, credentials and public route.</p></div><div class="api-hero-meta"><span>IDENTITY</span><span>STORAGE</span><span>TOPOLOGY</span></div></div>
     <table>
       <thead><tr><th>Variable</th><th>Used by</th></tr></thead>
       <tbody>
-        <tr><td><code>POSTGRES_USER</code> / <code>POSTGRES_DB</code> / <code>POSTGRES_PASSWORD</code></td><td>Base and staging variants.</td></tr>
-        <tr><td><code>DATABASE_URL_DOCKER</code></td><td>Base variant; container-reachable complete URL.</td></tr>
-        <tr><td><code>PESAGUARD_API_URL</code></td><td>Public base URL for status probes and integrations.</td></tr>
-        <tr><td><code>JWT_SECRET_KEY</code></td><td>Token signing.</td></tr>
-        <tr><td><code>KAFKA_BOOTSTRAP_SERVERS_DOCKER</code> / <code>REDIS_URL_DOCKER</code></td><td>Base variant brokers.</td></tr>
-        <tr><td><code>KAFKA_BOOTSTRAP_SERVERS_FULL</code> / <code>KAFKA_ADVERTISED_LISTENERS_FULL</code></td><td>Full variant (Kafka, not Redpanda).</td></tr>
-        <tr><td><code>STAGING_POSTGRES_DB</code> / <code>STAGING_KAFKA_ADVERTISED_LISTENERS</code></td><td>Staging variant.</td></tr>
-        <tr><td><code>API_SERVER_NAME</code></td><td>AWS/tunnel overlays; a hostname, not a URL.</td></tr>
-        <tr><td><code>CLOUDFLARE_TUNNEL_TOKEN</code></td><td>Tunnel overlay only.</td></tr>
+        <tr><td><code>POSTGRES_USER</code> / <code>POSTGRES_DB</code> / <code>POSTGRES_PASSWORD</code></td><td>Database identity for base and staging variants. Use environment-specific values and rotate the password.</td></tr>
+        <tr><td><code>DATABASE_URL_DOCKER</code></td><td>Container-reachable database URL for the base variant; verify host and database name.</td></tr>
+        <tr><td><code>PESAGUARD_API_URL</code></td><td>Public base URL for status probes and integrations. Do not point production clients at staging.</td></tr>
+        <tr><td><code>JWT_SECRET_KEY</code></td><td>Token signing secret. Store in a secret manager and never reuse it across environments.</td></tr>
+        <tr><td><code>KAFKA_BOOTSTRAP_SERVERS_DOCKER</code> / <code>REDIS_URL_DOCKER</code></td><td>Base-variant broker and queue endpoints; verify container DNS and credentials.</td></tr>
+        <tr><td><code>KAFKA_BOOTSTRAP_SERVERS_FULL</code> / <code>KAFKA_ADVERTISED_LISTENERS_FULL</code></td><td>Full Kafka variant listener configuration. Validate internal and external listener reachability.</td></tr>
+        <tr><td><code>STAGING_POSTGRES_DB</code> / <code>STAGING_KAFKA_ADVERTISED_LISTENERS</code></td><td>Staging-specific database and Kafka isolation settings.</td></tr>
+        <tr><td><code>API_SERVER_NAME</code></td><td>AWS or tunnel overlay hostname, not a URL. Do not include a scheme or path.</td></tr>
+        <tr><td><code>CLOUDFLARE_TUNNEL_TOKEN</code></td><td>Tunnel overlay secret only. Restrict access and rotate if exposed.</td></tr>
       </tbody>
     </table>
+      <h2>Configuration classes</h2>
+      <table><thead><tr><th>Class</th><th>Examples</th><th>Handling</th></tr></thead><tbody><tr><td>Secrets</td><td>Passwords, JWT keys, tunnel tokens</td><td>Secret manager or protected runtime injection; never log.</td></tr><tr><td>Endpoints</td><td>API URL, database and broker hosts</td><td>Review against the selected environment before startup.</td></tr><tr><td>Topology</td><td>Listener and overlay settings</td><td>Validate from the network location where each service runs.</td></tr></tbody></table>
+      <h2>Validation procedure</h2>
+      <ol><li>Copy the environment-specific template into the ignored local configuration.</li><li>Check required variables are present without printing their values.</li><li>Run <code>config --quiet</code> and inspect the selected environment.</li><li>Verify database, Redis, Kafka and public URL connectivity separately.</li><li>Start services only after reviewing the merged configuration.</li></ol>
+      <h2>Common configuration failures</h2>
+      <ul><li>Using a host name reachable only from inside a container on the host machine.</li><li>Pointing staging workers at a production broker or database.</li><li>Changing a signing key without coordinating token invalidation.</li><li>Putting a complete secret-bearing URL in logs or support tickets.</li><li>Assuming an unset optional variable has the same default in every overlay.</li></ul>
     <h2>Related</h2>
     <ul>
       <li><a href="../environments/index.html">Environments</a></li>

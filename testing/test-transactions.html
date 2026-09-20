@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/testing/test-transactions.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,18 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Testing</p>
-    <h1>Test transactions <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Send events into staging and assert the match, the exception reason and the audit entry.</p>
+    <h1>Test transactions</h1>
+    <p class="docs-lede">Create controlled staging transactions and assert the full outcome: authenticated ingestion, durable persistence, matching decision, exception reason, audit event and downstream notification.</p>
+    <h2>Transaction test matrix</h2><table><thead><tr><th>Fixture</th><th>Expected result</th></tr></thead><tbody><tr><td>Exact reference and amount</td><td>Matched with evidence for reference, amount, currency and time.</td></tr><tr><td>Amount difference</td><td>Exception with an explicit delta; no silent rounding.</td></tr><tr><td>Missing internal candidate</td><td>Unmatched queue entry with reason and provider event identity.</td></tr><tr><td>Duplicate callback</td><td>One transaction and one logical audit outcome.</td></tr><tr><td>Late callback</td><td>Configured tolerance determines match or review path.</td></tr></tbody></table>
+    <h2>Assertion sequence</h2><ol><li>Verify callback signature or API credential.</li><li>Confirm event and transaction records are durable.</li><li>Read lifecycle state and reconciliation outcome.</li><li>Inspect audit entry and reviewer context.</li><li>Confirm webhook or report reflects the same outcome.</li></ol>
+    <h2>Test data hygiene</h2><p>Use synthetic references, amounts and identities. Keep fixture ownership and cleanup explicit; never use production credentials or copy production personal data into staging.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../testing/index.html">Testing</a></li>

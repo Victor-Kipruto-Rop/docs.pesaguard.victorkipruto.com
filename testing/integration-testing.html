@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/testing/integration-testing.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,18 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Testing</p>
-    <h1>Integration testing <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Test the invariants, not the happy path: one record per event, one decision per exception, zero cross-tenant reads.</p>
+    <h1>Integration testing</h1>
+    <p class="docs-lede">Integration tests exercise real service boundaries: database persistence, asynchronous workers, Kafka or provider events, Redis-backed work and tenant-aware authorization.</p>
+    <h2>Integration setup</h2><ol><li>Use an isolated staging tenant and environment credential.</li><li>Provision synthetic provider and internal records.</li><li>Start API, database, workers, Redis and broker dependencies.</li><li>Capture request, event, transaction and audit identifiers.</li><li>Reset only through a controlled fixture or cleanup procedure.</li></ol>
+    <h2>Invariants to assert</h2><table><thead><tr><th>Invariant</th><th>Assertion</th></tr></thead><tbody><tr><td>Exactly-once logical write</td><td>Repeated delivery does not create a second financial record.</td></tr><tr><td>Tenant isolation</td><td>Every read, write, export, event and cache access is scoped.</td></tr><tr><td>Durable acknowledgement</td><td>Success is returned only after required state is persisted.</td></tr><tr><td>Explainable decision</td><td>Match, exception or review outcome has evidence and reason.</td></tr><tr><td>Replay safety</td><td>Dead-letter replay preserves identity and produces one outcome.</td></tr></tbody></table>
+    <h2>Test artifacts</h2><p>Keep fixtures, environment version, contract version, test timestamps, logs, metrics, audit events and failure traces together. A test that cannot be reproduced is a signal, not durable evidence.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../testing/index.html">Testing</a></li>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/api/pagination.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -63,8 +61,8 @@
           <a href="../index.html">API</a><span aria-hidden="true">/</span>
           <span>Pagination</span></nav>
     <p class="docs-eyebrow">API</p>
-    <h1>Pagination <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">List endpoints return items plus metadata so clients can size their loops instead of guessing.</p>
+    <h1>Pagination</h1>
+    <p class="docs-lede">List endpoints return a bounded page of tenant-scoped items plus metadata. Pagination keeps response size predictable, protects the service under high-volume reconciliation, and gives clients a deterministic way to finish a scan.</p>
     <div class="code-head"><span class="method">200</span><code>list envelope</code></div>
     <pre class="docs-code" data-lang="json"><code>{
   "items": [],
@@ -73,7 +71,21 @@
   "total": 0,
   "total_pages": 0
 }</code></pre>
+    <h2>Page parameters</h2>
+    <table><thead><tr><th>Parameter</th><th>Meaning</th><th>Guidance</th></tr></thead><tbody>
+      <tr><td><code>page</code></td><td>One-based page number</td><td>Start at 1 and advance only after a successful response.</td></tr>
+      <tr><td><code>limit</code></td><td>Items requested per page</td><td>Use a documented bounded value; the server may cap it.</td></tr>
+      <tr><td><code>total</code></td><td>Matching item count</td><td>Treat as a point-in-time estimate for changing collections.</td></tr>
+      <tr><td><code>total_pages</code></td><td>Calculated page count</td><td>Use it as the loop bound, not an empty page guess.</td></tr>
+    </tbody></table>
+    <h2>Iteration example</h2>
+    <pre class="docs-code" data-lang="javascript"><code>for (let page = 1; page &lt;= totalPages; page += 1) {
+  const response = await get(`/api/v1/discrepancies?page=${page}&amp;limit=50`);
+  consume(response.items);
+}</code></pre>
     <p>Pass <code>page</code> and <code>limit</code> as query parameters; treat <code>total_pages</code> as the loop bound rather than paginating until an empty page. Filtering and sorting parameters, where supported, are documented per endpoint in the OpenAPI contract.</p>
+    <h2>Consistency and exports</h2>
+    <p>For a changing collection, combine a stable sort with a time or id boundary and record the query used. If an export must be complete and reproducible, prefer a server-side export job or snapshot contract over holding a moving page count in memory. Retry a failed page without changing filters, sort or page size.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">Errors</a></li>

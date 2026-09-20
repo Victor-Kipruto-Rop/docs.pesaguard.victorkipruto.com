@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/reconciliation/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,19 +42,19 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <span>Reconciliation guides</span></nav>
     <p class="docs-eyebrow">Reconciliation guides</p>
-    <h1>Reconciliation guides <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Reconciliation guides for PesaGuard integrations.</p>
+    <h1>Reconciliation guides</h1>
+    <p class="docs-lede">Configure deterministic matching, investigate exceptions and produce reports that agree with the underlying reconciled records. These guides are written for both integration engineers and operations reviewers.</p>
+    <div class="api-hero"><div><strong>From evidence to outcome</strong><p>Configure the rules, observe the match decision, review differences and report from the durable record.</p></div><div class="api-hero-meta"><span>CONFIGURE</span><span>REVIEW</span><span>REPORT</span></div></div>
     <table>
       <thead><tr><th>Page</th><th>Focus</th></tr></thead>
       <tbody>
@@ -66,6 +65,7 @@
         <tr><td><a href="reconciliation-reports.html">Reconciliation reports</a></td><td>Reports read the reconciled record and its exceptions, so the queue and the numbers agree.</td></tr>
       </tbody>
     </table>
+    <h2>Recommended sequence</h2><ol><li>Define provider flow and internal record ownership.</li><li>Set match keys and tolerance with the pilot team.</li><li>Test matched, unmatched, duplicate and exception cases.</li><li>Assign reviewers and escalation paths.</li><li>Generate reports from reconciled records, not a parallel export.</li></ol>
     <h2>Related</h2>
     <ul>
       <li><a href="../../guides/index.html">Guides</a></li>

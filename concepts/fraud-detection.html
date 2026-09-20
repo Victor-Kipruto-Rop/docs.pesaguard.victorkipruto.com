@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/concepts/fraud-detection.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -64,13 +62,19 @@
           <a href="../index.html">Concepts</a><span aria-hidden="true">/</span>
           <span>Fraud detection</span></nav>
     <p class="docs-eyebrow">Concepts</p>
-    <h1>Fraud detection <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Fraud detection distinguishes anomaly from suspicion from confirmed fraud. PesaGuard's job is the first two — surfaced quickly, with reasons — while the third stays a recorded human decision.</p>
+    <h1>Fraud detection</h1>
+    <p class="docs-lede">Fraud detection separates an observable anomaly, a reviewable suspicion and a confirmed fraud decision. PesaGuard surfaces the first two with reasons and evidence; an authorized human owns the final decision and its consequences.</p>
     <ol>
       <li>A signal raises: named pattern, severity, transaction context.</li>
       <li>The right owner is reached through configured channels, with delivery attempts observable.</li>
       <li>A reviewer investigates and decides; the decision and reason land in the append-only trail.</li>
     </ol>
+    <h2>Decision stages</h2>
+    <table><thead><tr><th>Stage</th><th>Meaning</th><th>Control</th></tr></thead><tbody><tr><td>Anomaly</td><td>A pattern differs from expected behavior.</td><td>Show signal, evidence window and severity.</td></tr><tr><td>Suspicion</td><td>A reviewer believes the activity needs investigation.</td><td>Assign owner, preserve evidence and track age.</td></tr><tr><td>Confirmed fraud</td><td>An authorized decision records the conclusion.</td><td>Require reason, actor, timestamp and follow-up action.</td></tr></tbody></table>
+    <h2>Evidence-led investigation</h2>
+    <ul><li>Compare the transaction with account, provider and channel history.</li><li>Check duplicate, velocity, timing and amount signals together.</li><li>Preserve the original payload and related audit events.</li><li>Separate a provider failure, reconciliation mismatch and fraud suspicion.</li><li>Record a decision that another reviewer can understand later.</li></ul>
+    <h2>Alert delivery and response</h2>
+    <p>Alerts should identify the tenant, transaction, signal, severity and review link without including secrets or unnecessary personal data. Delivery retries must be observable and idempotent. A missing notification must not erase the anomaly from the review queue.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../concepts/anomalies.html">Anomalies</a></li>

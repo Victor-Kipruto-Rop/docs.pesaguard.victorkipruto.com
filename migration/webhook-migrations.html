@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/migration/webhook-migrations.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,28 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Migration</p>
-    <h1>Webhook migrations <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Consumer-affecting changes are announced through release notes and the OpenAPI document before any signature or payload change.</p>
+    <h1>Webhook migrations</h1>
+    <p class="docs-lede">Webhook consumers must be able to tolerate retries, additive payload fields, signature rotation and controlled event changes. Prepare the receiver before changing the producer.</p>
+    <div class="api-hero"><div><strong>Upgrade the receiver first</strong><p>Verify raw-body signature handling, idempotency and unknown-field tolerance before enabling a new webhook contract.</p></div><div class="api-hero-meta"><span>VERIFY</span><span>DUAL-RUN</span><span>OBSERVE</span></div></div>
+    <h2>Webhook migration sequence</h2><ol><li>Read release notes and compare event catalog or payload schema.</li><li>Make the consumer tolerant of additive fields and unknown event types.</li><li>Deploy signature verification and secret rotation support.</li><li>Preserve delivery id, event id and tenant context for idempotent handling.</li><li>Test retries, out-of-order delivery, malformed payloads and duplicate events.</li><li>Enable the producer change and monitor delivery, rejection and dead-letter rates.</li></ol>
+    <h2>Compatibility checklist</h2><table><thead><tr><th>Surface</th><th>Consumer requirement</th></tr></thead><tbody><tr><td>Signature</td><td>Verify the raw request body before parsing and support the announced secret overlap.</td></tr><tr><td>Payload</td><td>Ignore unknown fields, validate required fields and preserve the original body for audit.</td></tr><tr><td>Delivery</td><td>Return acknowledgement only after durable acceptance; process duplicates safely.</td></tr><tr><td>Ordering</td><td>Use event timestamps and state checks rather than assuming delivery order.</td></tr><tr><td>Recovery</td><td>Route failures to retry or dead-letter handling without losing event identity.</td></tr></tbody></table>
+    <h2>Receiver contract</h2><pre class="docs-code" data-lang="http"><code>POST /webhooks/pesaguard
+  Content-Type: application/json
+  X-PesaGuard-Signature: &lt;signature&gt;
+  X-PesaGuard-Delivery-Id: delivery_01J...
+
+  { "event": "transaction.matched", "id": "event_01J...", "tenant_id": "tenant_123" }</code></pre>
+    <p>Header names and event fields are illustrative until the deployment publishes the exact webhook contract. A receiver should fail closed on an invalid signature and retain the raw body needed to verify and audit the attempt.</p>
+    <h2>Signature and secret rotation</h2><ol><li>Read the new signature scheme and canonicalization rules from the release contract.</li><li>Deploy verification for the new secret while the old secret remains accepted for the announced overlap.</li><li>Verify against the raw body before JSON parsing.</li><li>Record which key version verified the delivery without logging secret material.</li><li>Remove the old secret after traffic confirms the overlap is complete.</li></ol>
+    <h2>Replay and duplicate testing</h2><table><thead><tr><th>Scenario</th><th>Expected consumer behavior</th></tr></thead><tbody><tr><td>Same delivery twice</td><td>One durable event and one downstream effect.</td></tr><tr><td>Out of order events</td><td>State transition checks prevent regression.</td></tr><tr><td>Malformed body</td><td>Reject safely and retain delivery evidence.</td></tr><tr><td>Consumer outage</td><td>Provider retry or dead-letter path preserves identity.</td></tr><tr><td>Signature mismatch</td><td>Reject before parsing or acting on the payload.</td></tr></tbody></table>
+    <h2>Rollback</h2><p>If rejection or duplicate rates increase, disable the producer change or route traffic to the previous consumer contract while preserving queued events. Do not discard deliveries during rollback; replay them after the receiver is compatible.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../migration/index.html">Migration</a></li>

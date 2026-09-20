@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/api/reference.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -51,15 +49,26 @@
 <div class="docs-shell">
   <article class="docs-article">
     <p class="docs-eyebrow">API</p>
-    <h1>Reference <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">The authoritative contract is the deployment's own /openapi.json; this site mirrors it.</p>
+    <h1>Reference</h1>
+    <p class="docs-lede">The authoritative API contract is the OpenAPI document served by the deployment you are calling. This page explains how to retrieve, compare and use that contract without treating generated schema as a substitute for runtime behavior.</p>
     <div class="code-head"><span class="method">GET</span><code>/openapi.json</code></div>
     <pre class="docs-code" data-lang="bash"><code>curl -sS "$PESAGUARD_API_URL/openapi.json" -o openapi.json</code></pre>
+    <h2>Contract facts</h2>
     <ul>
-      <li>Dashboard spec: OpenAPI 3.0.3, version 2.0.0.</li>
-      <li>Public routes sit under /api/v1.</li>
-      <li>Every error shares one envelope carrying a request id.</li>
+      <li>Specification format: OpenAPI 3.0.3.</li>
+      <li>Document version: 2.0.0 in the checked-in contract.</li>
+      <li>Security scheme: HTTP bearer with JWT format.</li>
+      <li>Every error should be handled through the normalized envelope and request id.</li>
+      <li>Some paths are rooted at <code>/api/v1</code>; follow the exact path published by the running deployment.</li>
     </ul>
+    <h2>Retrieving and reviewing the document</h2>
+    <pre class="docs-code" data-lang="bash"><code>curl --fail "$PESAGUARD_API_URL/openapi.json" \
+  -H "Authorization: Bearer $PESAGUARD_ACCESS_TOKEN" \
+  -o openapi.json
+node -e "JSON.parse(require('fs').readFileSync('openapi.json'))"</code></pre>
+    <p>Pin a reviewed contract in client generation and compare it during deployment. Treat a new path as additive only after checking authorization, tenant scope, pagination, errors, rate limits and idempotency. A schema change can still be behaviorally breaking if defaults or validation rules change.</p>
+    <h2>Generated clients</h2>
+    <p>Generated code is a starting point. Add timeouts, bounded retries, request-id logging, token renewal, idempotency keys for writes and explicit handling for <code>401</code>, <code>403</code>, <code>409</code>, <code>429</code> and 5xx responses.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../api-reference/openapi.json">OpenAPI document</a></li>

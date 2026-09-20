@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/environments/staging.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,24 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Environments</p>
-    <h1>Staging <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">A real deployment with its own database and Kafka listeners, used for integration testing.</p>
+    <h1>Staging</h1>
+    <p class="docs-lede">Staging is a real deployment used to exercise integration behavior before production. It has its own database, Redis configuration, Kafka listeners, credentials and operational data.</p>
+    <div class="api-hero"><div><strong>Promotion gate</strong><p>Staging is complete when the integration is not only functional, but observable, replayable and isolated.</p></div><div class="api-hero-meta"><span>CONTRACT TESTS</span><span>FAILURE TESTS</span><span>ISOLATION</span></div></div>
+    <div class="info-grid"><div class="info-panel"><h2>Developer focus</h2><p>Contract fixtures, validation, authentication, retries, idempotency and error handling.</p></div><div class="info-panel"><h2>Operator focus</h2><p>Queue lag, broker health, audit events, reconciliation outcomes and reset procedures.</p></div></div>
+    <h2>What staging should prove</h2>
+    <table><thead><tr><th>Capability</th><th>Proof</th></tr></thead><tbody><tr><td>Authentication</td><td>Staging credential succeeds; expired and insufficient-scope cases fail correctly.</td></tr><tr><td>Ingestion</td><td>Provider callbacks are validated, persisted and deduplicated.</td></tr><tr><td>Reconciliation</td><td>Matched, unmatched and exception outcomes are explainable.</td></tr><tr><td>Reliability</td><td>Timeouts, retries, dead letters and replay preserve event identity.</td></tr><tr><td>Isolation</td><td>Staging cannot read production data or publish to production topics.</td></tr></tbody></table>
+    <h2>Staging test cycle</h2>
+    <ol><li>Apply the reviewed configuration and migrations.</li><li>Check service health, database connectivity, Redis and Kafka listeners.</li><li>Run contract and integration tests with synthetic data.</li><li>Inspect logs, metrics, audit events and reconciliation reports.</li><li>Record failures and evidence before approving promotion.</li></ol>
+    <h2>Staging reset and retention</h2>
+    <p>Reset or clean staging deliberately. Preserve enough data to reproduce active failures, but remove expired credentials, stale provider connections and unnecessary personal data. A reset must not invalidate a production credential or affect production brokers.</p>
+    <h2>Promotion gate</h2><p>Production promotion requires passing staging tests, a reviewed artifact, environment-specific secrets, rollback evidence and an owner for post-deployment observation. See <a href="production.html">production</a> and the <a href="../getting-started/production-checklist.html">production checklist</a>.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../environments/index.html">Environments</a></li>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/sdks/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,24 +42,47 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+<aside class="docs-sidebar" aria-label="SDK navigation">
+  <div class="docs-nav-group"><p>SDKs</p><ul>
+    <li><a href="index.html" aria-current="page">Overview</a></li>
+    <li><a href="../api-reference/openapi.json">OpenAPI contract</a></li>
+  </ul></div>
+  <div class="docs-nav-group"><p>Client examples</p><ul>
+    <li><a href="curl.html">curl</a></li>
+    <li><a href="javascript.html">JavaScript</a></li>
+    <li><a href="typescript.html">TypeScript</a></li>
+    <li><a href="python.html">Python</a></li>
+    <li><a href="java.html">Java</a></li>
+  </ul></div>
+  <div class="docs-nav-group"><p>Integration foundations</p><ul>
+    <li><a href="../api/authentication.html">Authentication</a></li>
+    <li><a href="../api/errors.html">Errors</a></li>
+    <li><a href="../api/idempotency.html">Idempotency</a></li>
+    <li><a href="../api/pagination.html">Pagination</a></li>
+  </ul></div>
+</aside>
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>SDKs</span></nav>
     <p class="docs-eyebrow">SDKs</p>
-    <h1>SDKs <span class="status-pill" data-tone="planned"><i></i>Planned</span></h1>
-    <p class="docs-lede">There are no official PesaGuard SDKs yet. The OpenAPI document is the integration surface; any HTTP client works.</p>
+    <h1>SDKs and client libraries</h1>
+    <p class="docs-lede">There are no official PesaGuard SDKs yet. The supported integration surface is the deployment's OpenAPI contract, which you can call with any HTTP client or use to generate a language-specific client.</p>
+    <div class="api-hero"><div><strong>Build on the contract</strong><p>Keep authentication, retries, idempotency, tenant context and error handling in your own thin client boundary.</p></div><div class="api-hero-meta"><span>OPENAPI</span><span>HTTP</span><span>GENERATED</span></div></div>
+    <div class="callout" data-tone="info"><strong>Support boundary</strong><p>Generated clients are implementation aids, not a guarantee that every runtime behavior is encoded in types. The running deployment's OpenAPI document and behavior remain authoritative.</p></div>
     <div class="code-head"><span class="method">GET</span><code>generate a client</code></div>
     <pre class="docs-code" data-lang="bash"><code>curl -sS "$PESAGUARD_API_URL/openapi.json" -o openapi.json
 # example: generate a Python client
 npx @openapitools/openapi-generator-cli generate \
   -i openapi.json -g python -o ./client</code></pre>
     <p>Official clients (Python, TypeScript, JavaScript) will follow once the v1 contract is verified in production. A client generated from the published spec is the supported path until then.</p>
+    <h2>Choose an integration path</h2><table><thead><tr><th>Path</th><th>Best for</th><th>Guide</th></tr></thead><tbody><tr><td>curl</td><td>Health checks, debugging and reproducible support requests.</td><td><a href="curl.html">curl guide</a></td></tr><tr><td>JavaScript</td><td>Node services and fetch-based integrations.</td><td><a href="javascript.html">JavaScript guide</a></td></tr><tr><td>TypeScript</td><td>Typed application boundaries and generated models.</td><td><a href="typescript.html">TypeScript guide</a></td></tr><tr><td>Python</td><td>Workers, reconciliation jobs and operational tooling.</td><td><a href="python.html">Python guide</a></td></tr><tr><td>Java</td><td>JVM services and generated client workflows.</td><td><a href="java.html">Java guide</a></td></tr></tbody></table>
+    <h2>Client responsibilities</h2><ol><li>Load the correct environment base URL and credential at runtime.</li><li>Send bearer credentials over HTTPS without logging secrets.</li><li>Apply timeouts and bounded retries with jitter.</li><li>Reuse idempotency keys for uncertain writes.</li><li>Parse stable error codes, preserve request ids and redact payloads.</li><li>Keep tenant context and API version explicit in telemetry.</li></ol>
+    <h2>Generated-client review</h2><p>Before production use, inspect generated authentication, timeout, serialization, pagination and exception behavior. Add contract tests for <code>401</code>, <code>403</code>, <code>409</code>, <code>429</code> and 5xx responses, then pin the OpenAPI input used for generation.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../api-reference/openapi.json">OpenAPI document</a></li>

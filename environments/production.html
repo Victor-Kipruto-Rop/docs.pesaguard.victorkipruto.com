@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/environments/production.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,24 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Environments</p>
-    <h1>Production <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">The live deployment: production credentials, backups, reviewed exposure and the strictest change discipline.</p>
+    <h1>Production</h1>
+    <p class="docs-lede">Production is the authoritative environment for live tenant data, provider callbacks and reconciliation outcomes. It requires separate credentials, reviewed network exposure, tested backups and strict change discipline.</p>
+    <div class="api-hero"><div><strong>Production posture</strong><p>Every change must be observable, reversible and supported by an owner who can explain its effect on live reconciliation.</p></div><div class="api-hero-meta"><span>LIVE DATA</span><span>APPROVED CHANGES</span><span>RECOVERY READY</span></div></div>
+    <div class="info-grid"><div class="info-panel"><h2>Before deploy</h2><p>Verify artifact, environment variables, migrations, credentials, dependencies and rollback.</p></div><div class="info-panel"><h2>After deploy</h2><p>Run a read-only smoke test, watch health signals and compare reconciliation outcomes.</p></div></div>
+    <h2>Production entry criteria</h2>
+    <ul><li>Staging tests pass for authentication, tenant isolation, validation, idempotency and reconciliation.</li><li>Production credentials have named owners, least-privilege scopes, expiry and rotation evidence.</li><li>Database backups and restore procedures have been verified.</li><li>Monitoring covers API errors, queue lag, broker health, reconciliation outcomes and provider delivery.</li><li>Rollback, incident contacts and change approval are documented.</li></ul>
+    <h2>Production deployment sequence</h2>
+    <ol><li>Freeze and review the exact artifact and configuration.</li><li>Verify the destination URL, database, Redis, Kafka and secret references.</li><li>Apply backward-compatible migrations before application rollout.</li><li>Deploy with controlled worker concurrency and observe health signals.</li><li>Run an authenticated read-only smoke test.</li><li>Enable writes or provider callbacks only after metrics remain healthy.</li><li>Record release evidence and monitor reconciliation after the change.</li></ol>
+    <h2>Operational safeguards</h2>
+    <table><thead><tr><th>Area</th><th>Production expectation</th></tr></thead><tbody><tr><td>Secrets</td><td>Stored server-side, environment-specific and rotated without source changes.</td></tr><tr><td>Data</td><td>No unapproved test data or destructive experiments.</td></tr><tr><td>Access</td><td>Human and service access is least-privilege and auditable.</td></tr><tr><td>Recovery</td><td>Backups, restore tests, dead-letter handling and reconciliation replay are available.</td></tr><tr><td>Changes</td><td>Reviewed, observable, reversible and announced when compatibility is affected.</td></tr></tbody></table>
+    <h2>Incident response</h2><p>When production behavior is uncertain, stop new writes or callbacks if required, preserve request and event ids, assess reconciliation impact, and communicate through the status process. Do not repair financial records with ad-hoc database edits; use an auditable correction workflow.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../environments/index.html">Environments</a></li>

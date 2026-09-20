@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/guides/reconciliation/matching-rules.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,20 +42,22 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../../guides/index.html">Guides</a><span aria-hidden="true">/</span>
           <a href="../../index.html">Reconciliation guides</a><span aria-hidden="true">/</span>
           <span>Matching rules</span></nav>
     <p class="docs-eyebrow">Reconciliation guides</p>
-    <h1>Matching rules <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Amount, reference and tolerance decide the outcome; the same inputs give the same result.</p>
+    <h1>Matching rules</h1>
+    <p class="docs-lede">Matching rules compare provider evidence with internal records in a deterministic order. Amount, reference, currency and time tolerance should produce the same result for the same inputs.</p>
+    <h2>Rule inputs</h2><table><thead><tr><th>Input</th><th>Question</th><th>Failure signal</th></tr></thead><tbody><tr><td>Reference</td><td>Does the provider reference map to one internal record?</td><td>Missing, duplicate or ambiguous reference.</td></tr><tr><td>Amount</td><td>Does the value agree in the configured currency?</td><td>Amount delta becomes an exception.</td></tr><tr><td>Time</td><td>Does the event fall within the configured window?</td><td>Late or early event requires review.</td></tr></tbody></table>
+    <h2>Rule evaluation</h2><ol><li>Normalize provider and internal representations.</li><li>Restrict candidate search to the authorized tenant.</li><li>Evaluate the strongest stable key first.</li><li>Compare amount, currency and timestamp tolerance.</li><li>Persist the decision and evidence, including why a candidate was rejected.</li></ol>
+    <h2>Testing rules</h2><p>Test exact matches, duplicate references, amount differences, boundary timestamps, missing references and multiple candidates. Store expected outcomes as fixtures so a rule change is visible in review.</p>
     <p>Amount, reference and tolerance decide the outcome; the same inputs give the same result.</p>
     <h2>Related</h2>
     <ul>

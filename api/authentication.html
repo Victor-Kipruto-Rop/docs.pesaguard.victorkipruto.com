@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/api/authentication.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -58,24 +56,249 @@
       <li><a href="../api/idempotency.html">Idempotency</a></li>
       <li><a href="../api/errors.html">Errors</a></li>
     </ul></div></aside>
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <a href="../index.html">API</a><span aria-hidden="true">/</span>
           <span>Authentication</span></nav>
-    <p class="docs-eyebrow">API</p>
-    <h1>Authentication <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">Server access uses bearer JWTs carrying issuer, audience and tenant claims; session access uses the dashboard's authenticated session. Tokens are scoped, expiring and rotatable.</p>
+    <p class="docs-eyebrow">API / Security boundary</p>
+    <h1>Authentication</h1>
+    <p class="docs-lede">Every API request must prove who is calling, which tenant the caller belongs to, and which operation the caller may perform. PesaGuard uses bearer JWTs for service access; dashboard sessions and provisioned API keys are managed separately.</p>
+
+    <div class="callout callout-warning"><strong>Contract status.</strong> The checked-in OpenAPI document defines <code>bearerAuth</code> with JWT semantics. API-key creation, rotation and revocation are credential-management procedures; use the deployment's control plane or operator workflow for those actions rather than assuming undocumented public endpoints.</div>
+
+    <h2>Authentication overview</h2>
+    <p>Authentication happens before tenant authorization, request validation, idempotency handling and business processing. A request that cannot be authenticated must not be treated as an anonymous request, and a valid identity must not be confused with permission to access every resource.</p>
+    <div class="info-grid">
+      <div class="info-card"><h3>Identity</h3><p>Proves the caller's credential is valid and has not expired or been revoked.</p></div>
+      <div class="info-card"><h3>Context</h3><p>Associates the request with the issuer, audience, tenant and environment in the credential.</p></div>
+      <div class="info-card"><h3>Authorization</h3><p>Checks scopes and roles before allowing the requested operation or resource.</p></div>
+    </div>
+
+    <h2>Supported authentication methods</h2>
+    <table><thead><tr><th>Method</th><th>Best for</th><th>Transport</th><th>Notes</th></tr></thead><tbody>
+      <tr><td>Bearer JWT</td><td>API clients and service integrations</td><td><code>Authorization</code> header</td><td>Defined by the OpenAPI <code>bearerAuth</code> scheme.</td></tr>
+      <tr><td>API key</td><td>Long-lived service credentials</td><td>Deployment-approved header</td><td>Provision, scope and revoke through the operator workflow.</td></tr>
+      <tr><td>Dashboard session</td><td>Human operators</td><td>Secure session cookie</td><td>Do not reuse browser session cookies in integrations.</td></tr>
+    </tbody></table>
+
+    <h2>API keys</h2>
+    <p>An API key is a long-lived credential intended for a specific integration or service account. Treat the secret portion as equivalent to a password. The public identifier may be logged for identification, but the secret must never be written to source control, browser code, URLs or ordinary application logs.</p>
+    <h3>API key types</h3>
+    <table><thead><tr><th>Type</th><th>Use</th><th>Boundary</th></tr></thead><tbody>
+      <tr><td>Sandbox key</td><td>Development and integration testing</td><td>Sandbox data and endpoints only.</td></tr>
+      <tr><td>Production key</td><td>Live transaction and reconciliation workloads</td><td>Production tenant and production controls.</td></tr>
+      <tr><td>Service-account key</td><td>Non-human workload with a defined owner</td><td>One workload, one owner, least-privilege scopes.</td></tr>
+      <tr><td>Test key</td><td>Automated tests and failure scenarios</td><td>Short lifetime, disposable data, no production access.</td></tr>
+    </tbody></table>
+    <h3>API key format</h3>
+    <p>Use the key identifier to identify a credential and the secret to authenticate it. A typical provisioned key has a non-secret prefix and a high-entropy secret:</p>
+    <pre class="docs-code" data-lang="text"><code>pg_sbx_01J... . secret-value-returned-once</code></pre>
+    <p>The exact prefix and header name are deployment configuration. Never infer environment or tenant access from a prefix alone; validate the credential with the server.</p>
+    <h3>Creating, viewing, rotating and revoking keys</h3>
+    <ol>
+      <li>Create a key for one integration, record its owner, environment, scopes and expiry, and display the secret only once.</li>
+      <li>View metadata such as key id, owner, created time, last-used time, expiry and status. The secret must not be recoverable.</li>
+      <li>Rotate by creating the replacement first, deploying it, observing successful traffic, then revoking the old key. Keep overlap short and controlled.</li>
+      <li>Revoke immediately when a key is exposed, unused, mis-scoped or owned by a departing service. Revocation must be followed by a failed-authentication check.</li>
+    </ol>
+    <h3>API key expiration, permissions and scopes</h3>
+    <p>Give every key an expiry that matches the workload. A key should carry only the scopes it needs, such as <code>dashboard:read</code>, <code>transactions:read</code>, <code>transactions:write</code>, <code>reconciliation:read</code> or <code>reconciliation:write</code>. Separate read and write credentials when practical. A valid key with an insufficient scope must receive <code>403</code>, not a misleading <code>401</code>.</p>
+
+    <h2>Bearer authentication</h2>
+    <p>The OpenAPI contract declares HTTP bearer authentication with <code>bearerFormat: JWT</code>. Send the access token on every protected request. Do not send it as a query parameter or in a custom header unless the deployment explicitly documents that compatibility behavior.</p>
+    <h3>Access tokens and token format</h3>
+    <p>Access tokens are short-lived credentials containing claims such as issuer, audience, subject, tenant and expiry. Clients must treat the token as opaque: do not depend on decoding it to make authorization decisions, and do not accept a token merely because its payload can be parsed.</p>
+    <table><thead><tr><th>Claim</th><th>Purpose</th><th>Validation</th></tr></thead><tbody>
+      <tr><td><code>iss</code></td><td>Issuing authority</td><td>Matches the configured issuer.</td></tr>
+      <tr><td><code>aud</code></td><td>Intended API</td><td>Matches this deployment's audience.</td></tr>
+      <tr><td><code>sub</code></td><td>Authenticated user or service identity</td><td>Resolves to an active principal.</td></tr>
+      <tr><td><code>tenant</code></td><td>Organization boundary</td><td>Matches the authorized tenant context.</td></tr>
+      <tr><td><code>exp</code></td><td>Expiry time</td><td>Reject after expiry, allowing only documented clock skew.</td></tr>
+      <tr><td><code>scope</code></td><td>Allowed operations</td><td>Checked against the route and requested resource.</td></tr>
+    </tbody></table>
+    <h3>Obtaining, refreshing and revoking a token</h3>
+    <p>Obtain an access token through the authenticated login or identity-provider flow assigned to your deployment. Keep refresh tokens in a protected server-side store. Refresh before access-token expiry, rotate refresh tokens when the identity provider requires it, and discard the token set on logout, suspected compromise or refresh-token reuse.</p>
     <div class="code-head"><span class="method">POST</span><code>/api/v1/auth/login</code></div>
     <pre class="docs-code" data-lang="json"><code>{
-  "email": "user@example.com",
-  "password": "secret"
+  "email": "operator@example.com",
+  "password": "provided-out-of-band"
 }</code></pre>
-    <p>The design contract returns an access token, a refresh token, the token type, expiry, the user record and the caller's permission set (for example <code>dashboard:read</code>, <code>transactions:read</code>). Login failures return <code>401</code>; a locked account returns <code>423</code>; excessive attempts return <code>429</code>.</p>
-    <h2>Related</h2>
+    <pre class="docs-code" data-lang="json"><code>{
+  "access_token": "eyJ...",
+  "token_type": "Bearer",
+  "expires_in": 900,
+  "refresh_token": "stored-server-side",
+  "scope": "dashboard:read transactions:read",
+  "tenant_id": "tenant_123"
+}</code></pre>
+
+    <h2 id="authentication-headers">Authentication headers</h2>
+    <h3>Authorization header</h3>
+    <pre class="docs-code" data-lang="http"><code>Authorization: Bearer &lt;access-token&gt;</code></pre>
+    <h3>Required and optional headers</h3>
+    <table><thead><tr><th>Header</th><th>Required</th><th>Purpose</th></tr></thead><tbody>
+      <tr><td><code>Authorization</code></td><td>Protected routes</td><td>Bearer access token or deployment-approved API credential.</td></tr>
+      <tr><td><code>Content-Type: application/json</code></td><td>JSON request bodies</td><td>Declares the representation being sent.</td></tr>
+      <tr><td><code>Accept: application/json</code></td><td>Recommended</td><td>Requests the documented JSON response shape.</td></tr>
+      <tr><td><code>Idempotency-Key</code></td><td>Idempotent writes</td><td>Deduplicates safe retries; see the idempotency guide.</td></tr>
+      <tr><td><code>X-Request-ID</code></td><td>Optional</td><td>Correlation value when accepted by the deployment; always record the response request id.</td></tr>
+    </tbody></table>
+    <h3>Organization and tenant identification</h3>
+    <p>Tenant identity comes from the authenticated principal and server-side membership, not from an arbitrary client-supplied tenant id. If a route accepts an organization selector, the server must verify that the caller belongs to it. Never place tenant ids in a credential chosen by the client without checking membership.</p>
+
+    <h2>Environment-specific credentials</h2>
+    <table><thead><tr><th>Environment</th><th>Credential</th><th>Data rule</th></tr></thead><tbody>
+      <tr><td>Sandbox</td><td>Sandbox credentials</td><td>Use synthetic or explicitly isolated test data.</td></tr>
+      <tr><td>Production</td><td>Production credentials</td><td>Require approval, monitoring, rotation and restricted access.</td></tr>
+      <tr><td>Test automation</td><td>Short-lived test API keys</td><td>Provision per suite or environment and revoke after use.</td></tr>
+    </tbody></table>
+    <p>Never promote a sandbox key to production or copy production secrets into a local <code>.env</code> file that may be committed. Environment migration requires issuing a new credential in the destination environment and validating access before cutover.</p>
+
+    <h2>Authentication request examples</h2>
+    <h3>cURL</h3>
+    <pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/api/v1/tenant/current" \
+  -H "Authorization: Bearer $PESAGUARD_ACCESS_TOKEN" \
+  -H "Accept: application/json"</code></pre>
+    <h3>JavaScript</h3>
+    <pre class="docs-code" data-lang="javascript"><code>const response = await fetch(`${process.env.PESAGUARD_API_URL}/api/v1/tenant/current`, {
+  headers: {
+    Authorization: `Bearer ${process.env.PESAGUARD_ACCESS_TOKEN}`,
+    Accept: "application/json"
+  }
+});
+
+if (!response.ok) throw new Error(`PesaGuard request failed: ${response.status}`);</code></pre>
+    <h3>Python</h3>
+    <pre class="docs-code" data-lang="python"><code>import os
+import requests
+
+response = requests.get(
+    f"{os.environ['PESAGUARD_API_URL']}/api/v1/tenant/current",
+    headers={
+        "Authorization": f"Bearer {os.environ['PESAGUARD_ACCESS_TOKEN']}",
+        "Accept": "application/json",
+    },
+    timeout=10,
+)
+response.raise_for_status()</code></pre>
+
+    <h2>Authentication errors</h2>
+    <table><thead><tr><th>Failure</th><th>Status</th><th>Response action</th></tr></thead><tbody>
+      <tr><td>Invalid credentials</td><td><code>401</code></td><td>Do not retry passwords blindly; verify the configured identity and secret.</td></tr>
+      <tr><td>Missing credentials</td><td><code>401</code></td><td>Send the required <code>Authorization</code> header.</td></tr>
+      <tr><td>Expired credentials</td><td><code>401</code></td><td>Refresh or obtain a new token, then retry once.</td></tr>
+      <tr><td>Revoked credentials</td><td><code>401</code></td><td>Stop using the credential and provision a replacement.</td></tr>
+      <tr><td>Insufficient permissions</td><td><code>403</code></td><td>Request the smallest additional scope needed; do not escalate automatically.</td></tr>
+      <tr><td>Invalid authentication scheme</td><td><code>401</code></td><td>Use the documented bearer scheme and do not mix API-key and JWT formats.</td></tr>
+      <tr><td>Authentication rate limit</td><td><code>429</code></td><td>Apply bounded backoff and investigate repeated failures.</td></tr>
+    </tbody></table>
+    <pre class="docs-code" data-lang="json"><code>{
+  "error": {
+    "code": "AUTHENTICATION_FAILED",
+    "message": "Credentials were rejected.",
+    "request_id": "request_01J..."
+  }
+}</code></pre>
+
+    <h2>Security best practices</h2>
     <ul>
-      <li><a href="../concepts/tenants.html">Tenants</a></li>
-      <li><a href="../api/errors.html">Errors</a></li>
+      <li><strong>Never expose secret keys.</strong> Keep them out of browser bundles, mobile logs, screenshots, tickets, URLs and source control.</li>
+      <li><strong>Use server-side key storage.</strong> Store credentials in an approved secret manager and inject them at runtime.</li>
+      <li><strong>Use environment variables carefully.</strong> Restrict process visibility, validate required values at startup and do not print the environment.</li>
+      <li><strong>Rotate deliberately.</strong> Use overlapping credentials only for the measured deployment window, then revoke the old one.</li>
+      <li><strong>Use least privilege.</strong> Separate read, write, operator and migration roles; review scopes regularly.</li>
+      <li><strong>Require HTTPS.</strong> Reject plaintext API URLs outside local development and validate certificates.</li>
+      <li><strong>Use IP restrictions where appropriate.</strong> Treat allowlists as defense in depth, not as a replacement for credentials.</li>
+      <li><strong>Sign sensitive requests.</strong> For integrations that require proof of payload integrity, use the deployment's documented request-signing contract.</li>
     </ul>
+
+    <h2>Webhook authentication</h2>
+    <p>Webhook authentication is sender verification, not API-request authentication. Verify the signature against the raw request body before parsing or acting on it, enforce a timestamp window, reject mismatches, and record the delivery id for idempotent processing.</p>
+    <p>See <a href="../webhooks/verification.html">webhook signature verification</a> for the receiver procedure. API credentials must never be embedded in outbound webhook payloads.</p>
+
+    <h2>Idempotency authentication considerations</h2>
+    <p>Authentication and idempotency solve different problems. Authenticate every retry, bind the idempotency key to the authenticated tenant and operation, and reject reuse with a different request body. Never let an idempotency key bypass permission checks.</p>
+
+    <h2>Authentication flow</h2>
+    <ol>
+      <li><strong>Login / credential flow:</strong> the identity provider or control plane verifies the user or service secret and issues a scoped credential.</li>
+      <li><strong>API request flow:</strong> the client sends the credential over HTTPS with the request.</li>
+      <li><strong>Token validation flow:</strong> middleware validates signature, issuer, audience, expiry, revocation state and tenant membership.</li>
+      <li><strong>Authorization:</strong> route policy checks role and scope before loading tenant data or mutating state.</li>
+      <li><strong>Audit:</strong> the service records authentication success, failure, revocation and sensitive credential events without recording secrets.</li>
+    </ol>
+
+    <h2>Multi-tenant authentication</h2>
+    <h3>Organization access</h3>
+    <p>A principal may belong to one or more organizations, but each request executes in one authorized tenant context. Verify membership on every context switch and apply the same tenant boundary to reads, writes, exports, cache keys, events and replays.</p>
+    <h3>User vs API authentication</h3>
+    <p>User credentials represent a person and should support interactive lifecycle controls. API credentials represent a workload and must have an owner, purpose, expiry and rotation plan. Do not share a personal user token with a background service.</p>
+    <h3>Service accounts and credentials</h3>
+    <p>Use a dedicated service account per integration or bounded workload. Document its owner, scopes, environment, source IPs, expiry and emergency contact. Disable the account before deleting its records so failures are observable during the transition.</p>
+    <h3>Permissions and roles</h3>
+    <p>Roles group permissions for administration; scopes express the access granted to a credential. A role or scope must never grant access outside the principal's tenant membership.</p>
+
+    <h2>Authentication middleware</h2>
+    <p>Authentication middleware should run before route handlers and expose a normalized principal to them. It should fail closed, avoid leaking whether a user or tenant exists, attach a correlation id, and keep credential material out of request logs. Authorization belongs in policy checks close to the operation, not only in the global middleware.</p>
+    <h3>Authentication failure handling</h3>
+    <p>Return the standard error envelope, use <code>401</code> for missing or invalid authentication and <code>403</code> for an authenticated principal that lacks permission. Apply bounded backoff to repeated failures and alert on unusual failure patterns without locking out legitimate recovery paths.</p>
+
+    <h2>Troubleshooting authentication</h2>
+    <table><thead><tr><th>Symptom</th><th>Check first</th></tr></thead><tbody>
+      <tr><td>Every request returns <code>401</code></td><td>Base URL, environment, header spelling, token expiry and issuer/audience configuration.</td></tr>
+      <tr><td>Request returns <code>403</code></td><td>Tenant membership, role, scope and resource ownership.</td></tr>
+      <tr><td>Works locally but not in deployment</td><td>Secret injection, environment-specific key, clock drift and outbound network policy.</td></tr>
+      <tr><td>Refresh loop never ends</td><td>Refresh-token rotation, clock handling and whether the old token is being reused.</td></tr>
+      <tr><td>Intermittent failures</td><td>Multiple instances using different signing keys, caches, deployment skew or credential rotation timing.</td></tr>
+    </tbody></table>
+    <h3>Common authentication mistakes</h3>
+    <ul>
+      <li>Using <code>Bearer</code> with an API key or sending a JWT in a query string.</li>
+      <li>Using a sandbox credential against production or the reverse.</li>
+      <li>Logging full authorization headers during debugging.</li>
+      <li>Retrying a rejected credential indefinitely instead of renewing or escalating.</li>
+      <li>Trusting a client-supplied tenant id without membership validation.</li>
+    </ul>
+
+    <h2>Authentication status codes</h2>
+    <table><thead><tr><th>Status</th><th>Meaning</th><th>Client behavior</th></tr></thead><tbody>
+      <tr><td><code>401</code></td><td>Missing, malformed, expired or rejected credential</td><td>Renew or replace credentials; do not replay indefinitely.</td></tr>
+      <tr><td><code>403</code></td><td>Authenticated but not authorized</td><td>Check scope and tenant membership.</td></tr>
+      <tr><td><code>423</code></td><td>Locked account in the login contract</td><td>Use the account recovery process.</td></tr>
+      <tr><td><code>429</code></td><td>Authentication or API rate limit exceeded</td><td>Back off and investigate repeated failures.</td></tr>
+    </tbody></table>
+    <h3>Authentication headers reference</h3>
+    <p>For the minimum request header set, see the table in <a href="#authentication-headers">Authentication headers</a>. Always preserve the response <code>request_id</code> for support and audit correlation.</p>
+
+    <h2>Credential lifecycle</h2>
+    <h3>Credential rotation procedure</h3>
+    <ol><li>Inventory the credential and confirm its owner, scope and environment.</li><li>Issue and securely distribute the replacement.</li><li>Deploy and verify authenticated reads and writes.</li><li>Monitor old-key traffic, then revoke the old credential.</li><li>Record the change and close the rotation evidence.</li></ol>
+    <h3>Credential compromise procedure</h3>
+    <ol><li>Revoke the exposed credential immediately.</li><li>Preserve authentication and request audit events.</li><li>Identify affected tenants, scopes, time window and source addresses.</li><li>Issue a replacement and validate dependent services.</li><li>Review data access, rotate related secrets and document the incident.</li></ol>
+    <h3>Sandbox to production authentication</h3>
+    <p>Provision production credentials separately, review scopes and tenant membership, deploy through the production secret path, perform a harmless authenticated health or read check, and only then enable writes. Never copy sandbox data or secrets into production.</p>
+
+    <h2>Authentication audit logs</h2>
+    <h3>Security events</h3>
+    <p>Audit authentication success and failure, credential creation, rotation, revocation, scope changes, tenant membership changes, account lockout and suspicious source changes. Record actor, credential id, tenant, environment, timestamp, outcome and request id; never record passwords, raw tokens or secret key values.</p>
+    <h3>Authentication changelog</h3>
+    <p>Review the deployment's release notes and OpenAPI document when authentication behavior changes. A change to issuer, audience, signing keys, scopes, token lifetime, headers or error semantics requires an integration review and a staged migration.</p>
+
+    <h2>Authentication FAQ</h2>
+    <h3>Should a browser call the API with a service key?</h3><p>No. Keep service credentials server-side and expose only the minimum application session behavior to the browser.</p>
+    <h3>Can I decode a JWT to decide access?</h3><p>No. The server must validate the signature and claims, then apply authorization policy.</p>
+    <h3>What should I do with a <code>401</code>?</h3><p>Check environment and header formatting, renew or replace the credential once, and preserve the request id if the failure remains.</p>
+
+    <h2>Related documentation</h2>
+    <ul>
+      <li><a href="../api-reference/openapi.json">Related API reference: OpenAPI contract</a></li>
+      <li><a href="../security/authentication.html">Related security documentation: authentication controls</a></li>
+      <li><a href="../webhooks/verification.html">Related webhook documentation: signature verification</a></li>
+      <li><a href="../concepts/tenants.html">Tenant boundaries</a></li>
+      <li><a href="../api/errors.html">API errors and status semantics</a></li>
+    </ul>
+    <h2>Next steps</h2>
+    <p>Start with the <a href="../getting-started/create-api-key.html">API key creation guide</a>, confirm your environment, make an authenticated request from the <a href="../getting-started/quickstart.html">quickstart</a>, then review <a href="../api/errors.html">errors</a>, <a href="../api/rate-limits.html">rate limits</a> and <a href="../api/idempotency.html">idempotency</a> before enabling production writes.</p>
   </article>
 </div>
 </main>

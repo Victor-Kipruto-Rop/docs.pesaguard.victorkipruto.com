@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
 </head>
 <body data-path="/getting-started/production-checklist.html">
@@ -46,7 +45,6 @@
     <a href="../security/">Security</a>
     <a href="../status/">Status</a>
   </nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -65,11 +63,12 @@
     </ul></div>
   </aside>
 
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span><a href="index.html">Getting started</a><span aria-hidden="true">/</span><span>Production checklist</span></nav>
     <p class="docs-eyebrow">Getting started</p>
-    <h1>Production checklist <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
+    <h1>Production checklist</h1>
     <p class="docs-lede">The base production variant requires these settings before <code>up -d --build</code>. This page mirrors the infrastructure README; the README remains the operational authority.</p>
+    <div class="api-hero"><div><strong>Go-live gate</strong><p>Production readiness is a combination of correct configuration, tested recovery, controlled access and observable reconciliation outcomes.</p></div><div class="api-hero-meta"><span>CONFIGURE</span><span>VERIFY</span><span>RECOVER</span></div></div>
 
     <h2>Required settings</h2>
     <table>
@@ -94,6 +93,9 @@
       <li>Confirm the reverse proxy passes <code>X-Forwarded-</code> headers and that TLS terminates in front of the API.</li>
       <li>Check <a href="../status/">status</a> probes answer after rollout, and that the audit trail records the rollout operator.</li>
     </ol>
+    <h2>Evidence to retain</h2>
+    <table><thead><tr><th>Area</th><th>Evidence</th></tr></thead><tbody><tr><td>Configuration</td><td>Quiet validation output, reviewed variables and environment target.</td></tr><tr><td>Security</td><td>Credential owners, scopes, rotation dates and secret-storage path.</td></tr><tr><td>Recovery</td><td>Backup and restore check, rollback command and dead-letter procedure.</td></tr><tr><td>Operations</td><td>Health, queue, broker, error and reconciliation monitoring links.</td></tr><tr><td>Ownership</td><td>Named deployer, reviewer, incident contact and post-release observer.</td></tr></tbody></table>
+    <h2>Stop conditions</h2><ul><li>Do not proceed if the target URL, database or broker is ambiguous.</li><li>Do not proceed if production and staging secrets or topics overlap.</li><li>Do not proceed if restore, rollback or reconciliation review is unowned.</li></ul>
 
     <div class="callout" data-tone="danger">
       <strong>Not a certification</strong>

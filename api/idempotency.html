@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/api/idempotency.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -63,13 +61,24 @@
           <a href="../index.html">API</a><span aria-hidden="true">/</span>
           <span>Idempotency</span></nav>
     <p class="docs-eyebrow">API</p>
-    <h1>Idempotency <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">A retry must be safe to run more than once — that is an interface invariant, not a client courtesy.</p>
-    <ul>
-      <li>Provider callbacks, webhook deliveries and operator actions all run under the same rule.</li>
-      <li>A conflict on a duplicate returns <code>409</code>; the original record stays authoritative.</li>
-      <li>Replaying from a dead letter is supported and equally safe.</li>
-    </ul>
+    <h1>Idempotency</h1>
+    <p class="docs-lede">A retried write must produce one durable outcome for one logical operation. Idempotency protects transaction creation, provider callbacks, webhook handling and operator actions when networks fail after the server has accepted a request.</p>
+    <h2>Client contract</h2>
+    <p>Generate a unique key for each logical operation and reuse it for retries of that operation only. Bind the key to the authenticated tenant, route and request body. Never generate a new key for every transport retry or reuse a successful key for a different transaction.</p>
+    <pre class="docs-code" data-lang="http"><code>POST /api/v1/transactions
+Authorization: Bearer &lt;token&gt;
+Idempotency-Key: transaction-create-8f9c...
+Content-Type: application/json</code></pre>
+    <h2>Outcome matrix</h2>
+    <table><thead><tr><th>Situation</th><th>Expected behavior</th></tr></thead><tbody>
+      <tr><td>First request accepted</td><td>Process once and persist the outcome associated with the key.</td></tr>
+      <tr><td>Retry with same body</td><td>Return the original outcome or a documented in-progress response.</td></tr>
+      <tr><td>Same key, different body</td><td>Reject as a conflict; do not mutate the original operation.</td></tr>
+      <tr><td>Unknown result after timeout</td><td>Retry with the same key, then reconcile by resource id or provider reference.</td></tr>
+      <tr><td>Expired key</td><td>Do not assume the operation is absent; consult the resource or reconciliation record.</td></tr>
+    </tbody></table>
+    <h2>Retries and replay</h2>
+    <p>Use exponential backoff with jitter for network failures and 5xx responses. A <code>409</code> is not permission to create a second record. Replays from a dead-letter queue must preserve the original event identity, tenant and idempotency key, and every replay should be auditable.</p>
     <p>Full treatment: <a href="../concepts/idempotency.html">Concepts · Idempotency</a>.</p>
     <h2>Related</h2>
     <ul>

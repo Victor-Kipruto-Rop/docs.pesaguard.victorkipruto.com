@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/migration/deprecated-endpoints.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,16 +42,28 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Migration</p>
-    <h1>Deprecated endpoints <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">No endpoints are deprecated today. When one is, it is listed here with its replacement and sunset date.</p>
+    <h1>Deprecated endpoints</h1>
+    <p class="docs-lede">No endpoints are currently listed as deprecated. When a route enters a deprecation window, this page should identify the replacement, affected versions, first notice date, sunset date and migration owner.</p>
+    <div class="api-hero"><div><strong>Deprecation is a managed transition</strong><p>An endpoint remains usable during its support window, but new integrations should move to the replacement immediately.</p></div><div class="api-hero-meta"><span>NOTICE</span><span>MIGRATE</span><span>SUNSET</span></div></div>
+    <h2>Required deprecation record</h2><table><thead><tr><th>Field</th><th>Why it is required</th></tr></thead><tbody><tr><td>Old route and version</td><td>Defines exactly what consumers must find.</td></tr><tr><td>Replacement route</td><td>Gives teams an actionable destination.</td></tr><tr><td>Behavior differences</td><td>Prevents a path-only migration that misses semantics.</td></tr><tr><td>Notice and sunset dates</td><td>Creates a measurable support window of at least 90 days.</td></tr><tr><td>Owner and support path</td><td>Gives consumers a place to resolve migration blockers.</td></tr></tbody></table>
+    <h2>Consumer response</h2><ol><li>Inventory usage of the deprecated route.</li><li>Compare old and replacement contracts.</li><li>Update tests for authentication, validation, errors and retries.</li><li>Roll out the replacement with metrics and rollback.</li><li>Confirm old-route traffic reaches zero before sunset.</li></ol>
+    <h2>Current status</h2><p>No endpoint is listed as deprecated in the current documentation set. Continue using the documented route versions and check the <a href="../changelog/index.html">changelog</a> and running <a href="../api/reference.html">OpenAPI reference</a> for future notices.</p>
+    <h2>How to detect usage</h2><ul><li>Search source code, generated clients and infrastructure configuration for the old route.</li><li>Measure request counts by route, version, tenant, credential and client release.</li><li>Include background workers, scheduled exports and support tools in the inventory.</li><li>Track traffic until it remains at zero through the final support window.</li></ul>
+    <h2>Deprecation announcement template</h2><pre class="docs-code" data-lang="text"><code>Deprecated: GET /api/v1/example
+  Replacement: GET /api/v2/example
+  Notice date: YYYY-MM-DD
+  Sunset date: YYYY-MM-DD
+  Behavior changes: ...
+  Migration owner: ...
+  Support path: ...</code></pre>
+    <h2>Provider and client impact</h2><p>Deprecation can affect more than direct callers. Review SDKs, webhooks, exports, dashboards, audit queries and reconciliation jobs before declaring a migration complete.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../migration/index.html">Migration</a></li>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/getting-started/">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -59,12 +57,14 @@
       <li><a href="../getting-started/test-environment.html">Test environment</a></li>
       <li><a href="../getting-started/production-checklist.html">Production checklist</a></li>
     </ul></div></aside>
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span>
           <span>Getting started</span></nav>
     <p class="docs-eyebrow">Getting started</p>
-    <h1>Getting started <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Access to PesaGuard is provisioned with the pilot team because the reconciliation scope is agreed per operation. These pages take you from a running deployment to a production-ready configuration.</p>
+    <h1>Getting started</h1>
+    <p class="docs-lede">A guided path from your first health check to a production-ready reconciliation integration. Follow the sequence in order when setting up a new tenant; use the individual pages as runbooks during implementation and release review.</p>
+    <div class="api-hero"><div><strong>Onboarding path</strong><p>Establish access, prove the API contract, exercise a real test environment, then promote only after the operational evidence is complete.</p></div><div class="api-hero-meta"><span>01 · ACCESS</span><span>02 · VERIFY</span><span>03 · PROMOTE</span></div></div>
+    <div class="info-grid"><div class="info-panel"><h2>For developers</h2><p>Start with health, OpenAPI, credentials, bearer headers, scopes, idempotency and error handling.</p></div><div class="info-panel"><h2>For operators</h2><p>Confirm tenant scope, staging isolation, secrets, backups, observability, rollback and reconciliation ownership.</p></div></div>
     <p>Start with the <a href="quickstart.html">quickstart</a> — one health check and one OpenAPI read against a running deployment. Then <a href="first-request.html">your first authenticated request</a> introduces the bearer-token pattern and the scope model that governs everything else.</p>
     <table>
       <thead><tr><th>Page</th><th>What it covers</th></tr></thead>
@@ -78,6 +78,10 @@
         <tr><td><a href="production-checklist.html">Production checklist</a></td><td>Required settings and the pre-go-live review.</td></tr>
       </tbody>
     </table>
+    <h2>Definition of ready</h2>
+    <table><thead><tr><th>Milestone</th><th>Evidence</th></tr></thead><tbody><tr><td>Access ready</td><td>Tenant, named users, environment and least-privilege credential are confirmed.</td></tr><tr><td>Integration ready</td><td>Authenticated reads, validation failures, retries and errors are covered by tests.</td></tr><tr><td>Reconciliation ready</td><td>Matched, unmatched and exception paths have been exercised with traceable evidence.</td></tr><tr><td>Production ready</td><td>Secrets, backups, monitoring, rollback and ownership are reviewed and recorded.</td></tr></tbody></table>
+    <h2>Choose your next step</h2>
+    <p>New to the deployment? Start with <a href="quickstart.html">Quickstart</a>. Joining an existing pilot? Review <a href="create-account.html">account provisioning</a> and <a href="create-api-key.html">credential handling</a>. Preparing a release? Go directly to the <a href="production-checklist.html">production checklist</a>.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../concepts/index.html">Concepts</a></li>

@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../../css/search.css">
 <link rel="stylesheet" href="../../css/animations.css">
 <link rel="stylesheet" href="../../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/changelog/2026/september.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,7 +42,6 @@
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
     <a href="../../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -51,8 +49,18 @@
 <div class="docs-shell">
   <article class="docs-article">
     <p class="docs-eyebrow">Changelog</p>
-    <h1>September 2026 <span class="status-pill" data-tone="draft"><i></i>Draft</span></h1>
-    <p class="docs-lede">This documentation site was published. No API breaking changes.</p>
+    <h1>September 2026</h1>
+    <p class="docs-lede">The September release establishes the public documentation baseline for PesaGuard API consumers. The entries below describe documentation and contract visibility; they do not claim an unverified runtime feature release.</p>
+    <h2>Documentation and platform guidance</h2>
+    <article class="change-entry"><p class="change-meta">DOCUMENTATION · API</p><h3>Expanded API integration guidance</h3><p>Added detailed guidance for authentication, request validation, filtering, sorting, pagination, rate limits, idempotency, errors, versioning and OpenAPI contract review.</p><p><strong>Impact:</strong> No endpoint behavior is implied by the documentation update. Integrators should use the running deployment's OpenAPI document as the authority.</p></article>
+    <article class="change-entry"><p class="change-meta">SECURITY · GUIDANCE</p><h3>Credential lifecycle documented</h3><p>Documented API-key ownership, environment separation, rotation, revocation, tenant context, service accounts, audit events and compromise response.</p><p><strong>Action:</strong> Review production credentials for owner, scope, expiry and rotation evidence.</p></article>
+    <article class="change-entry"><p class="change-meta">COMPATIBILITY · POLICY</p><h3>Version migration guidance clarified</h3><p>Breaking changes must use a versioned route and receive at least 90 days of support after notice. Clients should compare contracts and test errors, retries and reconciliation semantics.</p></article>
+    <h2>Release impact</h2><table><thead><tr><th>Area</th><th>Impact</th></tr></thead><tbody><tr><td>API routes</td><td>No verified breaking route change recorded in this entry.</td></tr><tr><td>Credentials</td><td>Review guidance applies to new and existing integrations.</td></tr><tr><td>Documentation</td><td>New pages are available for implementation and operations teams.</td></tr></tbody></table>
+    <h2>Consumer action list</h2>
+    <ol><li>Fetch and pin the OpenAPI document for the environment being integrated.</li><li>Confirm the credential type, tenant membership, scopes and expiry.</li><li>Implement bounded retries with idempotency for writes.</li><li>Handle <code>401</code>, <code>403</code>, <code>409</code>, <code>429</code> and 5xx responses explicitly.</li><li>Record request ids and validate reconciliation outcomes in staging before production rollout.</li></ol>
+    <h2>Verification evidence</h2>
+    <table><thead><tr><th>Surface</th><th>Evidence to retain</th></tr></thead><tbody><tr><td>Contract</td><td>OpenAPI version and retrieval timestamp.</td></tr><tr><td>Authentication</td><td>Successful request and controlled expired-credential failure.</td></tr><tr><td>Reliability</td><td>Retry test showing one logical write produces one outcome.</td></tr><tr><td>Security</td><td>Credential owner, scope, rotation date and audit trail.</td></tr></tbody></table>
+    <h2>Scope of this release record</h2><p>This entry records the documentation work completed in September. It is not a substitute for a deployment release note, incident report or runtime feature flag. When the implementation and documentation differ, pause adoption and verify the running contract with the service owner.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../../changelog/index.html">Changelog</a></li>

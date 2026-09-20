@@ -30,7 +30,6 @@
 <link rel="stylesheet" href="../css/search.css">
 <link rel="stylesheet" href="../css/animations.css">
 <link rel="stylesheet" href="../css/responsive.css">
-<script>(function(){try{var t=localStorage.getItem("pg-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body data-path="/errors/authorization.html">
 <a class="visually-hidden" href="#main">Skip to content</a>
@@ -43,17 +42,18 @@
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
     <a href="../status/">Status</a></nav>
-  <button class="docs-theme-toggle" type="button" aria-label="Toggle dark mode"><span class="icon-light">☀</span><span class="icon-dark">☾</span></button>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
 <main id="main">
 <div class="docs-shell">
-  <article class="docs-article">
+  <article class="docs-article docs-content-wide api-page">
     <p class="docs-eyebrow">Errors</p>
-    <h1>403 · Authorization <span class="status-pill" data-tone="live"><i></i>Live</span></h1>
-    <p class="docs-lede">Authenticated, but the scope or tenant does not permit this action.</p>
+    <h1>403 · Authorization</h1>
+    <p class="docs-lede">The server recognized the caller but policy denied the requested operation. The usual causes are insufficient scope, missing role, inactive membership or an attempt to access a resource outside the authenticated tenant.</p>
     <p>See <a href="../api/errors.html">API · Errors</a> for the envelope and client behaviour.</p>
+    <h2>401 versus 403</h2><table><thead><tr><th>Status</th><th>Meaning</th><th>Fix</th></tr></thead><tbody><tr><td>401</td><td>No valid identity was established.</td><td>Renew or replace the credential.</td></tr><tr><td>403</td><td>Identity is valid but policy denies access.</td><td>Check scope, role and tenant membership.</td></tr></tbody></table>
+    <h2>Developer checklist</h2><ul><li>Confirm the principal belongs to the target organization.</li><li>Check the route's required scope and the credential's granted scopes.</li><li>Do not accept a client-supplied tenant id without server membership validation.</li><li>Do not retry unchanged requests; permission will not appear through repetition.</li><li>Record the request id for an operator authorization review.</li></ul>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">API · Errors</a></li>

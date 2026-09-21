@@ -121,14 +121,14 @@
     var supportPrefix = "../".repeat(supportDepth);
     var supportGroups = [
       ["Support", [["Overview", "index.html"], ["FAQ", "faq.html"], ["Troubleshooting", "troubleshooting.html"], ["Contact support", "contact.html"]]],
-      ["Reference", [["API errors", "../api/errors.html"], ["Service status", "../status/"], ["Responsible disclosure", "../security/responsible-disclosure.html"]]]
+      ["Reference", [["API errors", "../api/errors.html"], ["Service status", "https://status.pesaguard.victorkipruto.com"], ["Responsible disclosure", "../security/responsible-disclosure.html"]]]
     ];
     var supportSidebar = document.createElement("aside");
     supportSidebar.className = "docs-sidebar";
     supportSidebar.setAttribute("aria-label", "Support navigation");
     supportSidebar.innerHTML = supportGroups.map(function (group) {
       return '<div class="docs-nav-group"><p>' + group[0] + '</p><ul>' + group[1].map(function (item) {
-        return '<li><a href="' + supportPrefix + item[1] + '">' + item[0] + '</a></li>';
+        return '<li><a href="' + (/^https?:/.test(item[1]) ? "" : supportPrefix) + item[1] + '">' + item[0] + '</a></li>';
       }).join("") + '</ul></div>';
     }).join("");
     var supportShell = document.querySelector(".docs-shell");

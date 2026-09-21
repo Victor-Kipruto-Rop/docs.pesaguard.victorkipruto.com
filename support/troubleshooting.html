@@ -41,7 +41,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -56,8 +56,8 @@
     <h2>Decision tree</h2><table><thead><tr><th>Symptom</th><th>Check</th><th>Next move</th></tr></thead><tbody><tr><td>No response or timeout</td><td>Base URL, DNS, TLS, health and network path.</td><td>Check environment status before retrying.</td></tr><tr><td><code>401</code></td><td>Header, token expiry, issuer, audience and environment.</td><td>Renew or replace the credential once.</td></tr><tr><td><code>403</code></td><td>Tenant membership, role and scope.</td><td>Correct authorization; do not retry unchanged.</td></tr><tr><td><code>400</code> / <code>422</code></td><td>Field details, formats, amounts and enums.</td><td>Correct the payload and resubmit as a new attempt only if appropriate.</td></tr><tr><td><code>409</code></td><td>Idempotency key and current resource state.</td><td>Read the existing outcome instead of creating another.</td></tr><tr><td><code>429</code> or <code>5xx</code></td><td>Retry guidance, concurrency and dependency health.</td><td>Back off with jitter; preserve write identity.</td></tr></tbody></table>
     <h2>Diagnostic capture</h2><pre class="docs-code" data-lang="text"><code>Environment: staging | production
   UTC time: 2026-09-20T12:00:00Z
-  Method and route: GET /api/v1/tenant/current
-  Status and code: 401 AUTHENTICATION_FAILED
+  Method and route: GET /tenant/current
+  Status and code: 401 authentication_failed
   Request id: request_01J...
   Expected: authenticated tenant configuration
   Actual: credential rejected

@@ -41,7 +41,7 @@
     <a href="../../api/">API</a>
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
-    <a href="../../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -54,12 +54,21 @@
           <span>Search transactions</span></nav>
     <p class="docs-eyebrow">Transaction guides</p>
     <h1>Search transactions</h1>
-    <p class="docs-lede">Search is a bounded, tenant-scoped read. Combine documented filters with stable sorting and pagination so exports and reconciliation scans do not skip or duplicate records.</p>
-    <h2>Search procedure</h2><ol><li>Choose a narrow UTC time window.</li><li>Add documented status, provider or reference filters.</li><li>Set a bounded limit and stable sort.</li><li>Record the complete query and page metadata.</li><li>Retry a failed page without changing the query.</li></ol>
-    <h2>Export-safe query</h2><pre class="docs-code" data-lang="http"><code>GET /api/v1/transactions?status=exception&amp;page=1&amp;limit=50&amp;sort=created_at:asc,id:asc
-  Authorization: Bearer &lt;token&gt;</code></pre>
-    <h2>Search safeguards</h2><ul><li>Never rely on insertion order.</li><li>Do not remove tenant scope from a filter.</li><li>Use a server export or snapshot for long-running complete exports.</li><li>Deduplicate by server resource id when scanning changing collections.</li></ul>
-    <p>Paginate deterministically and treat unspecified ordering as unstable.</p>
+    <p class="docs-lede">List recent transactions for a tenant, newest first. The endpoint takes one filter, <code>since</code>, and returns at most 200 rows; it has no pagination, status or sort parameters today.</p>
+    <h2>Read pattern</h2>
+    <div class="code-head"><span class="method">GET</span><code>/api/v1/customers/{tenant_id}/transactions</code></div>
+    <pre class="docs-code" data-lang="http"><code>GET /api/v1/customers/{tenant_id}/transactions?since=2026-09-20T00:00:00Z
+Authorization: Bearer &lt;token&gt;</code></pre>
+    <table><thead><tr><th>Behavior</th><th>Detail</th></tr></thead><tbody>
+      <tr><td><code>since</code></td><td>Optional ISO 8601 timestamp. Returns transactions with <code>created_at</code> at or after it. An invalid value returns <code>400</code> <code>invalid_date_format</code>.</td></tr>
+      <tr><td>Ordering and size</td><td><code>created_at</code> descending, capped at 200 rows.</td></tr>
+      <tr><td>Response</td><td><code>{"tenant_id", "items"}</code>; each item has <code>trans_id</code>, <code>trans_amount</code>, <code>msisdn</code>, <code>business_short_code</code>, <code>trans_time</code>, <code>created_at</code>.</td></tr>
+      <tr><td>Permission</td><td><code>read:discrepancies</code>, and the path tenant must be the caller's tenant.</td></tr>
+    </tbody></table>
+    <h2>Scanning safely</h2>
+    <ul><li>If a response contains 200 items, older matches may have been cut off. Poll with a recent <code>since</code> often enough that fewer than 200 transactions arrive between polls.</li><li>Deduplicate by <code>trans_id</code>, because overlapping polls return the same rows.</li><li>Fetch <a href="retrieve-transaction.html">a single transaction</a> for its raw payload and matched record.</li></ul>
+    <div class="callout" data-tone="warn"><strong>Planned.</strong> Filtering by status, provider or reference, <code>page</code> and <code>limit</code> pagination, and a <code>sort</code> parameter have no implementation on this route today. For the discrepancy list, use <code>GET /discrepancies</code> with <code>page</code> and <code>per_page</code>.</div>
+
     <h2>Related</h2>
     <ul>
       <li><a href="../../guides/transactions/index.html">Transaction guides</a></li>

@@ -41,7 +41,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -59,10 +59,11 @@
       <tr><td>Keep filters and sort fixed</td><td>An export is reproducible only when its full query remains unchanged.</td></tr>
     </tbody></table>
     <h2>Example</h2>
-    <pre class="docs-code" data-lang="http"><code>GET /api/v1/discrepancies?status=open&amp;sort=created_at:asc,id:asc&amp;page=1&amp;limit=50</code></pre>
-    <p>If an endpoint does not publish a <code>sort</code> parameter, do not invent one. Use the endpoint's documented default and ask for a contract update when a stable export order is required.</p>
+    <pre class="docs-code" data-lang="http"><code>GET /discrepancies?status=open&amp;page=1&amp;per_page=50</code></pre>
+    <p>If an endpoint does not publish a <code>sort</code> parameter, do not invent one. No endpoint in the canonical backend app accepts one today: <code>GET /discrepancies</code> orders by <code>detected_at</code>, newest first, and the customer transaction, dead-letter and audit lists order by <code>created_at</code>, newest first, capped at 200 rows. The server applies no tie-breaker, so records with equal timestamps can move between pages while data changes; deduplicate by <code>id</code>.</p>
+    <div class="callout" data-tone="warn"><strong>Planned.</strong> Client-selectable sorting (a <code>sort</code> parameter with a tie-breaker) has no implementation today.</div>
     <h2>Reconciliation scans</h2>
-    <p>For long-running scans, use a bounded time window and record the final cursor or last-seen unique id. Re-run overlapping windows when necessary, then deduplicate by the server resource id rather than assuming page boundaries are immutable.</p>
+    <p>For long-running scans, use a bounded time window and record the last-seen unique id (the API has no cursors). Re-run overlapping windows when necessary, then deduplicate by the server resource id rather than assuming page boundaries are immutable.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/pagination.html">Pagination</a></li>

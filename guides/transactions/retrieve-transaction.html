@@ -41,7 +41,7 @@
     <a href="../../api/">API</a>
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
-    <a href="../../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -54,13 +54,28 @@
           <span>Retrieve a transaction</span></nav>
     <p class="docs-eyebrow">Transaction guides</p>
     <h1>Retrieve a transaction</h1>
-    <p class="docs-lede">Retrieve a transaction by its server-issued identifier within the authenticated tenant. Resource ids are not globally trusted and a not-found response must not be used to probe another organization.</p>
-    <h2>Read pattern</h2><pre class="docs-code" data-lang="http"><code>GET /api/v1/transactions/{transaction_id}
-  Authorization: Bearer &lt;token&gt;
-  Accept: application/json</code></pre>
-    <h2>Interpret the response</h2><table><thead><tr><th>Check</th><th>Why</th></tr></thead><tbody><tr><td>Tenant</td><td>Confirm the response belongs to the expected organization.</td></tr><tr><td>State</td><td>Use lifecycle state rather than assuming creation means settlement.</td></tr><tr><td>Evidence</td><td>Read provider reference, match result and audit correlation.</td></tr></tbody></table>
-    <h2>When it returns 404</h2><p>Check the environment, route version, id format and authenticated tenant. For asynchronous writes, use bounded polling or webhook delivery rather than an unbounded read loop.</p>
-    <p>Detail lookups always include tenant predicates; IDs are not globally trusted.</p>
+    <p class="docs-lede">Retrieve one transaction by its M-Pesa transaction id within a tenant. The response carries the recorded M-Pesa fields, the raw callback payload and, when one can be found, a matching internal ledger record.</p>
+    <h2>Read pattern</h2>
+    <div class="code-head"><span class="method">GET</span><code>/api/v1/customers/{tenant_id}/transactions/{trans_id}</code></div>
+    <pre class="docs-code" data-lang="http"><code>GET /api/v1/customers/{tenant_id}/transactions/{trans_id}
+Authorization: Bearer &lt;token&gt;
+Accept: application/json</code></pre>
+    <p>Requires the <code>read:discrepancies</code> permission. <code>tenant_id</code> must be the caller's tenant unless the caller holds <code>manage:all_tenants</code>. The route is also registered as <code>/v1/customers/{tenant_id}/transactions/{trans_id}</code>; use the <code>/api/v1</code> form.</p>
+    <h2>Response fields</h2>
+    <table><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody>
+      <tr><td><code>tenant_id</code>, <code>trans_id</code></td><td>The tenant and the M-Pesa transaction id you asked for.</td></tr>
+      <tr><td><code>trans_amount</code>, <code>msisdn</code>, <code>business_short_code</code>, <code>trans_time</code></td><td>The recorded M-Pesa values; <code>trans_time</code> is stored as received.</td></tr>
+      <tr><td><code>created_at</code></td><td>When PesaGuard recorded the transaction, as an ISO 8601 timestamp.</td></tr>
+      <tr><td><code>raw_payload</code></td><td>The stored callback payload.</td></tr>
+      <tr><td><code>matched_record</code></td><td><code>null</code>, or the most recent internal record with the same phone number and an amount within 0.01 (<code>internal_ref</code>, <code>amount</code>, <code>phone_number</code>, <code>status</code>, <code>synced_at</code>). Treat it as a hint, not the reconciliation result.</td></tr>
+    </tbody></table>
+    <h2>Errors</h2>
+    <table><thead><tr><th>Status</th><th><code>error</code></th><th>Meaning</th></tr></thead><tbody>
+      <tr><td><code>404</code></td><td><code>not_found</code></td><td>No transaction with that <code>trans_id</code> exists for the tenant.</td></tr>
+      <tr><td><code>403</code></td><td><code>tenant_access_denied</code></td><td>The tenant in the path is not yours. This is checked before any lookup, so a 404 cannot be used to probe another organization.</td></tr>
+      <tr><td><code>500</code></td><td><code>fetch_failed</code></td><td>The lookup failed on the server; retry with backoff.</td></tr>
+    </tbody></table>
+
     <h2>Related</h2>
     <ul>
       <li><a href="../../guides/transactions/index.html">Transaction guides</a></li>

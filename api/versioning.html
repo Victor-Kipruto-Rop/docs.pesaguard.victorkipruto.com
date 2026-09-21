@@ -41,7 +41,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -73,14 +73,21 @@
     <h2>Migration procedure</h2>
     <ol><li>Compare the old and new OpenAPI documents.</li><li>Classify route, schema, validation, error and authorization changes.</li><li>Add compatibility tests against both versions.</li><li>Deploy the new client behind a measured rollout.</li><li>Monitor errors, latency, reconciliation outcomes and old-version traffic.</li><li>Remove the old version only after its consumers have migrated and the support window closes.</li></ol>
     <h2>Versioned request</h2>
-    <pre class="docs-code" data-lang="http"><code>GET /api/v1/tenant/current
+    <pre class="docs-code" data-lang="http"><code>GET /tenant/current
 Authorization: Bearer &lt;token&gt;
 Accept: application/json</code></pre>
     <p>Do not infer a version from a server error or guess a compatibility alias. Read the deployment's OpenAPI document and release notes, then pin the route version in configuration.</p>
+    <h2>Route prefixes today</h2>
+    <p>The canonical backend app registers routes under three layouts, so use each route's exact path from the API reference and do not assume <code>/api/v1</code> in front of every route. Counts are operations, checked at backend commit <code>f9a57d0</code>.</p>
+    <table><thead><tr><th>Layout</th><th>Operations</th><th>What lives there</th></tr></thead><tbody>
+      <tr><td><code>/api/v1/...</code></td><td>56</td><td>Communications, organizations, customer exports and operations routes.</td></tr>
+      <tr><td><code>/v1/...</code></td><td>8</td><td>Older copies of the customer export routes, plus <code>/v1/settings</code>. New integrations should use the <code>/api/v1</code> form.</td></tr>
+      <tr><td>No prefix</td><td>35</td><td><code>/tenant/current</code>, <code>/providers</code>, <code>/discrepancies</code>, <code>/incidents</code>, <code>/analytics</code>, plus <code>/health</code>, <code>/metrics</code>, <code>/docs</code> and static assets.</td></tr>
+    </tbody></table>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">Errors</a></li>
-      <li><a href="../status/index.html">Status</a></li>
+      <li><a href="https://status.pesaguard.victorkipruto.com">Status</a></li>
     </ul>
   </article>
 </div>

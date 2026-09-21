@@ -41,7 +41,7 @@
     <a href="../../api/">API</a>
     <a href="../../webhooks/">Webhooks</a>
     <a href="../../security/">Security</a>
-    <a href="../../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -56,7 +56,7 @@
     <h1>Bearer tokens</h1>
     <p class="docs-lede">Send the access token in the HTTP Authorization header. The service validates its issuer, audience, expiry, tenant context and granted scopes before route authorization.</p>
     <div class="api-hero"><div><strong>Every protected request</strong><p>Authentication establishes identity; authorization then decides whether that identity may use the requested resource.</p></div><div class="api-hero-meta"><span>ISSUER</span><span>AUDIENCE</span><span>EXPIRY</span></div></div>
-    <h2>Request pattern</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/api/v1/tenant/current" \
+    <h2>Request pattern</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/tenant/current" \
   -H "Authorization: Bearer $PESAGUARD_ACCESS_TOKEN" \
   -H "Accept: application/json"</code></pre>
     <h2>Token checks</h2><table><thead><tr><th>Check</th><th>Failure</th></tr></thead><tbody><tr><td>Signature and issuer</td><td>Reject if token was not issued by the configured authority.</td></tr><tr><td>Audience and expiry</td><td>Reject tokens for another API or past their expiration.</td></tr><tr><td>Tenant and scope</td><td>Authenticate successfully but return <code>403</code> when policy denies access.</td></tr></tbody></table>

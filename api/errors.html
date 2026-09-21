@@ -41,7 +41,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -63,6 +63,7 @@
     <p class="docs-eyebrow">API</p>
     <h1>Errors</h1>
     <p class="docs-lede">Every failure should be machine-readable, safe to retry or correct, and traceable through a request id. The error envelope separates client action from server diagnosis without exposing tenant data or credential details.</p>
+    <div class="callout" data-tone="info"><strong>Verified behavior.</strong> At backend commit <code>f9a57d0</code>, most routes return a flat body such as <code>{"error": "invalid_token", "message": "..."}</code>, where <code>error</code> is a lower_snake_case string. The communication send routes return <code>{"error": {"code": "INVALID_REQUEST", "message": "..."}}</code>. Route handlers return no <code>request_id</code> in the body; every response carries an <code>X-Correlation-ID</code> header instead. The normalized envelope with <code>request_id</code> shown below is <span class="status-pill" data-tone="planned"><i></i>Planned</span>.</div>
     <div class="code-head"><span class="method">4XX</span><code>error envelope</code></div>
     <pre class="docs-code" data-lang="json"><code>{
   "error": {

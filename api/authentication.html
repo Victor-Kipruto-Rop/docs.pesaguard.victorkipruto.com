@@ -41,7 +41,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -66,6 +66,8 @@
 
     <div class="callout callout-warning"><strong>Contract status.</strong> The checked-in OpenAPI document defines <code>bearerAuth</code> with JWT semantics. API-key creation, rotation and revocation are credential-management procedures; use the deployment's control plane or operator workflow for those actions rather than assuming undocumented public endpoints.</div>
 
+    <div class="callout" data-tone="info"><strong>Verified behavior.</strong> Checked against the backend repository at commit <code>f9a57d0</code>: the canonical app accepts a bearer JWT or an <code>X-API-Key</code> header, and it registers no login, token-refresh, logout or API-key management route. Sections marked <span class="status-pill" data-tone="planned"><i></i>Planned</span> describe capabilities that have no route there.</div>
+
     <h2>Authentication overview</h2>
     <p>Authentication happens before tenant authorization, request validation, idempotency handling and business processing. A request that cannot be authenticated must not be treated as an anonymous request, and a valid identity must not be confused with permission to access every resource.</p>
     <div class="info-grid">
@@ -77,7 +79,7 @@
     <h2>Supported authentication methods</h2>
     <table><thead><tr><th>Method</th><th>Best for</th><th>Transport</th><th>Notes</th></tr></thead><tbody>
       <tr><td>Bearer JWT</td><td>API clients and service integrations</td><td><code>Authorization</code> header</td><td>Defined by the OpenAPI <code>bearerAuth</code> scheme.</td></tr>
-      <tr><td>API key</td><td>Long-lived service credentials</td><td>Deployment-approved header</td><td>Provision, scope and revoke through the operator workflow.</td></tr>
+      <tr><td>API key</td><td>Long-lived service credentials</td><td><code>X-API-Key</code> header</td><td>Value must start with <code>pk_</code>. Used only when no <code>Authorization</code> header is sent. Provision, scope and revoke through the operator workflow.</td></tr>
       <tr><td>Dashboard session</td><td>Human operators</td><td>Secure session cookie</td><td>Do not reuse browser session cookies in integrations.</td></tr>
     </tbody></table>
 
@@ -92,8 +94,8 @@
     </tbody></table>
     <h3>API key format</h3>
     <p>Use the key identifier to identify a credential and the secret to authenticate it. A typical provisioned key has a non-secret prefix and a high-entropy secret:</p>
-    <pre class="docs-code" data-lang="text"><code>pg_sbx_01J... . secret-value-returned-once</code></pre>
-    <p>The exact prefix and header name are deployment configuration. Never infer environment or tenant access from a prefix alone; validate the credential with the server.</p>
+    <pre class="docs-code" data-lang="http"><code>X-API-Key: pk_&lt;secret&gt;</code></pre>
+    <p>The backend requires the <code>pk_</code> prefix, looks the key up by its SHA-256 hash and accepts only active keys. An unknown, expired or revoked key returns <code>401</code> with <code>invalid_api_key</code>. Never infer environment or tenant access from a prefix alone; validate the credential with the server.</p>
     <h3>Creating, viewing, rotating and revoking keys</h3>
     <ol>
       <li>Create a key for one integration, record its owner, environment, scopes and expiry, and display the secret only once.</li>
@@ -102,49 +104,39 @@
       <li>Revoke immediately when a key is exposed, unused, mis-scoped or owned by a departing service. Revocation must be followed by a failed-authentication check.</li>
     </ol>
     <h3>API key expiration, permissions and scopes</h3>
-    <p>Give every key an expiry that matches the workload. A key should carry only the scopes it needs, such as <code>dashboard:read</code>, <code>transactions:read</code>, <code>transactions:write</code>, <code>reconciliation:read</code> or <code>reconciliation:write</code>. Separate read and write credentials when practical. A valid key with an insufficient scope must receive <code>403</code>, not a misleading <code>401</code>.</p>
+    <p>Give every key an expiry that matches the workload. A key should carry only the scopes it needs, such as <code>read:discrepancies</code>, <code>write:discrepancies</code>, <code>read:analytics</code>, <code>read:settings</code> or <code>send:communications</code>. Separate read and write credentials when practical. A valid key with an insufficient scope must receive <code>403</code>, not a misleading <code>401</code>.</p>
 
     <h2>Bearer authentication</h2>
     <p>The OpenAPI contract declares HTTP bearer authentication with <code>bearerFormat: JWT</code>. Send the access token on every protected request. Do not send it as a query parameter or in a custom header unless the deployment explicitly documents that compatibility behavior.</p>
     <h3>Access tokens and token format</h3>
-    <p>Access tokens are short-lived credentials containing claims such as issuer, audience, subject, tenant and expiry. Clients must treat the token as opaque: do not depend on decoding it to make authorization decisions, and do not accept a token merely because its payload can be parsed.</p>
+    <p>Access tokens are HS256-signed JWTs. Lifetime is a deployment setting (24 hours by default, configurable from 1 to 168 hours), so read <code>exp</code> rather than assuming a duration. Clients must treat the token as opaque: do not depend on decoding it to make authorization decisions, and do not accept a token merely because its payload can be parsed.</p>
     <table><thead><tr><th>Claim</th><th>Purpose</th><th>Validation</th></tr></thead><tbody>
-      <tr><td><code>iss</code></td><td>Issuing authority</td><td>Matches the configured issuer.</td></tr>
-      <tr><td><code>aud</code></td><td>Intended API</td><td>Matches this deployment's audience.</td></tr>
-      <tr><td><code>sub</code></td><td>Authenticated user or service identity</td><td>Resolves to an active principal.</td></tr>
-      <tr><td><code>tenant</code></td><td>Organization boundary</td><td>Matches the authorized tenant context.</td></tr>
-      <tr><td><code>exp</code></td><td>Expiry time</td><td>Reject after expiry, allowing only documented clock skew.</td></tr>
-      <tr><td><code>scope</code></td><td>Allowed operations</td><td>Checked against the route and requested resource.</td></tr>
+      <tr><td><code>iss</code></td><td>Issuing authority</td><td>Must match the configured issuer (default <code>pesaguard</code>).</td></tr>
+      <tr><td><code>aud</code></td><td>Intended API</td><td>Must match the deployment's audience (default <code>pesaguard-api</code>).</td></tr>
+      <tr><td><code>user_id</code>, <code>username</code></td><td>Authenticated user</td><td>Must resolve to an active account whose authorization version matches <code>auth_version</code>.</td></tr>
+      <tr><td><code>tenant_id</code></td><td>Organization boundary</td><td>Must match the tenant format and the tenant in the request path or parameters.</td></tr>
+      <tr><td><code>exp</code>, <code>iat</code></td><td>Expiry and issue time</td><td>Rejected after expiry, with 30 seconds of clock leeway.</td></tr>
+      <tr><td><code>jti</code></td><td>Token identifier</td><td>Checked against the revocation list.</td></tr>
+      <tr><td><code>type</code></td><td>Token type</td><td>Must be <code>access</code> for API calls.</td></tr>
+      <tr><td><code>roles</code>, <code>permissions</code></td><td>Allowed operations</td><td>The server derives permissions from roles, so a token cannot grant itself more. Each route requires one, such as <code>read:discrepancies</code>.</td></tr>
     </tbody></table>
-    <h3>Obtaining, refreshing and revoking a token</h3>
-    <p>Obtain an access token through the authenticated login or identity-provider flow assigned to your deployment. Keep refresh tokens in a protected server-side store. Refresh before access-token expiry, rotate refresh tokens when the identity provider requires it, and discard the token set on logout, suspected compromise or refresh-token reuse.</p>
-    <div class="code-head"><span class="method">POST</span><code>/api/v1/auth/login</code></div>
-    <pre class="docs-code" data-lang="json"><code>{
-  "email": "operator@example.com",
-  "password": "provided-out-of-band"
-}</code></pre>
-    <pre class="docs-code" data-lang="json"><code>{
-  "access_token": "eyJ...",
-  "token_type": "Bearer",
-  "expires_in": 900,
-  "refresh_token": "stored-server-side",
-  "scope": "dashboard:read transactions:read",
-  "tenant_id": "tenant_123"
-}</code></pre>
+    <h3>Obtaining, refreshing and revoking a token <span class="status-pill" data-tone="planned"><i></i>Planned</span></h3>
+    <p>The canonical backend app does not register a login, token-refresh or logout route, so there is no public endpoint to call for these today. Older application variants in the backend repository define <code>POST /auth/login</code>, but the image entrypoint does not load them. Obtain access tokens or <code>pk_</code> API keys from your PesaGuard operator, keep them in a server-side secret store, and expect <code>401</code> with <code>authentication_failed</code> once a token expires or is revoked. When a login route ships, this section will document its request and response.</p>
 
     <h2 id="authentication-headers">Authentication headers</h2>
     <h3>Authorization header</h3>
     <pre class="docs-code" data-lang="http"><code>Authorization: Bearer &lt;access-token&gt;</code></pre>
     <h3>Required and optional headers</h3>
     <table><thead><tr><th>Header</th><th>Required</th><th>Purpose</th></tr></thead><tbody>
-      <tr><td><code>Authorization</code></td><td>Protected routes</td><td>Bearer access token or deployment-approved API credential.</td></tr>
+      <tr><td><code>Authorization</code></td><td>Protected routes</td><td>Bearer access token.</td></tr>
+      <tr><td><code>X-API-Key</code></td><td>Alternative to Authorization</td><td>A <code>pk_</code> API key. Not used when an <code>Authorization</code> header is present.</td></tr>
       <tr><td><code>Content-Type: application/json</code></td><td>JSON request bodies</td><td>Declares the representation being sent.</td></tr>
       <tr><td><code>Accept: application/json</code></td><td>Recommended</td><td>Requests the documented JSON response shape.</td></tr>
-      <tr><td><code>Idempotency-Key</code></td><td>Idempotent writes</td><td>Deduplicates safe retries; see the idempotency guide.</td></tr>
-      <tr><td><code>X-Request-ID</code></td><td>Optional</td><td>Correlation value when accepted by the deployment; always record the response request id.</td></tr>
+      <tr><td><code>Idempotency-Key</code></td><td>Communication send routes</td><td>Required by <code>POST /api/v1/communications/sms</code> and <code>/email</code>; see the idempotency guide.</td></tr>
+      <tr><td><code>X-Request-ID</code></td><td>Optional</td><td>Optional correlation value. <code>X-Correlation-ID</code> is also accepted and takes precedence. Every response carries an <code>X-Correlation-ID</code> header; record it when contacting support.</td></tr>
     </tbody></table>
     <h3>Organization and tenant identification</h3>
-    <p>Tenant identity comes from the authenticated principal and server-side membership, not from an arbitrary client-supplied tenant id. If a route accepts an organization selector, the server must verify that the caller belongs to it. Never place tenant ids in a credential chosen by the client without checking membership.</p>
+    <p>Tenant identity comes from the authenticated principal and server-side membership, not from an arbitrary client-supplied tenant id. If a route accepts an organization selector, the server must verify that the caller belongs to it. Never place tenant ids in a credential chosen by the client without checking membership. Routes with a <code>{tenant_id}</code> path segment return <code>403</code> with <code>tenant_access_denied</code> when it differs from the token's tenant, unless the caller holds the <code>manage:all_tenants</code> permission.</p>
 
     <h2>Environment-specific credentials</h2>
     <table><thead><tr><th>Environment</th><th>Credential</th><th>Data rule</th></tr></thead><tbody>
@@ -156,11 +148,11 @@
 
     <h2>Authentication request examples</h2>
     <h3>cURL</h3>
-    <pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/api/v1/tenant/current" \
+    <pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/tenant/current" \
   -H "Authorization: Bearer $PESAGUARD_ACCESS_TOKEN" \
   -H "Accept: application/json"</code></pre>
     <h3>JavaScript</h3>
-    <pre class="docs-code" data-lang="javascript"><code>const response = await fetch(`${process.env.PESAGUARD_API_URL}/api/v1/tenant/current`, {
+    <pre class="docs-code" data-lang="javascript"><code>const response = await fetch(`${process.env.PESAGUARD_API_URL}/tenant/current`, {
   headers: {
     Authorization: `Bearer ${process.env.PESAGUARD_ACCESS_TOKEN}`,
     Accept: "application/json"
@@ -173,7 +165,7 @@ if (!response.ok) throw new Error(`PesaGuard request failed: ${response.status}`
 import requests
 
 response = requests.get(
-    f"{os.environ['PESAGUARD_API_URL']}/api/v1/tenant/current",
+    f"{os.environ['PESAGUARD_API_URL']}/tenant/current",
     headers={
         "Authorization": f"Bearer {os.environ['PESAGUARD_ACCESS_TOKEN']}",
         "Accept": "application/json",
@@ -193,12 +185,10 @@ response.raise_for_status()</code></pre>
       <tr><td>Authentication rate limit</td><td><code>429</code></td><td>Apply bounded backoff and investigate repeated failures.</td></tr>
     </tbody></table>
     <pre class="docs-code" data-lang="json"><code>{
-  "error": {
-    "code": "AUTHENTICATION_FAILED",
-    "message": "Credentials were rejected.",
-    "request_id": "request_01J..."
-  }
+  "error": "authentication_failed",
+  "message": "Valid bearer authentication is required."
 }</code></pre>
+    <p>A well-formed token that is expired, revoked or badly signed is rejected by a global check with <code>401</code> <code>authentication_failed</code>. Otherwise the route's own check returns <code>401</code> <code>missing_auth_header</code>, <code>invalid_auth_header</code>, <code>invalid_token</code> (the token cannot be decoded) or <code>invalid_api_key</code>; <code>403</code> <code>insufficient_permissions</code> or <code>tenant_access_denied</code>; and <code>503</code> <code>authentication_unavailable</code>. A caller over the rate limit gets <code>429</code> <code>rate_limit_exceeded</code> with a <code>Retry-After</code> header. Most routes return this flat <code>error</code> string plus <code>message</code>; the communication send routes instead return <code>{"error": {"code", "message"}}</code>.</p>
 
     <h2>Security best practices</h2>
     <ul>

@@ -440,7 +440,37 @@
     var searchInput = document.querySelector(".docs-search input");
     var groups = Array.prototype.slice.call(document.querySelectorAll(".docs-nav-group"));
     var searchRegion = document.querySelector(".docs-search");
+    var searchClose = searchRegion && searchRegion.querySelector(".docs-search-close");
     if (searchRegion) searchRegion.setAttribute("role", "search");
+
+    /* On narrow screens the search box collapses to an icon (see
+       responsive.css). These open/close it as a full-width overlay so it
+       stays reachable with a tap instead of becoming a dead icon. */
+    function openMobileSearch() {
+      if (searchRegion) searchRegion.classList.add("is-active");
+      if (searchInput) searchInput.focus();
+    }
+    function closeMobileSearch() {
+      if (searchRegion) searchRegion.classList.remove("is-active");
+    }
+
+    if (searchRegion) {
+      searchRegion.addEventListener("click", function () {
+        if (!searchRegion.classList.contains("is-active")) openMobileSearch();
+      });
+    }
+    if (searchClose) {
+      searchClose.addEventListener("click", function (event) {
+        event.stopPropagation();
+        closeMobileSearch();
+        searchInput && searchInput.blur();
+      });
+    }
+    document.addEventListener("click", function (event) {
+      if (searchRegion && searchRegion.classList.contains("is-active") && !searchRegion.contains(event.target)) {
+        closeMobileSearch();
+      }
+    });
 
     function filterNav(query) {
       var q = query.trim().toLowerCase();
@@ -482,13 +512,14 @@
             filterNav("");
           } else {
             searchInput.blur();
+            closeMobileSearch();
           }
         }
       });
       window.addEventListener("keydown", function (event) {
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
           event.preventDefault();
-          searchInput.focus();
+          openMobileSearch();
           searchInput.select();
         }
       });

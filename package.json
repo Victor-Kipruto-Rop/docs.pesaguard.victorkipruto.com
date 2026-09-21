@@ -5,6 +5,9 @@
   "description": "Static build tooling for docs.pesaguard.victorkipruto.com. Serves prebuilt HTML; scripts validate links and search.",
   "scripts": {
     "serve": "python -m http.server 4173 --directory .",
-    "check": "node scripts/check-docs.js"
+    "check": "node scripts/check-docs.js && node scripts/validate-openapi.js",
+    "check:openapi": "node scripts/validate-openapi.js",
+    "check:drift": "node scripts/check-drift.js",
+    "check:strict": "node scripts/check-docs.js && node scripts/validate-openapi.js --strict && node scripts/check-drift.js --strict"
   }
 }

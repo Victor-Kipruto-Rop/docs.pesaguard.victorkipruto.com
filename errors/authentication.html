@@ -41,7 +41,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -55,10 +55,10 @@
     <h2>Common causes</h2><ul><li>No <code>Authorization</code> header was sent.</li><li>The scheme is not <code>Bearer</code> or the token contains extra whitespace.</li><li>The token is expired, revoked, signed by an unknown issuer or intended for another audience.</li><li>A sandbox credential was sent to production or the reverse.</li></ul>
     <h2>Recovery procedure</h2><ol><li>Confirm the base URL and environment.</li><li>Check the header without logging the secret.</li><li>Renew or replace the credential once.</li><li>Retry the original request only after authentication succeeds.</li><li>Escalate repeated failures with the request id and token metadata, never the raw token.</li></ol>
     <h2>Example</h2><pre class="docs-code" data-lang="http"><code>HTTP/1.1 401 Unauthorized
-  WWW-Authenticate: Bearer
   Content-Type: application/json
 
-  {"error":{"code":"AUTHENTICATION_FAILED","message":"Credentials were rejected.","request_id":"request_01J..."}}</code></pre>
+  {"error":"authentication_failed","message":"Valid bearer authentication is required."}</code></pre>
+    <p>Expired, revoked or badly signed tokens return <code>authentication_failed</code>. Other authentication failures use <code>missing_auth_header</code>, <code>invalid_auth_header</code>, <code>invalid_token</code> and <code>invalid_api_key</code> (all <code>401</code>), and <code>authentication_unavailable</code> (<code>503</code>). See <a href="../api/authentication.html">Authentication</a>.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/errors.html">API · Errors</a></li>

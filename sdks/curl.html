@@ -41,7 +41,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -54,15 +54,15 @@
     <div class="api-hero"><div><strong>Reproducible HTTP</strong><p>Start with curl before introducing a generated client. It separates API behavior from application-library behavior.</p></div><div class="api-hero-meta"><span>DEBUG</span><span>VERIFY</span><span>REPRODUCE</span></div></div>
     <h2>Health and contract</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/health"
 curl --fail "$PESAGUARD_API_URL/openapi.json" -o openapi.json</code></pre>
-    <h2>Authenticated request</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/api/v1/tenant/current" \
+    <h2>Authenticated request</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/tenant/current" \
   -H "Authorization: Bearer $PESAGUARD_ACCESS_TOKEN" \
   -H "Accept: application/json" \
   -H "X-Request-ID: support-check-001"</code></pre>
-    <h2>Safe write pattern</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body -X POST "$PESAGUARD_API_URL/api/v1/transactions" \
+    <h2>Safe write pattern</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body -X POST "$PESAGUARD_API_URL/api/v1/communications/sms" \
   -H "Authorization: Bearer $PESAGUARD_ACCESS_TOKEN" \
-  -H "Idempotency-Key: transaction-create-001" \
+  -H "Idempotency-Key: sms-001" \
   -H "Content-Type: application/json" \
-  --data @transaction.json</code></pre><p>Never reuse an idempotency key for a different logical operation. Save the response request id for correlation.</p>
+  --data '{"recipient": "+254700000000", "message": "Your payment was received."}'</code></pre><p>Never reuse an idempotency key for a different logical operation. Save the response request id for correlation.</p>
     <h2>Debugging checklist</h2><ol><li>Confirm the URL and environment.</li><li>Use <code>--fail-with-body</code> so error responses remain visible.</li><li>Inspect status and stable error code, not only prose.</li><li>Redact the Authorization header before sharing output.</li></ol>
     <ul>
       <li><a href="../sdks/index.html">SDKs</a></li>

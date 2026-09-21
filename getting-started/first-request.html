@@ -43,7 +43,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a>
   </nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
@@ -66,7 +66,7 @@
       <li><a href="../api/">API</a></li>
       <li><a href="../webhooks/">Webhooks</a></li>
       <li><a href="../security/">Security</a></li>
-      <li><a href="../status/">Status</a></li>
+      <li><a href="https://status.pesaguard.victorkipruto.com">Status</a></li>
     </ul></div>
   </aside>
 
@@ -97,7 +97,7 @@
       <li><code>audit:read</code>, <code>settings:read</code>, <code>settings:write</code></li>
     </ul>
     <p>A token grants exactly the scopes it was issued for. Anything else returns <code>403</code>; see <a href="../api/errors.html">Errors</a>.</p>
-    <h2>Complete request example</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/api/v1/tenant/current" \
+    <h2>Complete request example</h2><pre class="docs-code" data-lang="bash"><code>curl --fail-with-body "$PESAGUARD_API_URL/tenant/current" \
   -H "Authorization: Bearer $PESAGUARD_ACCESS_TOKEN" \
   -H "Accept: application/json"</code></pre>
     <h2>Verification checklist</h2><table><thead><tr><th>Check</th><th>Expected result</th></tr></thead><tbody><tr><td>Identity</td><td>Credential is accepted with <code>200</code>.</td></tr><tr><td>Scope</td><td>Permitted resource is readable; an unpermitted route returns <code>403</code>.</td></tr><tr><td>Tenant</td><td>Response belongs only to the authenticated organization.</td></tr><tr><td>Tracing</td><td>Response or failure includes a request id for support.</td></tr></tbody></table>

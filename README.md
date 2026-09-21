@@ -24,3 +24,21 @@ by the same walk.
 - `Live`: behaviour verified in the repository (tests, routes, or docs).
 - `Draft`: design intent recorded here; not yet verified against shipped code.
 - `Planned`: named roadmap scope with no implementation.
+
+## API contract and checks
+
+`api-reference/openapi.json` is generated. Edit the hand-written parts (summaries, descriptions, info) in `api-reference/openapi.base.json`, then rebuild:
+
+```sh
+# needs the backend checkout and its Python dependencies
+python scripts/dump-flask-routes.py ../api.pesaguard.victorkipruto.com     # api-reference/routes.snapshot.json
+python scripts/generate-openapi.py  ../api.pesaguard.victorkipruto.com     # api-reference/openapi.json
+```
+
+Checks (Node only, no dependencies):
+
+- `npm run check` validates links, metadata and the OpenAPI structure.
+- `npm run check:drift` compares the docs and the spec with the backend's real routes.
+- `npm run check:strict` fails on warnings and drift too.
+
+Do not run `scripts/generate-pages.js`: it predates the current pages and overwrites them.

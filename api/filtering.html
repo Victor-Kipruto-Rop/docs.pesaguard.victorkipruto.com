@@ -41,7 +41,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -59,17 +59,25 @@
       <tr><td>Ranges</td><td>Confirm whether boundaries are inclusive and use UTC for time ranges.</td></tr>
       <tr><td>Empty filters</td><td>Expect a bounded default page rather than an unbounded export.</td></tr>
     </tbody></table>
+    <h2>Filters on <code>GET /discrepancies</code></h2>
+    <table><thead><tr><th>Parameter</th><th>Accepted values</th></tr></thead><tbody>
+      <tr><td><code>status</code></td><td><code>needs_review</code>, <code>assigned</code>, <code>resolved</code>, <code>open</code>, <code>closed</code>, <code>pending</code>, <code>missing_payment</code>, <code>missing_transaction</code>, <code>amount_mismatch</code>, <code>duplicate</code>. Matches the discrepancy's anomaly type or status.</td></tr>
+      <tr><td><code>severity</code></td><td><code>critical</code>, <code>warning</code>, <code>info</code></td></tr>
+      <tr><td><code>resolved</code></td><td><code>open</code> or <code>resolved</code></td></tr>
+      <tr><td><code>q</code></td><td>Text of up to 200 characters, matched against the transaction id and anomaly type.</td></tr>
+      <tr><td><code>tenant</code></td><td>Optional; must equal your own tenant, otherwise <code>403</code> <code>tenant_access_denied</code>.</td></tr>
+    </tbody></table>
+    <p>An unsupported value returns <code>400</code> <code>invalid_parameter</code> (for example, <code>Unsupported status filter.</code>). Unknown parameters are ignored, so a misspelled filter silently returns unfiltered results.</p>
+    <div class="callout" data-tone="warn"><strong>Planned.</strong> Filtering by provider, and date-range filters such as <code>created_from</code> and <code>created_to</code>, have no implementation on this route today.</div>
     <h2>Example query</h2>
-    <pre class="docs-code" data-lang="bash"><code>curl --get "$PESAGUARD_API_URL/api/v1/discrepancies" \
-  --data-urlencode "status=open" \
-  --data-urlencode "provider_id=provider_123" \
-  --data-urlencode "created_from=2026-09-01T00:00:00Z" \
-  --data-urlencode "created_to=2026-09-02T00:00:00Z" \
+    <pre class="docs-code" data-lang="bash"><code>curl --get "$PESAGUARD_API_URL/discrepancies" \
+  --data-urlencode "status=missing_payment" \
+  --data-urlencode "severity=critical" \
   --data-urlencode "page=1" \
-  --data-urlencode "limit=50" \
+  --data-urlencode "per_page=50" \
   -H "Authorization: Bearer $PESAGUARD_ACCESS_TOKEN"</code></pre>
     <h2>Safe filtering workflow</h2>
-    <ol><li>Start with a narrow time range and a small limit.</li><li>Confirm response metadata and tenant context.</li><li>Add one filter at a time and record the resulting count.</li><li>Use pagination and stable sorting for exports or reconciliation jobs.</li></ol>
+    <ol><li>Start with one filter and a small <code>per_page</code>.</li><li>Confirm response metadata and tenant context.</li><li>Add one filter at a time and record the resulting count.</li><li>Use pagination and stable sorting for exports or reconciliation jobs.</li></ol>
     <h2>Related</h2>
     <ul>
       <li><a href="../api/pagination.html">Pagination</a></li>

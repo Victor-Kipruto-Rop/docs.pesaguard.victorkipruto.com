@@ -41,7 +41,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -52,7 +52,7 @@
     <h1>JavaScript</h1>
     <p class="docs-lede">Use the platform fetch API or a generated client from OpenAPI. Keep the HTTP boundary server-side, centralize authentication and make write retries idempotent.</p>
     <h2>Minimal client boundary</h2><pre class="docs-code" data-lang="javascript"><code>async function getTenant(baseUrl, token) {
-  const response = await fetch(`${baseUrl}/api/v1/tenant/current`, {
+  const response = await fetch(`${baseUrl}/tenant/current`, {
     headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
     signal: AbortSignal.timeout(10000)
   });

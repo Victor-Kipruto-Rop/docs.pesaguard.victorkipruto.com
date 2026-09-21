@@ -41,7 +41,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -53,6 +53,7 @@
     <p class="docs-lede">Stable error codes are the machine-readable part of the failure contract. Message copy helps people, but it can change; client logic must branch on status and code rather than matching prose.</p>
     <p>See <a href="../api/errors.html">API · Errors</a> for the envelope and client behaviour.</p>
     <h2>Code catalog</h2>
+    <div class="callout" data-tone="warn"><strong>Planned.</strong> The upper-case code families below are a normalized design. The backend currently returns lower_snake_case codes such as <code>invalid_token</code>, <code>insufficient_permissions</code>, <code>tenant_access_denied</code>, <code>invalid_parameter</code>, <code>not_found</code> and <code>fetch_failed</code>. See <a href="../api/errors.html">API errors</a>.</div>
     <table><thead><tr><th>Code family</th><th>Typical status</th><th>Meaning</th><th>Client response</th></tr></thead><tbody><tr><td><code>AUTHENTICATION_FAILED</code></td><td>401</td><td>Credential missing, malformed, expired or rejected.</td><td>Renew or replace credentials once.</td></tr><tr><td><code>FORBIDDEN</code></td><td>403</td><td>Principal lacks scope or tenant access.</td><td>Correct authorization; do not retry blindly.</td></tr><tr><td><code>VALIDATION_FAILED</code></td><td>400 / 422</td><td>Payload or query violates the contract.</td><td>Use field details to correct input.</td></tr><tr><td><code>NOT_FOUND</code></td><td>404</td><td>Resource is absent within authorized scope.</td><td>Confirm id and tenant context.</td></tr><tr><td><code>CONFLICT</code></td><td>409</td><td>Operation conflicts with existing state or key.</td><td>Read the existing outcome.</td></tr><tr><td><code>RATE_LIMITED</code></td><td>429</td><td>Request budget is exhausted.</td><td>Back off with jitter.</td></tr><tr><td><code>INTERNAL_ERROR</code></td><td>500</td><td>Unexpected service failure.</td><td>Bounded retry and escalate with request id.</td></tr></tbody></table>
     <h2>Compatibility rules</h2>
     <ul><li>Unknown codes must be handled as their status family, not as success.</li><li>Messages may be localized, reworded or made safer without changing the code.</li><li>New fields in <code>details</code> are additive; clients should ignore fields they do not understand.</li><li>Never expose raw error objects containing secrets or internal stack traces to end users.</li></ul>

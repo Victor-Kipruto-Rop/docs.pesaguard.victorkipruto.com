@@ -41,7 +41,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -62,23 +62,35 @@
           <span>Idempotency</span></nav>
     <p class="docs-eyebrow">API</p>
     <h1>Idempotency</h1>
-    <p class="docs-lede">A retried write must produce one durable outcome for one logical operation. Idempotency protects transaction creation, provider callbacks, webhook handling and operator actions when networks fail after the server has accepted a request.</p>
+    <p class="docs-lede">A retried write must produce one durable outcome for one logical operation. Idempotency keys protect writes such as sending a communication when networks fail after the server has accepted a request.</p>
     <h2>Client contract</h2>
-    <p>Generate a unique key for each logical operation and reuse it for retries of that operation only. Bind the key to the authenticated tenant, route and request body. Never generate a new key for every transport retry or reuse a successful key for a different transaction.</p>
-    <pre class="docs-code" data-lang="http"><code>POST /api/v1/transactions
+    <p>Generate a unique key for each logical operation and reuse it for retries of that operation only. Bind the key to the authenticated tenant, route and request body. Never generate a new key for every transport retry or reuse a successful key for a different operation.</p>
+    <div class="code-head"><span class="method">POST</span><code>/api/v1/communications/sms</code></div>
+    <pre class="docs-code" data-lang="http"><code>POST /api/v1/communications/sms
 Authorization: Bearer &lt;token&gt;
-Idempotency-Key: transaction-create-8f9c...
-Content-Type: application/json</code></pre>
+Idempotency-Key: sms-8f9c...
+Content-Type: application/json
+
+{
+  "recipient": "+254700000000",
+  "message": "Your payment was received."
+}</code></pre>
+    <h2>Where idempotency keys apply today</h2>
+    <table><thead><tr><th>Route</th><th>Key input</th><th>Missing key</th><th>Repeated key</th></tr></thead><tbody>
+      <tr><td><code>POST /api/v1/communications/sms</code></td><td><code>Idempotency-Key</code> header or <code>idempotency_key</code> body field</td><td><code>400</code> <code>INVALID_REQUEST</code></td><td>Returns the existing notification (<code>id</code>, <code>status</code>, <code>tenant_id</code>) with <code>202</code>; nothing new is queued.</td></tr>
+      <tr><td><code>POST /api/v1/communications/email</code></td><td>Same as SMS</td><td><code>400</code> <code>INVALID_REQUEST</code></td><td>Same request and response shape.</td></tr>
+    </tbody></table>
+    <p>A key is unique per tenant, so two tenants can use the same value. No other route in the canonical backend app reads an idempotency key, and the transaction endpoints are read-only.</p>
     <h2>Outcome matrix</h2>
     <table><thead><tr><th>Situation</th><th>Expected behavior</th></tr></thead><tbody>
       <tr><td>First request accepted</td><td>Process once and persist the outcome associated with the key.</td></tr>
-      <tr><td>Retry with same body</td><td>Return the original outcome or a documented in-progress response.</td></tr>
-      <tr><td>Same key, different body</td><td>Reject as a conflict; do not mutate the original operation.</td></tr>
+      <tr><td>Retry with same body</td><td>Returns the original notification with <code>202</code>.</td></tr>
+      <tr><td>Same key, different body</td><td>Not detected today: the original notification is returned and the new body is ignored, so do not rely on a <code>409</code>. <span class="status-pill" data-tone="planned"><i></i>Planned</span> Conflict detection.</td></tr>
       <tr><td>Unknown result after timeout</td><td>Retry with the same key, then reconcile by resource id or provider reference.</td></tr>
-      <tr><td>Expired key</td><td>Do not assume the operation is absent; consult the resource or reconciliation record.</td></tr>
+      <tr><td>Expired key</td><td>Communication keys do not expire in the current code; a reused key returns the original notification. For other writes, do not assume the operation is absent; consult the resource or reconciliation record.</td></tr>
     </tbody></table>
     <h2>Retries and replay</h2>
-    <p>Use exponential backoff with jitter for network failures and 5xx responses. A <code>409</code> is not permission to create a second record. Replays from a dead-letter queue must preserve the original event identity, tenant and idempotency key, and every replay should be auditable.</p>
+    <p>Use exponential backoff with jitter for network failures and 5xx responses. A <code>409</code>, if a route ever returns one, is not permission to create a second record. Replays from a dead-letter queue must preserve the original event identity, tenant and idempotency key, and every replay should be auditable.</p>
     <p>Full treatment: <a href="../concepts/idempotency.html">Concepts · Idempotency</a>.</p>
     <h2>Related</h2>
     <ul>

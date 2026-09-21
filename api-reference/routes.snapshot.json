@@ -1,0 +1,678 @@
+{
+  "source": {
+    "repository": "Victor-Kipruto-Rop/api.pesaguard.victorkipruto.com",
+    "commit": "f9a57d0856f9f8b0c6833aec42093ae944866202",
+    "entrypoint": "pesaguard_backend_pipeline.canonical_app:app"
+  },
+  "routes": [
+    {
+      "path": "/activity-feed",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "activity_feed"
+    },
+    {
+      "path": "/analytics/incident-trends",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "analytics_incident_trends"
+    },
+    {
+      "path": "/analytics/operator-stats",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "analytics_operator_stats"
+    },
+    {
+      "path": "/analytics/reconciliation-report",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "reconciliation_report"
+    },
+    {
+      "path": "/analytics/resolution-times",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "analytics_resolution_times"
+    },
+    {
+      "path": "/analytics/sla-metrics",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "analytics_sla_metrics"
+    },
+    {
+      "path": "/api/v1/communications/analytics",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_product.analytics_route"
+    },
+    {
+      "path": "/api/v1/communications/analytics/costs",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_operations.costs_route"
+    },
+    {
+      "path": "/api/v1/communications/campaigns",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_product.campaign_route"
+    },
+    {
+      "path": "/api/v1/communications/campaigns/{campaign_id}/cancel",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_operations.campaign_cancel_route"
+    },
+    {
+      "path": "/api/v1/communications/campaigns/{campaign_id}/estimate",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_operations.campaign_estimate_route"
+    },
+    {
+      "path": "/api/v1/communications/campaigns/{campaign_id}/pause",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_operations.campaign_pause_route"
+    },
+    {
+      "path": "/api/v1/communications/campaigns/{campaign_id}/resume",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_operations.campaign_resume_route"
+    },
+    {
+      "path": "/api/v1/communications/consent/{recipient}",
+      "methods": [
+        "PUT"
+      ],
+      "endpoint": "communications_product.consent_route"
+    },
+    {
+      "path": "/api/v1/communications/dead-letters",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_operations.dead_letters_route"
+    },
+    {
+      "path": "/api/v1/communications/dead-letters/{entry_id}/replay",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_operations.dead_letter_replay_route"
+    },
+    {
+      "path": "/api/v1/communications/email",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_webhooks.send_email"
+    },
+    {
+      "path": "/api/v1/communications/export",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_product.export_route"
+    },
+    {
+      "path": "/api/v1/communications/flags",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_operations.flags_route"
+    },
+    {
+      "path": "/api/v1/communications/incidents",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_operations.incidents_route"
+    },
+    {
+      "path": "/api/v1/communications/incidents/{incident_id}/status",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_operations.incident_status_route"
+    },
+    {
+      "path": "/api/v1/communications/messages",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_operations.messages_route"
+    },
+    {
+      "path": "/api/v1/communications/messages/{message_id}",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_operations.message_detail_route"
+    },
+    {
+      "path": "/api/v1/communications/otp",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_product.issue_otp_route"
+    },
+    {
+      "path": "/api/v1/communications/otp/{challenge_id}/verify",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_product.verify_otp_route"
+    },
+    {
+      "path": "/api/v1/communications/policy/preview",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_operations.policy_preview_route"
+    },
+    {
+      "path": "/api/v1/communications/preferences/{recipient}",
+      "methods": [
+        "PUT"
+      ],
+      "endpoint": "communications_product.preference_route"
+    },
+    {
+      "path": "/api/v1/communications/providers/health",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_operations.provider_health_route"
+    },
+    {
+      "path": "/api/v1/communications/quotas",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_operations.quotas_route"
+    },
+    {
+      "path": "/api/v1/communications/quotas/{scope}",
+      "methods": [
+        "PUT"
+      ],
+      "endpoint": "communications_operations.set_quota_route"
+    },
+    {
+      "path": "/api/v1/communications/saved-filters",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_operations.saved_filters_route"
+    },
+    {
+      "path": "/api/v1/communications/saved-filters",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_operations.create_saved_filter_route"
+    },
+    {
+      "path": "/api/v1/communications/saved-filters/{filter_id}",
+      "methods": [
+        "DELETE"
+      ],
+      "endpoint": "communications_operations.delete_saved_filter_route"
+    },
+    {
+      "path": "/api/v1/communications/search",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_product.search_route"
+    },
+    {
+      "path": "/api/v1/communications/sms",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_webhooks.send_sms"
+    },
+    {
+      "path": "/api/v1/communications/templates",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_product.templates"
+    },
+    {
+      "path": "/api/v1/communications/templates",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_product.create_template_route"
+    },
+    {
+      "path": "/api/v1/communications/templates/{template_id}/approve",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_product.approve_template_route"
+    },
+    {
+      "path": "/api/v1/communications/webhook-events",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "communications_operations.webhook_events_route"
+    },
+    {
+      "path": "/api/v1/communications/webhook-events/{event_id}/ignore",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_operations.webhook_ignore_route"
+    },
+    {
+      "path": "/api/v1/communications/webhook-events/{event_id}/replay",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_operations.webhook_replay_route"
+    },
+    {
+      "path": "/api/v1/customers/{tenant_id}/audit",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_routes_api_v1.customer_audit"
+    },
+    {
+      "path": "/api/v1/customers/{tenant_id}/deadletters",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_routes_api_v1.customer_deadletters"
+    },
+    {
+      "path": "/api/v1/customers/{tenant_id}/reports",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_routes_api_v1.customer_reports"
+    },
+    {
+      "path": "/api/v1/customers/{tenant_id}/transactions",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_routes_api_v1.customer_transactions"
+    },
+    {
+      "path": "/api/v1/customers/{tenant_id}/transactions/{trans_id}",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_routes_api_v1.customer_transaction_detail"
+    },
+    {
+      "path": "/api/v1/export/csv",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_routes_api_v1.export_csv"
+    },
+    {
+      "path": "/api/v1/operations/dead-letters/{dead_letter_id}/replay",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "replay_dead_letter"
+    },
+    {
+      "path": "/api/v1/operations/outbox",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "operations_outbox"
+    },
+    {
+      "path": "/api/v1/organizations",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "tenant_org_routes.list_organizations"
+    },
+    {
+      "path": "/api/v1/organizations",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "tenant_org_routes.create_organization"
+    },
+    {
+      "path": "/api/v1/organizations/{organization_id}",
+      "methods": [
+        "GET",
+        "PATCH"
+      ],
+      "endpoint": "tenant_org_routes.organization_detail"
+    },
+    {
+      "path": "/api/v1/organizations/{organization_id}/approvals",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "tenant_org_routes.create_approval"
+    },
+    {
+      "path": "/api/v1/organizations/{organization_id}/approvals/{approval_id}/review",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "tenant_org_routes.review_approval"
+    },
+    {
+      "path": "/api/v1/organizations/{organization_id}/departments",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "endpoint": "tenant_org_routes.organization_departments"
+    },
+    {
+      "path": "/api/v1/organizations/{organization_id}/members",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "tenant_org_routes.add_member"
+    },
+    {
+      "path": "/api/v1/organizations/{organization_id}/teams",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "endpoint": "tenant_org_routes.organization_teams"
+    },
+    {
+      "path": "/api/v1/organizations/{organization_id}/usage",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "tenant_org_routes.usage_summary"
+    },
+    {
+      "path": "/api/v1/webhooks/africastalking/delivery",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "communications_webhooks.africastalking_delivery"
+    },
+    {
+      "path": "/assignment-queue",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "assignment_queue"
+    },
+    {
+      "path": "/discrepancies",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "discrepancies"
+    },
+    {
+      "path": "/discrepancies/bulk-resolve",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "bulk_resolve_discrepancies"
+    },
+    {
+      "path": "/discrepancies/export/csv",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_discrepancies_csv"
+    },
+    {
+      "path": "/discrepancies/{discrepancy_id}/assign",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "assign_discrepancy"
+    },
+    {
+      "path": "/discrepancies/{discrepancy_id}/notes",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "save_notes"
+    },
+    {
+      "path": "/discrepancies/{discrepancy_id}/resolve",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "resolve_discrepancy"
+    },
+    {
+      "path": "/docs",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "docs"
+    },
+    {
+      "path": "/health",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "health"
+    },
+    {
+      "path": "/incidents/auto-escalate",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "auto_escalate_incidents"
+    },
+    {
+      "path": "/incidents/bulk-assign",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "bulk_assign_incidents"
+    },
+    {
+      "path": "/incidents/filters/presets",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "endpoint": "incident_filter_presets"
+    },
+    {
+      "path": "/incidents/search",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "search_incidents"
+    },
+    {
+      "path": "/metrics",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "metrics"
+    },
+    {
+      "path": "/openapi.json",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "openapi_spec"
+    },
+    {
+      "path": "/providers",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "list_providers"
+    },
+    {
+      "path": "/providers",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "providers"
+    },
+    {
+      "path": "/providers/{provider_id}",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "get_provider"
+    },
+    {
+      "path": "/providers/{provider_id}",
+      "methods": [
+        "PATCH"
+      ],
+      "endpoint": "provider_detail"
+    },
+    {
+      "path": "/providers/{provider_id}/connection",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "provider_connection"
+    },
+    {
+      "path": "/providers/{provider_id}/health",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "provider_health"
+    },
+    {
+      "path": "/static/{filename}",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "static"
+    },
+    {
+      "path": "/tenant/current",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "current_tenant_configuration"
+    },
+    {
+      "path": "/tenant/current/locale",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "current_tenant_locale"
+    },
+    {
+      "path": "/tenant/current/locale",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "update_current_tenant_locale"
+    },
+    {
+      "path": "/tenant/current/user-locale",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "current_user_locale"
+    },
+    {
+      "path": "/tenants/{tenant_id}/settings",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "get_tenant_settings"
+    },
+    {
+      "path": "/tenants/{tenant_id}/settings",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "update_tenant_settings"
+    },
+    {
+      "path": "/v1/customers/{tenant_id}/audit",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_routes.customer_audit"
+    },
+    {
+      "path": "/v1/customers/{tenant_id}/deadletters",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_routes.customer_deadletters"
+    },
+    {
+      "path": "/v1/customers/{tenant_id}/reports",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_routes.customer_reports"
+    },
+    {
+      "path": "/v1/customers/{tenant_id}/transactions",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_routes.customer_transactions"
+    },
+    {
+      "path": "/v1/customers/{tenant_id}/transactions/{trans_id}",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_routes.customer_transaction_detail"
+    },
+    {
+      "path": "/v1/export/csv",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "export_routes.export_csv"
+    },
+    {
+      "path": "/v1/settings",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "get_settings"
+    },
+    {
+      "path": "/v1/settings",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "update_settings"
+    }
+  ]
+}

@@ -41,7 +41,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a></nav>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a></nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
 
@@ -65,25 +65,29 @@
     <p class="docs-lede">List endpoints return a bounded page of tenant-scoped items plus metadata. Pagination keeps response size predictable, protects the service under high-volume reconciliation, and gives clients a deterministic way to finish a scan.</p>
     <div class="code-head"><span class="method">200</span><code>list envelope</code></div>
     <pre class="docs-code" data-lang="json"><code>{
-  "items": [],
   "page": 1,
-  "limit": 25,
+  "per_page": 10,
   "total": 0,
-  "total_pages": 0
+  "items": []
 }</code></pre>
+    <p>This is the envelope of <code>GET /discrepancies</code>, the paginated list verified against the backend (commit <code>f9a57d0</code>). The customer transaction, dead-letter and audit lists are not paginated: they return the latest 200 rows, and the report list the latest 100.</p>
     <h2>Page parameters</h2>
     <table><thead><tr><th>Parameter</th><th>Meaning</th><th>Guidance</th></tr></thead><tbody>
-      <tr><td><code>page</code></td><td>One-based page number</td><td>Start at 1 and advance only after a successful response.</td></tr>
-      <tr><td><code>limit</code></td><td>Items requested per page</td><td>Use a documented bounded value; the server may cap it.</td></tr>
-      <tr><td><code>total</code></td><td>Matching item count</td><td>Treat as a point-in-time estimate for changing collections.</td></tr>
-      <tr><td><code>total_pages</code></td><td>Calculated page count</td><td>Use it as the loop bound, not an empty page guess.</td></tr>
+      <tr><td><code>page</code></td><td>One-based page number, 1 to 1,000,000 (default 1)</td><td>Start at 1 and advance only after a successful response.</td></tr>
+      <tr><td><code>per_page</code></td><td>Items per page, 1 to 100 (default 10)</td><td>Values outside the range return <code>400</code> <code>invalid_parameter</code>.</td></tr>
+      <tr><td><code>total</code></td><td>Matching item count</td><td>Treat as a point-in-time value for changing collections.</td></tr>
+      <tr><td>Page count</td><td>Not returned</td><td>Compute <code>Math.ceil(total / per_page)</code> and use it as the loop bound.</td></tr>
     </tbody></table>
     <h2>Iteration example</h2>
-    <pre class="docs-code" data-lang="javascript"><code>for (let page = 1; page &lt;= totalPages; page += 1) {
-  const response = await get(`/api/v1/discrepancies?page=${page}&amp;limit=50`);
+    <pre class="docs-code" data-lang="javascript"><code>const perPage = 50;
+let totalPages = 1;
+for (let page = 1; page &lt;= totalPages; page += 1) {
+  const response = await get(`/discrepancies?page=${page}&amp;per_page=${perPage}`);
   consume(response.items);
+  totalPages = Math.ceil(response.total / perPage);
 }</code></pre>
-    <p>Pass <code>page</code> and <code>limit</code> as query parameters; treat <code>total_pages</code> as the loop bound rather than paginating until an empty page. Filtering and sorting parameters, where supported, are documented per endpoint in the OpenAPI contract.</p>
+    <p>Pass <code>page</code> and <code>per_page</code> as query parameters and derive the loop bound from <code>total</code> rather than paginating until an empty page. Filters are listed on the <a href="filtering.html">filtering</a> page.</p>
+    <div class="callout" data-tone="warn"><strong>Planned.</strong> A <code>limit</code> parameter, a <code>total_pages</code> field and cursor pagination have no implementation today.</div>
     <h2>Consistency and exports</h2>
     <p>For a changing collection, combine a stable sort with a time or id boundary and record the query used. If an export must be complete and reproducible, prefer a server-side export job or snapshot contract over holding a moving page count in memory. Retry a failed page without changing filters, sort or page size.</p>
     <h2>Related</h2>

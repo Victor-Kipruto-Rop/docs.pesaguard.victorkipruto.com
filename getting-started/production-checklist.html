@@ -43,7 +43,7 @@
     <a href="../api/">API</a>
     <a href="../webhooks/">Webhooks</a>
     <a href="../security/">Security</a>
-    <a href="../status/">Status</a>
+    <a href="https://status.pesaguard.victorkipruto.com">Status</a>
   </nav>
   <button class="docs-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle navigation menu"><span></span><span></span><span></span></button>
 </div></header>
@@ -91,7 +91,7 @@
       <li>Review actual published ports. The AWS overlay's <code>ports: []</code> does not necessarily remove base-file published ports during Compose merging.</li>
       <li>Keep the root <code>.env</code> out of images and out of git. Merge new keys into existing deployments; do not replace the file.</li>
       <li>Confirm the reverse proxy passes <code>X-Forwarded-</code> headers and that TLS terminates in front of the API.</li>
-      <li>Check <a href="../status/">status</a> probes answer after rollout, and that the audit trail records the rollout operator.</li>
+      <li>Check <a href="https://status.pesaguard.victorkipruto.com">status</a> probes answer after rollout, and that the audit trail records the rollout operator.</li>
     </ol>
     <h2>Evidence to retain</h2>
     <table><thead><tr><th>Area</th><th>Evidence</th></tr></thead><tbody><tr><td>Configuration</td><td>Quiet validation output, reviewed variables and environment target.</td></tr><tr><td>Security</td><td>Credential owners, scopes, rotation dates and secret-storage path.</td></tr><tr><td>Recovery</td><td>Backup and restore check, rollback command and dead-letter procedure.</td></tr><tr><td>Operations</td><td>Health, queue, broker, error and reconciliation monitoring links.</td></tr><tr><td>Ownership</td><td>Named deployer, reviewer, incident contact and post-release observer.</td></tr></tbody></table>

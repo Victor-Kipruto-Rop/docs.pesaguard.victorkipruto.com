@@ -40,8 +40,8 @@ function chrome(file, page, sidebarHtml) {
   const canonical = siteRoot + page.path;
   const ogImage = `${siteRoot}/assets/brand/og-image.jpg`;
   const titleText = page.section && page.section !== page.title
-    ? `${page.section} · ${page.title} — PesaGuard docs`
-    : `${page.title} — PesaGuard docs`;
+    ? `${page.section} · ${page.title} - PesaGuard docs`
+    : `${page.title} - PesaGuard docs`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -245,7 +245,7 @@ const pages = [
     sidebar: sidebarFor("Getting started", "getting-started/index.html", GETTING_STARTED_SIDEBAR),
     crumbs: crumb(["Docs", "index.html"], ["Getting started"], null),
     blocks: [
-      { p: "Start with the <a href=\"quickstart.html\">quickstart</a> — one health check and one OpenAPI read against a running deployment. Then <a href=\"first-request.html\">your first authenticated request</a> introduces the bearer-token pattern and the scope model that governs everything else." },
+      { p: "Start with the <a href=\"quickstart.html\">quickstart</a>: one health check and one OpenAPI read against a running deployment. Then <a href=\"first-request.html\">your first authenticated request</a> introduces the bearer-token pattern and the scope model that governs everything else." },
       {
         table: [
           ["Page", "What it covers"],
@@ -259,7 +259,7 @@ const pages = [
         ],
       },
       {
-        note: ["Scope, up front", "PesaGuard reconciles M-Pesa (Safaricom Daraja) only today. Airtel Money, bank rails and point-of-sale feeds are planned with no adapter yet — the integration pages label them accordingly."],
+        note: ["Scope, up front", "PesaGuard reconciles M-Pesa (Safaricom Daraja) only today. Airtel Money, bank rails and point-of-sale feeds are planned with no adapter yet: the integration pages label them accordingly."],
         noteTone: "warn",
       },
     ],
@@ -281,7 +281,7 @@ const pages = [
         h2: "1 · The callback arrives",
         p: "Safaricom Daraja delivers a callback to your deployment. Ingestion validates the payload, normalizes it into the canonical payment-event shape, and de-duplicates it on write.",
         ul: [
-          "Invalid payloads are quarantined with the reason — never dropped silently.",
+          "Invalid payloads are quarantined with the reason: never dropped silently.",
           "A provider retry of the same event is rejected by idempotency, not processed twice.",
         ],
       },
@@ -289,16 +289,16 @@ const pages = [
         h2: "2 · The match is decided",
         p: "The event is compared against internal records on amount, reference and a timestamp tolerance. Deterministic rules mean the same inputs always produce the same outcome.",
         ul: [
-          "Matched — the record carries the evidence that produced the decision.",
-          "Difference found — an exception is raised with the delta shown.",
-          "No candidate — the payment queues as unmatched with the reason attached.",
+          "Matched: the record carries the evidence that produced the decision.",
+          "Difference found: an exception is raised with the delta shown.",
+          "No candidate: the payment queues as unmatched with the reason attached.",
         ],
       },
       {
         h2: "3 · The outcome is recorded",
         p: "Every outcome is written to the append-only audit trail with its actor and tenant. A reviewer resolving an exception records the decision and the reason, which keeps month-end explainable.",
       },
-      { note: ["Where to see it", "The dashboard surfaces live flow, the exception queue and per-transaction state. The ops API exposes the same data for integrations — see the API section."] },
+      { note: ["Where to see it", "The dashboard surfaces live flow, the exception queue and per-transaction state. The ops API exposes the same data for integrations: see the API section."] },
     ],
     related: [["Reconciliation concept", "concepts/reconciliation.html"], ["Idempotency", "concepts/idempotency.html"], ["Audit trails", "concepts/audit-trails.html"]],
   },
@@ -322,7 +322,7 @@ const pages = [
           ["<a href=\"transaction-lifecycle.html\">Transaction lifecycle</a>", "The states a payment moves through, and what each means."],
           ["<a href=\"idempotency.html\">Idempotency</a>", "A retry never becomes a second financial record."],
           ["<a href=\"tenants.html\">Tenants</a>", "Database-enforced boundaries, measured with zero leakage."],
-          ["<a href=\"anomalies.html\">Anomalies</a>", "Named signals to review — never automatic verdicts."],
+          ["<a href=\"anomalies.html\">Anomalies</a>", "Named signals to review: never automatic verdicts."],
           ["<a href=\"audit-trails.html\">Audit trails</a>", "Append-only evidence for every decision."],
         ],
       },
@@ -354,9 +354,9 @@ const pages = [
       },
       {
         ul: [
-          "<strong>Durability first</strong> — work is acknowledged only after the required durable state or idempotency record is written.",
-          "<strong>Safe failure</strong> — transient failures retry with bounded backoff; exhausted work is dead-lettered, never discarded.",
-          "<strong>Evidence by default</strong> — correlation IDs, structured logs, metrics and append-only audit events explain what happened.",
+          "<strong>Durability first</strong>: work is acknowledged only after the required durable state or idempotency record is written.",
+          "<strong>Safe failure</strong>: transient failures retry with bounded backoff; exhausted work is dead-lettered, never discarded.",
+          "<strong>Evidence by default</strong>: correlation IDs, structured logs, metrics and append-only audit events explain what happened.",
         ],
       },
       { note: ["Single-rail scope", "The ingestion pipeline, webhook validators and Daraja auth client are M-Pesa-specific today. Other rails are named on the roadmap and marked planned wherever they appear."] },
@@ -371,16 +371,16 @@ const pages = [
     title: "Reconciliation",
     description: "How deterministic matching pairs provider events with internal records, and what happens to a difference.",
     status: "Live",
-    lede: "Reconciliation pairs each Daraja callback with the internal record it belongs to, using amount, reference and a timestamp tolerance. The same inputs produce the same outcome — which is what makes a result explainable months later.",
+    lede: "Reconciliation pairs each Daraja callback with the internal record it belongs to, using amount, reference and a timestamp tolerance. The same inputs produce the same outcome: which is what makes a result explainable months later.",
     sidebar: sidebarFor("Concepts", "concepts/reconciliation.html", CONCEPTS_SIDEBAR),
     crumbs: crumb(["Docs", "index.html"], ["Concepts", "index.html"], ["Reconciliation"], null),
     blocks: [
       {
         ul: [
-          "<strong>Match keys</strong> — amount, reference and timestamp tolerance, configured per flow. Tolerance is a setting, not a hidden constant, because provider and ledger clocks rarely agree to the second.",
-          "<strong>Differences are first-class</strong> — a KES 500 amount mismatch is not smoothed over; it becomes an exception with the delta stated.",
-          "<strong>Exceptions carry reasons</strong> — unmatched, amount-mismatch and reference-not-found each raise with its own reason attached.",
-          "<strong>Safe to re-run</strong> — idempotency at the write means replays and provider retries never double-count.",
+          "<strong>Match keys</strong>: amount, reference and timestamp tolerance, configured per flow. Tolerance is a setting, not a hidden constant, because provider and ledger clocks rarely agree to the second.",
+          "<strong>Differences are first-class</strong>: a KES 500 amount mismatch is not smoothed over; it becomes an exception with the delta stated.",
+          "<strong>Exceptions carry reasons</strong>: unmatched, amount-mismatch and reference-not-found each raise with its own reason attached.",
+          "<strong>Safe to re-run</strong>: idempotency at the write means replays and provider retries never double-count.",
         ],
       },
       {
@@ -388,7 +388,7 @@ const pages = [
         p: "Exceptions queue with the transaction, the provider event and the reason. A reviewer resolves with a written decision, and the outcome lands in the append-only trail.",
         ol: [
           "Queue ordered by severity and age.",
-          "Reviewer accepts, rejects or escalates — with a reason.",
+          "Reviewer accepts, rejects or escalates: with a reason.",
           "Outcome recorded; reports read the reconciled result, not a parallel export.",
         ],
       },
@@ -404,7 +404,7 @@ const pages = [
     title: "Transaction lifecycle",
     description: "The states a payment moves through from callback to reconciled record, and what each state tells your team.",
     status: "Draft",
-    lede: "Every payment moves through a small set of states. The state names what has been proven so far — and the next state is only reached when its precondition holds.",
+    lede: "Every payment moves through a small set of states. The state names what has been proven so far: and the next state is only reached when its precondition holds.",
     sidebar: sidebarFor("Concepts", "concepts/transaction-lifecycle.html", CONCEPTS_SIDEBAR),
     crumbs: crumb(["Docs", "index.html"], ["Concepts", "index.html"], ["Transaction lifecycle"], null),
     blocks: [
@@ -414,12 +414,12 @@ const pages = [
           ["Received", "A callback arrived and passed validation; duplicates were rejected on write."],
           ["Matched", "A deterministic pairing exists against an internal record, with evidence retained."],
           ["Unmatched", "No internal candidate was found; the payment queues with the reason."],
-          ["Exception", "A difference exists — amount, reference or tolerance — and awaits review."],
+          ["Exception", "A difference exists (amount, reference or tolerance) and awaits review."],
           ["Resolved", "A reviewer decided with a written reason; the decision is in the audit trail."],
         ],
       },
       {
-        note: ["Why draft", "The state machine above describes the designed contract. Field-level names may differ in the shipped API — confirm against the OpenAPI document on your deployment before coding against statuses."],
+        note: ["Why draft", "The state machine above describes the designed contract. Field-level names may differ in the shipped API: confirm against the OpenAPI document on your deployment before coding against statuses."],
         noteTone: "warn",
       },
     ],
@@ -433,16 +433,16 @@ const pages = [
     title: "Idempotency",
     description: "Why a retried callback, a replayed webhook or a manual reprocess never creates a second financial record.",
     status: "Live",
-    lede: "Retries are expected in payment systems — from Daraja, from your consumers, from operators. Idempotency is enforced where writes happen, so a repeated operation is safe by construction.",
+    lede: "Retries are expected in payment systems: from Daraja, from your consumers, from operators. Idempotency is enforced where writes happen, so a repeated operation is safe by construction.",
     sidebar: sidebarFor("Concepts", "concepts/idempotency.html", CONCEPTS_SIDEBAR),
     crumbs: crumb(["Docs", "index.html"], ["Concepts", "index.html"], ["Idempotency"], null),
     blocks: [
       {
         ul: [
-          "<strong>Enforced at the write</strong> — a duplicate event is rejected by the database, not by an application check that can be forgotten.",
-          "<strong>Events persist before processing</strong> — so a crash between receipt and processing leaves a record, not a gap.",
-          "<strong>Replay-safe operations</strong> — dead-letter replay, manual reprocessing and provider retries all run under the same rule.",
-          "<strong>Acknowledge only what persisted</strong> — a success response never claims durable processing that did not happen.",
+          "<strong>Enforced at the write</strong>: a duplicate event is rejected by the database, not by an application check that can be forgotten.",
+          "<strong>Events persist before processing</strong>: so a crash between receipt and processing leaves a record, not a gap.",
+          "<strong>Replay-safe operations</strong>: dead-letter replay, manual reprocessing and provider retries all run under the same rule.",
+          "<strong>Acknowledge only what persisted</strong>: a success response never claims durable processing that did not happen.",
         ],
       },
       { p: "The invariant in one line: <em>the same logical event, delivered twice, produces one financial record and one audit entry.</em>" },
@@ -458,18 +458,18 @@ const pages = [
     title: "Tenants",
     description: "Database-enforced isolation between organizations, measured across 100 tenants with zero cross-tenant rows.",
     status: "Live",
-    lede: "Every query, mutation, export, cache key, event and audit record carries an authorized tenant scope — enforced at the database layer, so application mistakes cannot leak one organization's data into another's view.",
+    lede: "Every query, mutation, export, cache key, event and audit record carries an authorized tenant scope: enforced at the database layer, so application mistakes cannot leak one organization's data into another's view.",
     sidebar: sidebarFor("Concepts", "concepts/tenants.html", CONCEPTS_SIDEBAR),
     crumbs: crumb(["Docs", "index.html"], ["Concepts", "index.html"], ["Tenants"], null),
     blocks: [
       {
         ul: [
-          "<strong>Tenant predicates are part of the data access</strong> — a query without an authorized tenant resolves to nothing, not to everything.",
-          "<strong>IDs are not globally trusted</strong> — detail lookups must include tenant and account predicates.",
-          "<strong>Measured, not assumed</strong> — the committed load test exercised 100 tenants concurrently and recorded zero cross-tenant rows.",
+          "<strong>Tenant predicates are part of the data access</strong>: a query without an authorized tenant resolves to nothing, not to everything.",
+          "<strong>IDs are not globally trusted</strong>: detail lookups must include tenant and account predicates.",
+          "<strong>Measured, not assumed</strong>: the committed load test exercised 100 tenants concurrently and recorded zero cross-tenant rows.",
         ],
       },
-      { p: "The reason this lives in the database rather than the application: handlers change constantly, and one missed check is enough to leak data. A boundary that only protects reads is not a boundary — isolation covers writes, exports, cache keys, events and replays too." },
+      { p: "The reason this lives in the database rather than the application: handlers change constantly, and one missed check is enough to leak data. A boundary that only protects reads is not a boundary: isolation covers writes, exports, cache keys, events and replays too." },
       { note: ["Undocumented bypasses are excluded", "There are no unscoped cross-tenant access paths or administrative bypasses in the design baseline. Explicitly scoped administrative paths, where they exist, are themselves recorded."] },
     ],
     related: [["Tenant isolation (security)", "security/tenant-isolation.html"], ["Authentication", "api/authentication.html"], ["Audit trails", "concepts/audit-trails.html"]],
@@ -480,7 +480,7 @@ const pages = [
     path: "/concepts/anomalies.html",
     section: "Concepts",
     title: "Anomalies",
-    description: "Rule-based and statistical signals scored in context — a prompt to review, never an automatic verdict.",
+    description: "Rule-based and statistical signals scored in context: a prompt to review, never an automatic verdict.",
     status: "Live",
     lede: "An anomaly is a named signal, not a verdict. Velocity spikes, amount deviations, duplicate references and timing patterns are scored against the behaviour they came from, and a human decides what happens next.",
     sidebar: sidebarFor("Concepts", "concepts/anomalies.html", CONCEPTS_SIDEBAR),
@@ -488,9 +488,9 @@ const pages = [
     blocks: [
       {
         ul: [
-          "<strong>Signals are named</strong> — each flag states the pattern behind it: amount outside the typical range, N transactions from one account in M minutes, a reference seen before.",
-          "<strong>Context beats thresholds</strong> — a large payment is not a problem on its own; it is scored against the account and channel behaviour.",
-          "<strong>Review stays with people</strong> — a flag queues a transaction with severity and reason. PesaGuard does not auto-declare fraud, and blocking, if any, is your recorded decision.",
+          "<strong>Signals are named</strong>: each flag states the pattern behind it: amount outside the typical range, N transactions from one account in M minutes, a reference seen before.",
+          "<strong>Context beats thresholds</strong>: a large payment is not a problem on its own; it is scored against the account and channel behaviour.",
+          "<strong>Review stays with people</strong>: a flag queues a transaction with severity and reason. PesaGuard does not auto-declare fraud, and blocking, if any, is your recorded decision.",
         ],
       },
       { p: "Today this is explicit rules plus statistical checks. These pages describe it that way rather than implying a machine-learning model that has not shipped." },
@@ -505,7 +505,7 @@ const pages = [
     title: "Fraud detection",
     description: "How signals become investigations, and why the platform never declares fraud on its own.",
     status: "Live",
-    lede: "Fraud detection distinguishes anomaly from suspicion from confirmed fraud. PesaGuard's job is the first two — surfaced quickly, with reasons — while the third stays a recorded human decision.",
+    lede: "Fraud detection distinguishes anomaly from suspicion from confirmed fraud. PesaGuard's job is the first two (surfaced quickly, with reasons) while the third stays a recorded human decision.",
     sidebar: sidebarFor("Concepts", "concepts/fraud-detection.html", CONCEPTS_SIDEBAR),
     crumbs: crumb(["Docs", "index.html"], ["Concepts", "index.html"], ["Fraud detection"], null),
     blocks: [
@@ -529,7 +529,7 @@ const pages = [
     path: "/concepts/audit-trails.html",
     section: "Concepts",
     title: "Audit trails",
-    description: "Append-only evidence for every match, review and configuration change — with secrets excluded by design.",
+    description: "Append-only evidence for every match, review and configuration change: with secrets excluded by design.",
     status: "Live",
     lede: "Every match, exception, review and configuration change is written to an append-only record that carries its actor, tenant and reason. Entries are added, never rewritten.",
     sidebar: sidebarFor("Concepts", "concepts/audit-trails.html", CONCEPTS_SIDEBAR),
@@ -537,9 +537,9 @@ const pages = [
     blocks: [
       {
         ul: [
-          "<strong>Decisions keep their reason</strong> — accept, reject or escalate is stored with the actor and the transaction context.",
-          "<strong>History survives turnover</strong> — institutional knowledge stays queryable when the team changes.",
-          "<strong>Secrets are excluded</strong> — tokens, keys and credentials never enter audit entries; sensitive fields are redacted at logging boundaries.",
+          "<strong>Decisions keep their reason</strong>: accept, reject or escalate is stored with the actor and the transaction context.",
+          "<strong>History survives turnover</strong>: institutional knowledge stays queryable when the team changes.",
+          "<strong>Secrets are excluded</strong>: tokens, keys and credentials never enter audit entries; sensitive fields are redacted at logging boundaries.",
         ],
       },
       { p: "An audit-ready trail needs three properties more than it needs volume: entries can only be added, each entry identifies who did what, and each entry traces back to the transaction that caused it." },
@@ -598,12 +598,12 @@ const pages = [
           ["401", "Authentication failed. Refresh or reissue the token."],
           ["403", "Authenticated, but the scope or tenant does not permit this."],
           ["404", "Not found within the caller's tenant scope."],
-          ["409", "Conflict — usually a duplicate under idempotency. Safe to re-read."],
+          ["409", "Conflict: usually a duplicate under idempotency. Safe to re-read."],
           ["429", "Rate limited. Back off; see rate limits."],
           ["500 / 502 / 503 / 504", "Server or gateway problem. Retry with backoff; quote the request id."],
         ],
       },
-      { note: ["Quote the request id", "Every error carries a request_id. Include it in support conversations — it is the correlation key the operator can search for."] },
+      { note: ["Quote the request id", "Every error carries a request_id. Include it in support conversations: it is the correlation key the operator can search for."] },
     ],
     related: [["Rate limits", "api/rate-limits.html"], ["Idempotency", "api/idempotency.html"]],
   },
@@ -650,13 +650,13 @@ const pages = [
     title: "Versioning",
     description: "The /v1 namespace, the 90-day deprecation policy, and how breaking changes are introduced.",
     status: "Live",
-    lede: "All public routes belong under a versioned namespace — /api/v1 — unless a documented compatibility alias exists.",
+    lede: "All public routes belong under a versioned namespace (/api/v1) unless a documented compatibility alias exists.",
     sidebar: sidebarFor("API", "api/versioning.html", API_SIDEBAR),
     crumbs: crumb(["Docs", "index.html"], ["API", "index.html"], ["Versioning"], null),
     blocks: [
       { ul: [
         "A version remains supported for at least <strong>90 days</strong> after a deprecation notice is published.",
-        "Breaking changes require a new versioned route prefix — never a silent shape change in place.",
+        "Breaking changes require a new versioned route prefix: never a silent shape change in place.",
         "Deprecations are announced in release notes and in the OpenAPI specification itself.",
       ] },
     ],
@@ -670,14 +670,14 @@ const pages = [
     title: "Rate limits",
     description: "Bounded request rates, 429 handling, and why limits protect the reconciliation pipeline.",
     status: "Draft",
-    lede: "Rate limits exist to protect durability — a flood of writes must never be served at the cost of reconciliation correctness.",
+    lede: "Rate limits exist to protect durability: a flood of writes must never be served at the cost of reconciliation correctness.",
     sidebar: sidebarFor("API", "api/rate-limits.html", API_SIDEBAR),
     crumbs: crumb(["Docs", "index.html"], ["API", "index.html"], ["Rate limits"], null),
     blocks: [
       { ul: [
         "Exceeding a limit returns <code>429</code> with the standard error envelope.",
         "Back off and retry; retries are safe because writes are idempotent.",
-        "Numeric limits are deployment configuration, not documentation constants — ask the operator for the values that apply to your tenant.",
+        "Numeric limits are deployment configuration, not documentation constants: ask the operator for the values that apply to your tenant.",
       ] },
       { note: ["Why draft", "The principle is shipped policy; the numbers are deployment-specific and are deliberately not published here so this page cannot drift from reality."], noteTone: "warn" },
     ],
@@ -691,7 +691,7 @@ const pages = [
     title: "Idempotency",
     description: "Safe retries for every write: the same logical event delivered twice produces one record.",
     status: "Live",
-    lede: "A retry must be safe to run more than once — that is an interface invariant, not a client courtesy.",
+    lede: "A retry must be safe to run more than once: that is an interface invariant, not a client courtesy.",
     sidebar: sidebarFor("API", "api/idempotency.html", API_SIDEBAR),
     crumbs: crumb(["Docs", "index.html"], ["API", "index.html"], ["Idempotency"], null),
     blocks: [
@@ -712,17 +712,17 @@ const pages = [
     title: "Webhook delivery",
     description: "Signed outbound events with bounded retries and a dead-letter path you can inspect and replay.",
     status: "Live",
-    lede: "Outbound webhooks carry exceptions and notifications to systems you run. Every delivery is signed, retried on failure with bounded backoff, and dead-lettered when exhausted — never silently dropped.",
+    lede: "Outbound webhooks carry exceptions and notifications to systems you run. Every delivery is signed, retried on failure with bounded backoff, and dead-lettered when exhausted: never silently dropped.",
     sidebar: sidebarFor("Webhooks", "webhooks/index.html", WEBHOOKS_SIDEBAR),
     crumbs: crumb(["Docs", "index.html"], ["Webhooks"], null),
     blocks: [
       { ul: [
-        "<strong>Signed by default</strong> — consumers verify the sender before trusting the payload.",
-        "<strong>Attempts are recorded</strong> — delivery history per event, with outcomes.",
-        "<strong>Exhausted deliveries are retained</strong> — dead letters stay visible for investigation and replay.",
-        "<strong>Replay is safe</strong> — idempotency applies to delivery exactly as it does to ingestion.",
+        "<strong>Signed by default</strong>: consumers verify the sender before trusting the payload.",
+        "<strong>Attempts are recorded</strong>: delivery history per event, with outcomes.",
+        "<strong>Exhausted deliveries are retained</strong>: dead letters stay visible for investigation and replay.",
+        "<strong>Replay is safe</strong>: idempotency applies to delivery exactly as it does to ingestion.",
       ] },
-      { p: "The ops API exposes webhook delivery events (event id, type, source, received and processing times, status, HTTP status, retry count, error and the related transaction) under the integrations scopes — see <a href=\"../api/index.html\">the API reference</a> and the contract at <a href=\"../api-reference/openapi.json\">api-reference/openapi.json</a>." },
+      { p: "The ops API exposes webhook delivery events (event id, type, source, received and processing times, status, HTTP status, retry count, error and the related transaction) under the integrations scopes: see <a href=\"../api/index.html\">the API reference</a> and the contract at <a href=\"../api-reference/openapi.json\">api-reference/openapi.json</a>." },
     ],
     related: [["Event catalog", "webhooks/event-catalog.html"], ["Verification", "webhooks/verification.html"], ["Retries", "webhooks/retries.html"]],
   },
@@ -759,7 +759,7 @@ const pages = [
     title: "Verification",
     description: "Verify the sender before you trust the payload: signature checks on every delivery.",
     status: "Draft",
-    lede: "Every outbound delivery is signed. Your consumer should reject any delivery whose signature does not verify — the signature is what turns an HTTP POST into a trustworthy event.",
+    lede: "Every outbound delivery is signed. Your consumer should reject any delivery whose signature does not verify: the signature is what turns an HTTP POST into a trustworthy event.",
     sidebar: sidebarFor("Webhooks", "webhooks/verification.html", WEBHOOKS_SIDEBAR),
     crumbs: crumb(["Docs", "index.html"], ["Webhooks", "index.html"], ["Verification"], null),
     blocks: [
@@ -767,7 +767,7 @@ const pages = [
         "Read the signature header from the delivery.",
         "Recompute the signature over the raw body using your shared secret.",
         "Compare with a constant-time comparison; reject on mismatch with 401.",
-        "Only then parse the body and act — and act idempotently.",
+        "Only then parse the body and act: and act idempotently.",
       ] },
       { note: ["Why draft", "The signing scheme (header name, algorithm, key rotation) is finalized with each pilot integration. Confirm the exact mechanism with the operator before shipping a consumer."], noteTone: "warn" },
     ],
@@ -781,14 +781,14 @@ const pages = [
     title: "Retries and dead letters",
     description: "Bounded backoff, visible attempt history, dead-letter retention and safe replay.",
     status: "Live",
-    lede: "Transient failures are retried with bounded backoff. When retries are exhausted the delivery moves to the dead-letter path, where it stays visible and replayable — a failed delivery never disappears.",
+    lede: "Transient failures are retried with bounded backoff. When retries are exhausted the delivery moves to the dead-letter path, where it stays visible and replayable: a failed delivery never disappears.",
     sidebar: sidebarFor("Webhooks", "webhooks/retries.html", WEBHOOKS_SIDEBAR),
     crumbs: crumb(["Docs", "index.html"], ["Webhooks", "index.html"], ["Retries"], null),
     blocks: [
       { ul: [
         "Each attempt is recorded with its outcome, so you can answer what was sent and when.",
         "Exhausted deliveries are dead-lettered and retained for investigation.",
-        "Replay from the dead letter is safe — idempotency applies to delivery like everything else.",
+        "Replay from the dead letter is safe: idempotency applies to delivery like everything else.",
         "Retry schedules are bounded on purpose; unbounded retries only hide an outage.",
       ] },
       { p: "The ops API surfaces these delivery events with retry counts and error details under the <code>integrations:read</code> scope." },
@@ -827,7 +827,7 @@ const pages = [
     path: "/security/tenant-isolation.html",
     section: "Security",
     title: "Tenant isolation",
-    description: "Isolation enforced at the database layer — measured across 100 tenants with zero cross-tenant rows.",
+    description: "Isolation enforced at the database layer: measured across 100 tenants with zero cross-tenant rows.",
     status: "Live",
     lede: "Every tenant-owned resource is evaluated against the authenticated tenant context, down to the query predicate. A query without an authorized tenant resolves to nothing.",
     sidebar: sidebarFor("Security", "security/tenant-isolation.html", SECURITY_SIDEBAR),
@@ -855,7 +855,7 @@ const pages = [
     crumbs: crumb(["Docs", "index.html"], ["Security", "index.html"], ["Responsible disclosure"], null),
     blocks: [
       { ol: [
-        "Open a private security advisory or issue on the <a href=\"https://github.com/Victor-Kipruto-Rop/pesaguard\">source repository</a> — do not include exploit details in a public issue.",
+        "Open a private security advisory or issue on the <a href=\"https://github.com/Victor-Kipruto-Rop/pesaguard\">source repository</a>: do not include exploit details in a public issue.",
         "Include reproduction steps and the request id or timestamp if the issue involves API behaviour.",
         "We acknowledge receipt, then confirm or decline with reasoning.",
         "Fixes are released with a note; you may be credited unless you prefer otherwise.",
@@ -893,7 +893,7 @@ const pages = [
     title: "Environment variables",
     description: "Deployment settings PesaGuard reads: database, Redis, Kafka, JWT and the public API URL.",
     status: "Live",
-    lede: "These settings live in the ignored root .env — never in images, never in git.",
+    lede: "These settings live in the ignored root .env: never in images, never in git.",
     sidebar: null,
     crumbs: crumb(["Docs", "index.html"], ["Environments", "index.html"], ["Environment variables"], null),
     blocks: [
@@ -921,7 +921,7 @@ const pages = [
     title: "Service status",
     description: "Live health of the PesaGuard services, the ops metrics endpoint, and what an incident page includes.",
     status: "Live",
-    lede: "The public status site probes the API health endpoint directly — the same check the quickstart uses.",
+    lede: "The public status site probes the API health endpoint directly: the same check the quickstart uses.",
     sidebar: null,
     crumbs: crumb(["Docs", "index.html"], ["Status"], null),
     blocks: [
@@ -964,7 +964,7 @@ const pages = [
     path: "/sdks/",
     section: "SDKs",
     title: "SDKs",
-    description: "No official SDKs today — generate a client from the OpenAPI document with any HTTP stack.",
+    description: "No official SDKs today: generate a client from the OpenAPI document with any HTTP stack.",
     status: "Planned",
     lede: "There are no official PesaGuard SDKs yet. The OpenAPI document is the integration surface; any HTTP client works.",
     sidebar: null,
@@ -987,10 +987,10 @@ const pages = [
     sidebar: null,
     crumbs: crumb(["Docs", "index.html"], ["Errors"], null),
     blocks: [
-      { p: "Full reference: <a href=\"../api/errors.html\">API · Errors</a> — envelope, status classes and client behaviour from 400 through 504." },
+      { p: "Full reference: <a href=\"../api/errors.html\">API · Errors</a>: envelope, status classes and client behaviour from 400 through 504." },
       { ul: [
         "Stable codes are part of the public contract; message copy is not.",
-        "409 conflicts usually mean a duplicate under idempotency — re-read rather than re-send.",
+        "409 conflicts usually mean a duplicate under idempotency: re-read rather than re-send.",
         "Quote the request id in support conversations; it is the correlation key operators search for.",
       ] },
     ],
@@ -1029,9 +1029,9 @@ const pages = [
     crumbs: crumb(["Docs", "index.html"], ["Migration"], null),
     blocks: [
       { ul: [
-        "<strong>Schema</strong> — Alembic revisions, safe backfills, no production schema creation outside migrations.",
-        "<strong>API</strong> — breaking changes require a new versioned prefix; the previous version stays supported for at least 90 days after notice.",
-        "<strong>Deprecations</strong> — announced in release notes and the OpenAPI document.",
+        "<strong>Schema</strong>: Alembic revisions, safe backfills, no production schema creation outside migrations.",
+        "<strong>API</strong>: breaking changes require a new versioned prefix; the previous version stays supported for at least 90 days after notice.",
+        "<strong>Deprecations</strong>: announced in release notes and the OpenAPI document.",
       ] },
       { note: ["No v1-to-v2 guide yet", "The dashboard OpenAPI document is versioned 2.0.0 while the public contract remains /api/v1. A dedicated migration guide will be written when a version transition is announced."], noteTone: "warn" },
     ],
@@ -1050,7 +1050,7 @@ const pages = [
     crumbs: crumb(["Docs", "index.html"], ["Testing"], null),
     blocks: [
       { ul: [
-        "Use the <a href=\"../getting-started/test-environment.html\">staging variant</a> — same code, separate state.",
+        "Use the <a href=\"../getting-started/test-environment.html\">staging variant</a>: same code, separate state.",
         "Drive the idempotency path: deliver the same callback twice and assert one record.",
         "Exercise failure recovery: stop a consumer, watch retries land in dead letters, replay, assert one outcome.",
         "Verify tenant scope: a request without tenant predicates must return nothing.",
@@ -1067,15 +1067,15 @@ const pages = [
     title: "Support",
     description: "How to reach the team: pilots are supported personally, with the source repository as the shared record.",
     status: "Draft",
-    lede: "PesaGuard is deployed and supported with the pilot team. There is no ticket portal yet — the fastest paths are the source repository and the pilot conversation.",
+    lede: "PesaGuard is deployed and supported with the pilot team. There is no ticket portal yet: the fastest paths are the source repository and the pilot conversation.",
     sidebar: null,
     crumbs: crumb(["Docs", "index.html"], ["Support"], null),
     blocks: [
       { ul: [
-        "<strong>Documentation feedback</strong> — open an issue on the <a href=\"https://github.com/Victor-Kipruto-Rop/pesaguard\">source repository</a>.",
-        "<strong>Production issues</strong> — quote the <code>request_id</code> from the error response; it is the correlation key operators search for.",
-        "<strong>Security issues</strong> — follow <a href=\"../security/responsible-disclosure.html\">responsible disclosure</a>; use private advisories, not public issues.",
-        "<strong>Status questions</strong> — check <a href=\"../status/\">status</a> first; incidents carry scope and duration.",
+        "<strong>Documentation feedback</strong>: open an issue on the <a href=\"https://github.com/Victor-Kipruto-Rop/pesaguard\">source repository</a>.",
+        "<strong>Production issues</strong>: quote the <code>request_id</code> from the error response; it is the correlation key operators search for.",
+        "<strong>Security issues</strong>: follow <a href=\"../security/responsible-disclosure.html\">responsible disclosure</a>; use private advisories, not public issues.",
+        "<strong>Status questions</strong>: check <a href=\"../status/\">status</a> first; incidents carry scope and duration.",
       ] },
     ],
     related: [["Errors", "api/errors.html"], ["Responsible disclosure", "security/responsible-disclosure.html"], ["Status", "status/index.html"]],
@@ -1088,7 +1088,7 @@ const pages = [
     title: "Search",
     description: "Ctrl/⌘+K filters the sidebar. Client-side only; nothing is sent anywhere.",
     status: "Live",
-    lede: "Docs search filters the navigation index in the sidebar as you type — no tracking, no external service.",
+    lede: "Docs search filters the navigation index in the sidebar as you type: no tracking, no external service.",
     sidebar: null,
     crumbs: crumb(["Docs", "index.html"], ["Search"], null),
     blocks: [

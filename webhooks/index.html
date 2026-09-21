@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Webhooks · Webhook delivery — PesaGuard docs</title>
+<title>Webhooks · Webhook delivery - PesaGuard docs</title>
 <meta name="description" content="Signed outbound events with bounded retries and a dead-letter path you can inspect and replay.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/webhooks/">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Webhooks · Webhook delivery — PesaGuard docs">
+<meta property="og:title" content="Webhooks · Webhook delivery - PesaGuard docs">
 <meta property="og:description" content="Signed outbound events with bounded retries and a dead-letter path you can inspect and replay.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/webhooks/">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Webhooks · Webhook delivery — PesaGuard docs">
+<meta name="twitter:title" content="Webhooks · Webhook delivery - PesaGuard docs">
 <meta name="twitter:description" content="Signed outbound events with bounded retries and a dead-letter path you can inspect and replay.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
@@ -63,14 +63,14 @@
           <span>Webhooks</span></nav>
     <p class="docs-eyebrow">Webhooks</p>
     <h1>Webhook delivery</h1>
-    <p class="docs-lede">Outbound webhooks carry exceptions and notifications to systems you run. Every delivery is signed, retried on failure with bounded backoff, and dead-lettered when exhausted — never silently dropped.</p>
+    <p class="docs-lede">Outbound webhooks carry exceptions and notifications to systems you run. Every delivery is signed, retried on failure with bounded backoff, and dead-lettered when exhausted: never silently dropped.</p>
     <ul>
-      <li><strong>Signed by default</strong> — consumers verify the sender before trusting the payload.</li>
-      <li><strong>Attempts are recorded</strong> — delivery history per event, with outcomes.</li>
-      <li><strong>Exhausted deliveries are retained</strong> — dead letters stay visible for investigation and replay.</li>
-      <li><strong>Replay is safe</strong> — idempotency applies to delivery exactly as it does to ingestion.</li>
+      <li><strong>Signed by default</strong>: consumers verify the sender before trusting the payload.</li>
+      <li><strong>Attempts are recorded</strong>: delivery history per event, with outcomes.</li>
+      <li><strong>Exhausted deliveries are retained</strong>: dead letters stay visible for investigation and replay.</li>
+      <li><strong>Replay is safe</strong>: idempotency applies to delivery exactly as it does to ingestion.</li>
     </ul>
-    <p>The ops API exposes webhook delivery events (event id, type, source, received and processing times, status, HTTP status, retry count, error and the related transaction) under the integrations scopes — see <a href="../api/index.html">the API reference</a> and the contract at <a href="../api-reference/openapi.json">api-reference/openapi.json</a>.</p>
+    <p>The ops API exposes webhook delivery events (event id, type, source, received and processing times, status, HTTP status, retry count, error and the related transaction) under the integrations scopes: see <a href="../api/index.html">the API reference</a> and the contract at <a href="../api-reference/openapi.json">api-reference/openapi.json</a>.</p>
     <div class="api-hero"><div><strong>Receiver contract</strong><p>Verify the sender, accept durably, process idempotently and expose every attempt for investigation.</p></div><div class="api-hero-meta"><span>VERIFY</span><span>ACKNOWLEDGE</span><span>REPLAY</span></div></div>
     <h2>Delivery lifecycle</h2><ol><li>PesaGuard creates an event with a stable event and delivery identity.</li><li>The payload is signed and sent to the configured receiver.</li><li>The receiver verifies the raw body before parsing.</li><li>The receiver persists the event and acknowledges only after durable acceptance.</li><li>Failures are retried with bounded backoff, then retained in a dead-letter path.</li><li>Operators can inspect and replay the delivery without losing its identity.</li></ol>
     <h2>Minimum receiver requirements</h2><table><thead><tr><th>Requirement</th><th>Why</th></tr></thead><tbody><tr><td>Raw-body signature verification</td><td>Prevents a modified payload from being trusted.</td></tr><tr><td>Fast acknowledgement after persistence</td><td>Prevents timeouts while avoiding data loss.</td></tr><tr><td>Idempotent event handling</td><td>Provider retries must not create duplicate effects.</td></tr><tr><td>Unknown-field tolerance</td><td>Additive payload changes remain compatible.</td></tr><tr><td>Observable delivery identity</td><td>Operators can trace attempts, retries and replay.</td></tr></tbody></table>

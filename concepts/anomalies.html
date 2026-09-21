@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Concepts · Anomalies — PesaGuard docs</title>
-<meta name="description" content="Rule-based and statistical signals scored in context — a prompt to review, never an automatic verdict.">
+<title>Concepts · Anomalies - PesaGuard docs</title>
+<meta name="description" content="Rule-based and statistical signals scored in context: a prompt to review, never an automatic verdict.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/concepts/anomalies.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Concepts · Anomalies — PesaGuard docs">
-<meta property="og:description" content="Rule-based and statistical signals scored in context — a prompt to review, never an automatic verdict.">
+<meta property="og:title" content="Concepts · Anomalies - PesaGuard docs">
+<meta property="og:description" content="Rule-based and statistical signals scored in context: a prompt to review, never an automatic verdict.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/concepts/anomalies.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Concepts · Anomalies — PesaGuard docs">
-<meta name="twitter:description" content="Rule-based and statistical signals scored in context — a prompt to review, never an automatic verdict.">
+<meta name="twitter:title" content="Concepts · Anomalies - PesaGuard docs">
+<meta name="twitter:description" content="Rule-based and statistical signals scored in context: a prompt to review, never an automatic verdict.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,9 +65,9 @@
     <h1>Anomalies</h1>
     <p class="docs-lede">An anomaly is a named signal, not a verdict. Velocity spikes, amount deviations, duplicate references and timing patterns are compared with the behavior they came from, then routed to a review decision with context and evidence.</p>
     <ul>
-      <li><strong>Signals are named</strong> — each flag states the pattern behind it: amount outside the typical range, N transactions from one account in M minutes, a reference seen before.</li>
-      <li><strong>Context beats thresholds</strong> — a large payment is not a problem on its own; it is scored against the account and channel behaviour.</li>
-      <li><strong>Review stays with people</strong> — a flag queues a transaction with severity and reason. PesaGuard does not auto-declare fraud, and blocking, if any, is your recorded decision.</li>
+      <li><strong>Signals are named</strong>: each flag states the pattern behind it: amount outside the typical range, N transactions from one account in M minutes, a reference seen before.</li>
+      <li><strong>Context beats thresholds</strong>: a large payment is not a problem on its own; it is scored against the account and channel behaviour.</li>
+      <li><strong>Review stays with people</strong>: a flag queues a transaction with severity and reason. PesaGuard does not auto-declare fraud, and blocking, if any, is your recorded decision.</li>
     </ul>
     <h2>Signal anatomy</h2>
     <table><thead><tr><th>Field</th><th>Purpose</th></tr></thead><tbody><tr><td>Signal name</td><td>States the recognizable pattern, such as velocity spike or duplicate reference.</td></tr><tr><td>Severity</td><td>Prioritizes review without claiming fraud.</td></tr><tr><td>Evidence window</td><td>Defines the account, channel, time range or comparison population.</td></tr><tr><td>Observed values</td><td>Shows the measurements that caused the signal.</td></tr><tr><td>Decision</td><td>Records the human response and reason.</td></tr></tbody></table>

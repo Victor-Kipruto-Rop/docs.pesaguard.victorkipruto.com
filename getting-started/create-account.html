@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Create an account — PesaGuard docs</title>
+<title>Create an account - PesaGuard docs</title>
 <meta name="description" content="How access to a PesaGuard deployment is provisioned: with the pilot team, not through public signup.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/getting-started/create-account.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Create an account — PesaGuard docs">
+<meta property="og:title" content="Create an account - PesaGuard docs">
 <meta property="og:description" content="How access to a PesaGuard deployment is provisioned: with the pilot team, not through public signup.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/getting-started/create-account.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Create an account — PesaGuard docs">
+<meta name="twitter:title" content="Create an account - PesaGuard docs">
 <meta name="twitter:description" content="How access to a PesaGuard deployment is provisioned: with the pilot team, not through public signup.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
@@ -74,14 +74,14 @@
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span><a href="index.html">Getting started</a><span aria-hidden="true">/</span><span>Create an account</span></nav>
     <p class="docs-eyebrow">Getting started</p>
     <h1>Create an account</h1>
-    <p class="docs-lede">PesaGuard has no public signup. Access is provisioned with the pilot team, because the reconciliation scope — flows, matching keys, retention — is agreed per operation rather than self-served.</p>
+    <p class="docs-lede">PesaGuard has no public signup. Access is provisioned with the pilot team, because the reconciliation scope (flows, matching keys, retention) is agreed per operation rather than self-served.</p>
     <div class="api-hero"><div><strong>Provisioning is a design decision</strong><p>The account is created around the organization, payment flow, operators, retention and reconciliation ownership that will use it.</p></div><div class="api-hero-meta"><span>TENANT</span><span>FLOW</span><span>OWNERSHIP</span></div></div>
 
     <h2>What provisioning covers</h2>
     <ul>
       <li><strong>A tenant.</strong> Your organization's data lives in its own tenant boundary, enforced at the database layer.</li>
       <li><strong>An M-Pesa (Daraja) flow.</strong> The active payment scope: STK Push and PayBill callbacks.</li>
-      <li><strong>Dashboard users.</strong> Named accounts with roles — reviewer, operator, administrator.</li>
+      <li><strong>Dashboard users.</strong> Named accounts with roles: reviewer, operator, administrator.</li>
       <li><strong>A pilot plan.</strong> Pricing follows your operation; see <a href="https://pesaguard.victorkipruto.com/pricing">pricing</a> for the shape of it.</li>
     </ul>
 
@@ -90,7 +90,7 @@
       <li>Which M-Pesa shortcodes and flows you collect on.</li>
       <li>Where your internal records live (Postgres, Sheets or a REST ledger).</li>
       <li>Who reviews exceptions, and through which channels they should be reached.</li>
-      <li>Whether you need Airtel Money or bank rails today — because those are <em>not</em> included, and we would rather say so now than mid-pilot.</li>
+      <li>Whether you need Airtel Money or bank rails today: because those are <em>not</em> included, and we would rather say so now than mid-pilot.</li>
     </ol>
     <h2>Provisioning handoff</h2>
     <table><thead><tr><th>Owner</th><th>Decision</th><th>Evidence</th></tr></thead><tbody><tr><td>Business owner</td><td>Which payment flows and organizations are in scope?</td><td>Approved scope and tenant name.</td></tr><tr><td>Integration owner</td><td>Which systems send, read or export data?</td><td>Flow diagram and service contact.</td></tr><tr><td>Operations owner</td><td>Who reviews exceptions and incidents?</td><td>Escalation path and review SLA.</td></tr><tr><td>Security owner</td><td>How are credentials stored and rotated?</td><td>Secret-management and access plan.</td></tr></tbody></table>
@@ -98,11 +98,11 @@
 
     <div class="callout" data-tone="info">
       <strong>Multi-rail is a scoping conversation</strong>
-      <p>Airtel Money, bank transfers and card rails are out of scope for the pilot. If multi-rail support is a hard requirement, it becomes a separate scoping exercise — say so in the first conversation.</p>
+      <p>Airtel Money, bank transfers and card rails are out of scope for the pilot. If multi-rail support is a hard requirement, it becomes a separate scoping exercise: say so in the first conversation.</p>
     </div>
 
     <h2>Then</h2>
-    <p>Once your tenant exists, <a href="create-api-key.html">create an API key</a> is a conversation, not a form — credentials are issued with explicit scopes and rotation metadata.</p>
+    <p>Once your tenant exists, <a href="create-api-key.html">create an API key</a> is a conversation, not a form: credentials are issued with explicit scopes and rotation metadata.</p>
   </article>
 </div>
 </main>

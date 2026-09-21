@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Create an API key — PesaGuard docs</title>
+<title>Create an API key - PesaGuard docs</title>
 <meta name="description" content="What a PesaGuard credential carries: explicit scopes, expiry, rotation metadata, and hashed storage.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/getting-started/create-api-key.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Create an API key — PesaGuard docs">
+<meta property="og:title" content="Create an API key - PesaGuard docs">
 <meta property="og:description" content="What a PesaGuard credential carries: explicit scopes, expiry, rotation metadata, and hashed storage.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/getting-started/create-api-key.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Create an API key — PesaGuard docs">
+<meta name="twitter:title" content="Create an API key - PesaGuard docs">
 <meta name="twitter:description" content="What a PesaGuard credential carries: explicit scopes, expiry, rotation metadata, and hashed storage.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
@@ -74,7 +74,7 @@
     <nav class="docs-crumbs" aria-label="Breadcrumb"><a href="../index.html">Docs</a><span aria-hidden="true">/</span><a href="index.html">Getting started</a><span aria-hidden="true">/</span><span>Create an API key</span></nav>
     <p class="docs-eyebrow">Getting started</p>
     <h1>Create an API key</h1>
-    <p class="docs-lede">Credentials are issued with the pilot team, scoped to the integration that needs them. A key is never "full access" — it is a scope, an expiry and a tenant, nothing more.</p>
+    <p class="docs-lede">Credentials are issued with the pilot team, scoped to the integration that needs them. A key is never "full access": it is a scope, an expiry and a tenant, nothing more.</p>
     <div class="api-hero"><div><strong>One integration, one credential</strong><p>Separate keys make ownership, rotation, incident response and usage review possible.</p></div><div class="api-hero-meta"><span>SCOPED</span><span>EXPIRING</span><span>AUDITABLE</span></div></div>
 
     <h2>What a credential carries</h2>
@@ -92,10 +92,10 @@
 
     <h2>Handling rules</h2>
     <ul>
-      <li>Keep credentials out of source control. The infra README requires the deployment's <code>.env</code> to be ignored — the same rule applies to your integration's secrets.</li>
+      <li>Keep credentials out of source control. The infra README requires the deployment's <code>.env</code> to be ignored: the same rule applies to your integration's secrets.</li>
       <li>One credential per integration. A shared "team key" makes rotation pointless.</li>
       <li>Rotate on a schedule and immediately on suspicion. Revocation takes effect at once; there is no grace window to exploit.</li>
-      <li>Audit entries never contain secret material — tokens are excluded from logs by design.</li>
+      <li>Audit entries never contain secret material: tokens are excluded from logs by design.</li>
     </ul>
     <h2>Rotation procedure</h2><p>Issue the replacement before revoking the current key, deploy it, observe successful traffic, then revoke the old key and verify failure. If compromise is suspected, revoke immediately and accept a controlled interruption rather than leaving an exposed key active.</p>
 
@@ -106,8 +106,8 @@
 
     <h2>Next</h2>
     <ul>
-      <li><a href="first-request.html">First request</a> — put the credential to work.</li>
-      <li><a href="../security/tenant-isolation.html">Tenant isolation</a> — what your key's tenant bounds.</li>
+      <li><a href="first-request.html">First request</a>: put the credential to work.</li>
+      <li><a href="../security/tenant-isolation.html">Tenant isolation</a>: what your key's tenant bounds.</li>
     </ul>
   </article>
 </div>

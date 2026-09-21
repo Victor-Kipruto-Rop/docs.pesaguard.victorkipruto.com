@@ -1,4 +1,4 @@
-/* Design tokens — mirror the PesaGuard marketing palette exactly. */
+/* Design tokens: mirror the PesaGuard marketing palette exactly. */
 
 :root {
   --ink: #0e1311;
@@ -41,7 +41,7 @@
 
 /* --- Dark theme -----------------------------------------------------------
  * Device-driven only: the OS preference (prefers-color-scheme) decides the
- * palette. There is no in-page toggle and no data-theme override — this
+ * palette. There is no in-page toggle and no data-theme override: this
  * media query is the single source of the dark token values.
  * ------------------------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
@@ -98,7 +98,7 @@ a:hover { color: var(--lime-ink); }
 
 /* Keyboard focus is always visible: a brand-coloured ring replaces the default
    outline wherever the browser would show one. (The search input opts out via
-   the more specific outline:none in search.css — its container carries the
+   the more specific outline:none in search.css: its container carries the
    focus style instead.) */
 :focus-visible {
   outline: 2px solid var(--lime-deep);

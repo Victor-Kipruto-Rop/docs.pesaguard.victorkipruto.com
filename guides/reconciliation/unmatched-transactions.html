@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reconciliation guides · Unmatched transactions — PesaGuard docs</title>
-<meta name="description" content="Queue with the reason attached — never silently discarded.">
+<title>Reconciliation guides · Unmatched transactions - PesaGuard docs</title>
+<meta name="description" content="Queue with the reason attached: never silently discarded.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/guides/reconciliation/unmatched-transactions.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Reconciliation guides · Unmatched transactions — PesaGuard docs">
-<meta property="og:description" content="Queue with the reason attached — never silently discarded.">
+<meta property="og:title" content="Reconciliation guides · Unmatched transactions - PesaGuard docs">
+<meta property="og:description" content="Queue with the reason attached: never silently discarded.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/guides/reconciliation/unmatched-transactions.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Reconciliation guides · Unmatched transactions — PesaGuard docs">
-<meta name="twitter:description" content="Queue with the reason attached — never silently discarded.">
+<meta name="twitter:title" content="Reconciliation guides · Unmatched transactions - PesaGuard docs">
+<meta name="twitter:description" content="Queue with the reason attached: never silently discarded.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../../assets/brand/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,7 +58,7 @@
     <div class="api-hero"><div><strong>Unmatched is a state, not a loss</strong><p>Keep the event, expose the reason and make reprocessing safe when the missing evidence arrives.</p></div><div class="api-hero-meta"><span>QUEUE</span><span>EXPLAIN</span><span>REPLAY</span></div></div>
     <h2>Investigation steps</h2><ol><li>Open the provider event and confirm its tenant and identity.</li><li>Read the unmatched reason and candidate-search window.</li><li>Check internal reference, amount, currency and timing.</li><li>Confirm whether the internal record arrived late or belongs to another flow.</li><li>Reprocess with the original event identity after correction.</li></ol>
     <h2>Do not discard</h2><p>Do not delete an unmatched event, alter its original payload or create a manual success without an audit decision. Unmatched volume and age are operational signals that should appear in queues and reports.</p>
-    <p>Queue with the reason attached — never silently discarded.</p>
+    <p>Queue with the reason attached: never silently discarded.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../../guides/reconciliation/index.html">Reconciliation guides</a></li>

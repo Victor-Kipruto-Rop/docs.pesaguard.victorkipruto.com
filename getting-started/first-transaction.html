@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Getting started · First transaction — PesaGuard docs</title>
+<title>Getting started · First transaction - PesaGuard docs</title>
 <meta name="description" content="Follow one M-Pesa payment from callback to matched record, and what each state means on the way.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/getting-started/first-transaction.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Getting started · First transaction — PesaGuard docs">
+<meta property="og:title" content="Getting started · First transaction - PesaGuard docs">
 <meta property="og:description" content="Follow one M-Pesa payment from callback to matched record, and what each state means on the way.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/getting-started/first-transaction.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Getting started · First transaction — PesaGuard docs">
+<meta name="twitter:title" content="Getting started · First transaction - PesaGuard docs">
 <meta name="twitter:description" content="Follow one M-Pesa payment from callback to matched record, and what each state means on the way.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
@@ -68,15 +68,15 @@
     <h2>1 · The callback arrives</h2>
     <p>Safaricom Daraja delivers a callback to your deployment. Ingestion validates the payload, normalizes it into the canonical payment-event shape, and de-duplicates it on write.</p>
     <ul>
-      <li>Invalid payloads are quarantined with the reason — never dropped silently.</li>
+      <li>Invalid payloads are quarantined with the reason: never dropped silently.</li>
       <li>A provider retry of the same event is rejected by idempotency, not processed twice.</li>
     </ul>
     <h2>2 · The match is decided</h2>
     <p>The event is compared against internal records on amount, reference and a timestamp tolerance. Deterministic rules mean the same inputs always produce the same outcome.</p>
     <ul>
-      <li>Matched — the record carries the evidence that produced the decision.</li>
-      <li>Difference found — an exception is raised with the delta shown.</li>
-      <li>No candidate — the payment queues as unmatched with the reason attached.</li>
+      <li>Matched: the record carries the evidence that produced the decision.</li>
+      <li>Difference found: an exception is raised with the delta shown.</li>
+      <li>No candidate: the payment queues as unmatched with the reason attached.</li>
     </ul>
     <h2>3 · The outcome is recorded</h2>
     <p>Every outcome is written to the append-only audit trail with its actor and tenant. A reviewer resolving an exception records the decision and the reason, which keeps month-end explainable.</p>

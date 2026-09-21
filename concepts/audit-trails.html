@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Concepts · Audit trails — PesaGuard docs</title>
-<meta name="description" content="Append-only evidence for every match, review and configuration change — with secrets excluded by design.">
+<title>Concepts · Audit trails - PesaGuard docs</title>
+<meta name="description" content="Append-only evidence for every match, review and configuration change: with secrets excluded by design.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/concepts/audit-trails.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Concepts · Audit trails — PesaGuard docs">
-<meta property="og:description" content="Append-only evidence for every match, review and configuration change — with secrets excluded by design.">
+<meta property="og:title" content="Concepts · Audit trails - PesaGuard docs">
+<meta property="og:description" content="Append-only evidence for every match, review and configuration change: with secrets excluded by design.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/concepts/audit-trails.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Concepts · Audit trails — PesaGuard docs">
-<meta name="twitter:description" content="Append-only evidence for every match, review and configuration change — with secrets excluded by design.">
+<meta name="twitter:title" content="Concepts · Audit trails - PesaGuard docs">
+<meta name="twitter:description" content="Append-only evidence for every match, review and configuration change: with secrets excluded by design.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,9 +65,9 @@
     <h1>Audit trails</h1>
     <p class="docs-lede">An audit trail is the durable explanation for a system decision. Every match, exception, review, credential event and configuration change records its actor, tenant, reason and correlation context. Entries are added, never rewritten.</p>
     <ul>
-      <li><strong>Decisions keep their reason</strong> — accept, reject or escalate is stored with the actor and the transaction context.</li>
-      <li><strong>History survives turnover</strong> — institutional knowledge stays queryable when the team changes.</li>
-      <li><strong>Secrets are excluded</strong> — tokens, keys and credentials never enter audit entries; sensitive fields are redacted at logging boundaries.</li>
+      <li><strong>Decisions keep their reason</strong>: accept, reject or escalate is stored with the actor and the transaction context.</li>
+      <li><strong>History survives turnover</strong>: institutional knowledge stays queryable when the team changes.</li>
+      <li><strong>Secrets are excluded</strong>: tokens, keys and credentials never enter audit entries; sensitive fields are redacted at logging boundaries.</li>
     </ul>
     <h2>Audit event anatomy</h2>
     <table><thead><tr><th>Field</th><th>Why it matters</th></tr></thead><tbody><tr><td>Event type</td><td>Identifies the action or decision.</td></tr><tr><td>Actor</td><td>Names the user, service account or worker responsible.</td></tr><tr><td>Tenant</td><td>Constrains the event to the organization it belongs to.</td></tr><tr><td>Resource and event ids</td><td>Connects the decision to the transaction, provider event or request.</td></tr><tr><td>Reason and outcome</td><td>Explains what was decided and why.</td></tr><tr><td>Timestamp</td><td>Supports ordering, investigation and retention policy.</td></tr></tbody></table>

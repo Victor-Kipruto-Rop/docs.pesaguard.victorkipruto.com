@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Webhooks · Retries and dead letters — PesaGuard docs</title>
+<title>Webhooks · Retries and dead letters - PesaGuard docs</title>
 <meta name="description" content="Bounded backoff, visible attempt history, dead-letter retention and safe replay.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/webhooks/retries.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Webhooks · Retries and dead letters — PesaGuard docs">
+<meta property="og:title" content="Webhooks · Retries and dead letters - PesaGuard docs">
 <meta property="og:description" content="Bounded backoff, visible attempt history, dead-letter retention and safe replay.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/webhooks/retries.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Webhooks · Retries and dead letters — PesaGuard docs">
+<meta name="twitter:title" content="Webhooks · Retries and dead letters - PesaGuard docs">
 <meta name="twitter:description" content="Bounded backoff, visible attempt history, dead-letter retention and safe replay.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
@@ -59,11 +59,11 @@
           <span>Retries</span></nav>
     <p class="docs-eyebrow">Webhooks</p>
     <h1>Retries and dead letters</h1>
-    <p class="docs-lede">Transient failures are retried with bounded backoff. When retries are exhausted the delivery moves to the dead-letter path, where it stays visible and replayable — a failed delivery never disappears.</p>
+    <p class="docs-lede">Transient failures are retried with bounded backoff. When retries are exhausted the delivery moves to the dead-letter path, where it stays visible and replayable: a failed delivery never disappears.</p>
     <ul>
       <li>Each attempt is recorded with its outcome, so you can answer what was sent and when.</li>
       <li>Exhausted deliveries are dead-lettered and retained for investigation.</li>
-      <li>Replay from the dead letter is safe — idempotency applies to delivery like everything else.</li>
+      <li>Replay from the dead letter is safe: idempotency applies to delivery like everything else.</li>
       <li>Retry schedules are bounded on purpose; unbounded retries only hide an outage.</li>
     </ul>
     <p>The ops API surfaces these delivery events with retry counts and error details under the <code>integrations:read</code> scope.</p>

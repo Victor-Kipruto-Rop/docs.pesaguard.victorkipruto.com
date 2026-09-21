@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Transaction guides · Create a transaction — PesaGuard docs</title>
-<meta name="description" content="The write path is documented in the OpenAPI contract — confirm the schema against your deployment.">
+<title>Transaction guides · Create a transaction - PesaGuard docs</title>
+<meta name="description" content="The write path is documented in the OpenAPI contract: confirm the schema against your deployment.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/guides/transactions/create-transaction.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Transaction guides · Create a transaction — PesaGuard docs">
-<meta property="og:description" content="The write path is documented in the OpenAPI contract — confirm the schema against your deployment.">
+<meta property="og:title" content="Transaction guides · Create a transaction - PesaGuard docs">
+<meta property="og:description" content="The write path is documented in the OpenAPI contract: confirm the schema against your deployment.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/guides/transactions/create-transaction.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Transaction guides · Create a transaction — PesaGuard docs">
-<meta name="twitter:description" content="The write path is documented in the OpenAPI contract — confirm the schema against your deployment.">
+<meta name="twitter:title" content="Transaction guides · Create a transaction - PesaGuard docs">
+<meta name="twitter:description" content="The write path is documented in the OpenAPI contract: confirm the schema against your deployment.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../../assets/brand/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,7 +58,7 @@
     <div class="api-hero"><div><strong>Safe write pattern</strong><p>Validate locally, send one logical operation with one idempotency key, then reconcile the durable outcome.</p></div><div class="api-hero-meta"><span>VALIDATE</span><span>WRITE ONCE</span><span>RECONCILE</span></div></div>
     <h2>Request checklist</h2><ul><li>Use the correct environment and tenant credential.</li><li>Send exact amount, currency, reference and timestamp formats.</li><li>Generate and persist an idempotency key for the logical operation.</li><li>Set a client timeout without assuming timeout means rejection.</li></ul>
     <h2>Write sequence</h2><ol><li>Validate the payload against the deployment contract.</li><li>Send the authenticated request.</li><li>Persist the response or request id.</li><li>On uncertainty, retry with the same key.</li><li>Retrieve and reconcile the resulting transaction.</li></ol>
-    <p>The write path is documented in the OpenAPI contract — confirm the schema against your deployment.</p>
+    <p>The write path is documented in the OpenAPI contract: confirm the schema against your deployment.</p>
     <h2>Related</h2>
     <ul>
       <li><a href="../../guides/transactions/index.html">Transaction guides</a></li>

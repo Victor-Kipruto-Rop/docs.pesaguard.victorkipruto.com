@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Concepts · Architecture — PesaGuard docs</title>
+<title>Concepts · Architecture - PesaGuard docs</title>
 <meta name="description" content="The services behind PesaGuard: Flask and SQLAlchemy API, Postgres store, Redis and RQ workers, Kafka transport, Alembic migrations.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/concepts/architecture.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Concepts · Architecture — PesaGuard docs">
+<meta property="og:title" content="Concepts · Architecture - PesaGuard docs">
 <meta property="og:description" content="The services behind PesaGuard: Flask and SQLAlchemy API, Postgres store, Redis and RQ workers, Kafka transport, Alembic migrations.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/concepts/architecture.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Concepts · Architecture — PesaGuard docs">
+<meta name="twitter:title" content="Concepts · Architecture - PesaGuard docs">
 <meta name="twitter:description" content="The services behind PesaGuard: Flask and SQLAlchemy API, Postgres store, Redis and RQ workers, Kafka transport, Alembic migrations.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
@@ -79,9 +79,9 @@
     <h2>Failure boundaries</h2>
     <table><thead><tr><th>Failure</th><th>Expected protection</th></tr></thead><tbody><tr><td>Process crash after receipt</td><td>Durable event and idempotency record allow safe replay.</td></tr><tr><td>Queue or broker outage</td><td>Accepted work remains visible and is retried or dead-lettered.</td></tr><tr><td>Database failure</td><td>Requests do not claim success before required state commits.</td></tr><tr><td>Consumer failure</td><td>Delivery retries preserve event identity and tenant context.</td></tr></tbody></table>
     <ul>
-      <li><strong>Durability first</strong> — work is acknowledged only after the required durable state or idempotency record is written.</li>
-      <li><strong>Safe failure</strong> — transient failures retry with bounded backoff; exhausted work is dead-lettered, never discarded.</li>
-      <li><strong>Evidence by default</strong> — correlation IDs, structured logs, metrics and append-only audit events explain what happened.</li>
+      <li><strong>Durability first</strong>: work is acknowledged only after the required durable state or idempotency record is written.</li>
+      <li><strong>Safe failure</strong>: transient failures retry with bounded backoff; exhausted work is dead-lettered, never discarded.</li>
+      <li><strong>Evidence by default</strong>: correlation IDs, structured logs, metrics and append-only audit events explain what happened.</li>
     </ul>
     <h2>Design principles</h2>
     <ul>

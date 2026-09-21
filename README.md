@@ -21,6 +21,6 @@ by the same walk.
 
 ## Status labels
 
-- `Live` — behaviour verified in the repository (tests, routes, or docs).
-- `Draft` — design intent recorded here; not yet verified against shipped code.
-- `Planned` — named roadmap scope with no implementation.
+- `Live`: behaviour verified in the repository (tests, routes, or docs).
+- `Draft`: design intent recorded here; not yet verified against shipped code.
+- `Planned`: named roadmap scope with no implementation.

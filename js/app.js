@@ -10,7 +10,7 @@
  * - Copy buttons on every pre.docs-code block, with a screen-reader status.
  *
  * Each feature is wired through safe() so one failing feature cannot disable
- * the others. No frameworks, no build step, no polling — everything is event-
+ * the others. No frameworks, no build step, no polling: everything is event-
  * or observer-driven, and the script works from file:// as well as http(s).
  */
 (function () {
@@ -370,7 +370,7 @@
             var title = page.querySelector("title");
             var description = page.querySelector('meta[name="description"]');
             var link = pathname.replace(/^\//, "");
-            return { section: link.split("/")[0] || "Docs", href: link, title: title ? title.textContent.replace(/\s*[—-]\s*PesaGuard docs.*$/, "") : link, description: description ? description.content : "PesaGuard documentation", text: page.body.textContent.toLowerCase() };
+            return { section: link.split("/")[0] || "Docs", href: link, title: title ? title.textContent.replace(/\s*-\s*PesaGuard docs.*$/, "") : link, description: description ? description.content : "PesaGuard documentation", text: page.body.textContent.toLowerCase() };
           });
         }));
       }).then(function (pages) {

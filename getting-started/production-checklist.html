@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Production checklist — PesaGuard docs</title>
+<title>Production checklist - PesaGuard docs</title>
 <meta name="description" content="What changes between the staging variant and a production PesaGuard deployment: required settings, secrets handling, proxy and validation.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/getting-started/production-checklist.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Production checklist — PesaGuard docs">
+<meta property="og:title" content="Production checklist - PesaGuard docs">
 <meta property="og:description" content="What changes between the staging variant and a production PesaGuard deployment: required settings, secrets handling, proxy and validation.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/getting-started/production-checklist.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Production checklist — PesaGuard docs">
+<meta name="twitter:title" content="Production checklist - PesaGuard docs">
 <meta name="twitter:description" content="What changes between the staging variant and a production PesaGuard deployment: required settings, secrets handling, proxy and validation.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
@@ -81,13 +81,13 @@
         <tr><td><code>KAFKA_BOOTSTRAP_SERVERS_DOCKER</code></td><td>Broker address reachable from containers, not host localhost.</td></tr>
         <tr><td><code>REDIS_URL_DOCKER</code></td><td>Redis connection for asynchronous work.</td></tr>
         <tr><td><code>PESAGUARD_BIND_HOST_DOCKER</code></td><td>Bind address for the API container.</td></tr>
-        <tr><td><code>API_SERVER_NAME</code> (AWS/tunnel overlays)</td><td>The hostname nginx serves — a hostname, not a URL.</td></tr>
+        <tr><td><code>API_SERVER_NAME</code> (AWS/tunnel overlays)</td><td>The hostname nginx serves: a hostname, not a URL.</td></tr>
       </tbody>
     </table>
 
     <h2>Before you go live</h2>
     <ol>
-      <li>Validate the merged configuration with <code>config --quiet</code> — never with plain <code>config</code>, which can print resolved secrets.</li>
+      <li>Validate the merged configuration with <code>config --quiet</code>: never with plain <code>config</code>, which can print resolved secrets.</li>
       <li>Review actual published ports. The AWS overlay's <code>ports: []</code> does not necessarily remove base-file published ports during Compose merging.</li>
       <li>Keep the root <code>.env</code> out of images and out of git. Merge new keys into existing deployments; do not replace the file.</li>
       <li>Confirm the reverse proxy passes <code>X-Forwarded-</code> headers and that TLS terminates in front of the API.</li>

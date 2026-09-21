@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Concepts · Idempotency — PesaGuard docs</title>
+<title>Concepts · Idempotency - PesaGuard docs</title>
 <meta name="description" content="Why a retried callback, a replayed webhook or a manual reprocess never creates a second financial record.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/concepts/idempotency.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Concepts · Idempotency — PesaGuard docs">
+<meta property="og:title" content="Concepts · Idempotency - PesaGuard docs">
 <meta property="og:description" content="Why a retried callback, a replayed webhook or a manual reprocess never creates a second financial record.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/concepts/idempotency.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Concepts · Idempotency — PesaGuard docs">
+<meta name="twitter:title" content="Concepts · Idempotency - PesaGuard docs">
 <meta name="twitter:description" content="Why a retried callback, a replayed webhook or a manual reprocess never creates a second financial record.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
@@ -65,10 +65,10 @@
     <h1>Idempotency</h1>
     <p class="docs-lede">Retries are expected in payment systems: providers redeliver callbacks, clients retry timeouts and operators replay failed work. Idempotency binds those attempts to one logical operation so a duplicate cannot become a second financial record.</p>
     <ul>
-      <li><strong>Enforced at the write</strong> — a duplicate event is rejected by the database, not by an application check that can be forgotten.</li>
-      <li><strong>Events persist before processing</strong> — so a crash between receipt and processing leaves a record, not a gap.</li>
-      <li><strong>Replay-safe operations</strong> — dead-letter replay, manual reprocessing and provider retries all run under the same rule.</li>
-      <li><strong>Acknowledge only what persisted</strong> — a success response never claims durable processing that did not happen.</li>
+      <li><strong>Enforced at the write</strong>: a duplicate event is rejected by the database, not by an application check that can be forgotten.</li>
+      <li><strong>Events persist before processing</strong>: so a crash between receipt and processing leaves a record, not a gap.</li>
+      <li><strong>Replay-safe operations</strong>: dead-letter replay, manual reprocessing and provider retries all run under the same rule.</li>
+      <li><strong>Acknowledge only what persisted</strong>: a success response never claims durable processing that did not happen.</li>
     </ul>
     <h2>Identity of an operation</h2>
     <p>An idempotency key is meaningful only with its tenant, operation, authenticated principal and request payload. The same key with a different body is a conflict, not a new request. A new logical transaction requires a new key.</p>

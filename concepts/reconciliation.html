@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Concepts · Reconciliation — PesaGuard docs</title>
+<title>Concepts · Reconciliation - PesaGuard docs</title>
 <meta name="description" content="How deterministic matching pairs provider events with internal records, and what happens to a difference.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/concepts/reconciliation.html">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Concepts · Reconciliation — PesaGuard docs">
+<meta property="og:title" content="Concepts · Reconciliation - PesaGuard docs">
 <meta property="og:description" content="How deterministic matching pairs provider events with internal records, and what happens to a difference.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/concepts/reconciliation.html">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Concepts · Reconciliation — PesaGuard docs">
+<meta name="twitter:title" content="Concepts · Reconciliation - PesaGuard docs">
 <meta name="twitter:description" content="How deterministic matching pairs provider events with internal records, and what happens to a difference.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
@@ -65,10 +65,10 @@
     <h1>Reconciliation</h1>
     <p class="docs-lede">Reconciliation compares an external provider event with the internal transaction it should represent. PesaGuard uses explicit evidence such as amount, reference and a configured timestamp tolerance, then records a deterministic outcome that can be reviewed months later.</p>
     <ul>
-      <li><strong>Match keys</strong> — amount, reference and timestamp tolerance, configured per flow. Tolerance is a setting, not a hidden constant, because provider and ledger clocks rarely agree to the second.</li>
-      <li><strong>Differences are first-class</strong> — a KES 500 amount mismatch is not smoothed over; it becomes an exception with the delta stated.</li>
-      <li><strong>Exceptions carry reasons</strong> — unmatched, amount-mismatch and reference-not-found each raise with its own reason attached.</li>
-      <li><strong>Safe to re-run</strong> — idempotency at the write means replays and provider retries never double-count.</li>
+      <li><strong>Match keys</strong>: amount, reference and timestamp tolerance, configured per flow. Tolerance is a setting, not a hidden constant, because provider and ledger clocks rarely agree to the second.</li>
+      <li><strong>Differences are first-class</strong>: a KES 500 amount mismatch is not smoothed over; it becomes an exception with the delta stated.</li>
+      <li><strong>Exceptions carry reasons</strong>: unmatched, amount-mismatch and reference-not-found each raise with its own reason attached.</li>
+      <li><strong>Safe to re-run</strong>: idempotency at the write means replays and provider retries never double-count.</li>
     </ul>
     <h2>Matching sequence</h2>
     <ol><li>Validate the provider payload and establish its event identity.</li><li>Resolve the authorized tenant and locate candidate internal records.</li><li>Compare reference, amount, currency and time-window evidence.</li><li>Persist a matched, unmatched or exception outcome with reasons.</li><li>Publish downstream notifications and expose the result through APIs and reports.</li></ol>
@@ -78,7 +78,7 @@
     <p>Exceptions queue with the transaction, the provider event and the reason. A reviewer resolves with a written decision, and the outcome lands in the append-only trail.</p>
     <ol>
       <li>Queue ordered by severity and age.</li>
-      <li>Reviewer accepts, rejects or escalates — with a reason.</li>
+      <li>Reviewer accepts, rejects or escalates: with a reason.</li>
       <li>Outcome recorded; reports read the reconciled result, not a parallel export.</li>
     </ol>
     <h2>What reconciliation must not do</h2>

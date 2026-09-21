@@ -53,7 +53,7 @@ const API_MORE = [
     { ul: ["Dashboard spec: OpenAPI 3.0.3, version 2.0.0.", "Public routes sit under /api/v1.", "Every error shares one envelope carrying a request id."] },
   ], [["OpenAPI document", "api-reference/openapi.json"], ["API overview", "api/index.html"]]],
   ["api/filtering.html", "Filtering", "Query parameters narrow list endpoints; exact names come from the endpoint contract.", "Live", [
-    { ul: ["Filters are scoped to the caller's tenant and cannot widen it.", "Unknown parameters are ignored or rejected per endpoint — read the spec, do not assume.", "Tenant identifiers are never trusted from the client."] },
+    { ul: ["Filters are scoped to the caller's tenant and cannot widen it.", "Unknown parameters are ignored or rejected per endpoint: read the spec, do not assume.", "Tenant identifiers are never trusted from the client."] },
   ], [["Pagination", "api/pagination.html"], ["Sorting", "api/sorting.html"]]],
   ["api/sorting.html", "Sorting", "Where an endpoint supports ordering it is documented in its OpenAPI entry.", "Draft", [
     { p: "Treat unspecified ordering as unstable. Paginate deterministically and do not rely on insertion order surviving a filter change." },
@@ -83,7 +83,7 @@ const ERROR_CLASSES = [
   ["errors/authentication.html", "401 · Authentication", "The caller was not authenticated. Refresh or reissue the credential."],
   ["errors/authorization.html", "403 · Authorization", "Authenticated, but the scope or tenant does not permit this action."],
   ["errors/validation.html", "400 / 422 · Validation", "The request failed validation; the response names the offending field."],
-  ["errors/rate-limit.html", "429 · Rate limit", "Too many requests. Back off and retry — writes are idempotent, so a retry is safe."],
+  ["errors/rate-limit.html", "429 · Rate limit", "Too many requests. Back off and retry: writes are idempotent, so a retry is safe."],
   ["errors/conflict.html", "409 · Conflict", "Usually a duplicate under idempotency. Read the existing record instead of re-sending."],
   ["errors/not-found.html", "404 · Not found", "No such resource within the caller's tenant scope."],
   ["errors/server-errors.html", "5xx · Server errors", "Server or gateway failure. Retry with backoff and quote the request id to the operator."],
@@ -140,7 +140,7 @@ const GUIDE_TREES = [
     ["key-rotation.html", "Key rotation", "Rotate on a schedule and on suspicion; revocation takes effect immediately."],
   ]],
   ["guides/transactions/", "Transaction guides", "Live", [
-    ["create-transaction.html", "Create a transaction", "The write path is documented in the OpenAPI contract — confirm the schema against your deployment."],
+    ["create-transaction.html", "Create a transaction", "The write path is documented in the OpenAPI contract: confirm the schema against your deployment."],
     ["retrieve-transaction.html", "Retrieve a transaction", "Detail lookups always include tenant predicates; IDs are not globally trusted."],
     ["search-transactions.html", "Search transactions", "Paginate deterministically and treat unspecified ordering as unstable."],
     ["transaction-status.html", "Transaction status", "See the lifecycle concept page for states and their preconditions."],
@@ -149,7 +149,7 @@ const GUIDE_TREES = [
   ["guides/reconciliation/", "Reconciliation guides", "Live", [
     ["configure-reconciliation.html", "Configure reconciliation", "Match keys and timestamp tolerance are configured per flow, scoped with the pilot team."],
     ["matching-rules.html", "Matching rules", "Amount, reference and tolerance decide the outcome; the same inputs give the same result."],
-    ["unmatched-transactions.html", "Unmatched transactions", "Queue with the reason attached — never silently discarded."],
+    ["unmatched-transactions.html", "Unmatched transactions", "Queue with the reason attached: never silently discarded."],
     ["exceptions.html", "Exceptions", "Differences are first-class: the delta is stated and a reviewer decides with a written reason."],
     ["reconciliation-reports.html", "Reconciliation reports", "Reports read the reconciled record and its exceptions, so the queue and the numbers agree."],
   ]],

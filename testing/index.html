@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Testing — PesaGuard docs</title>
+<title>Testing - PesaGuard docs</title>
 <meta name="description" content="How PesaGuard validates behaviour, and how to test your integration against staging.">
 <link rel="canonical" href="https://docs.pesaguard.victorkipruto.com/testing/">
 <meta name="theme-color" content="#f4f5ef" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0e1311" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PesaGuard docs">
-<meta property="og:title" content="Testing — PesaGuard docs">
+<meta property="og:title" content="Testing - PesaGuard docs">
 <meta property="og:description" content="How PesaGuard validates behaviour, and how to test your integration against staging.">
 <meta property="og:url" content="https://docs.pesaguard.victorkipruto.com/testing/">
 <meta property="og:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Testing — PesaGuard docs">
+<meta name="twitter:title" content="Testing - PesaGuard docs">
 <meta name="twitter:description" content="How PesaGuard validates behaviour, and how to test your integration against staging.">
 <meta name="twitter:image" content="https://docs.pesaguard.victorkipruto.com/assets/brand/og-image.jpg">
 <link rel="icon" type="image/svg+xml" href="../assets/brand/favicon.svg">
@@ -71,7 +71,7 @@
     <p class="docs-lede">The platform is validated with focused tests for normal paths, boundary conditions, cross-tenant isolation, retries and failure recovery. Test your integration the same way: against real staging.</p>
     <div class="api-hero"><div><strong>Test the invariants</strong><p>A green happy path is not enough. Prove that duplicates stay singular, failures remain visible and tenant boundaries hold under pressure.</p></div><div class="api-hero-meta"><span>ISOLATE</span><span>BREAK</span><span>VERIFY</span></div></div>
     <ul>
-      <li>Use the <a href="../getting-started/test-environment.html">staging variant</a> — same code, separate state.</li>
+      <li>Use the <a href="../getting-started/test-environment.html">staging variant</a>: same code, separate state.</li>
       <li>Drive the idempotency path: deliver the same callback twice and assert one record.</li>
       <li>Exercise failure recovery: stop a consumer, watch retries land in dead letters, replay, assert one outcome.</li>
       <li>Verify tenant scope: a request without tenant predicates must return nothing.</li>

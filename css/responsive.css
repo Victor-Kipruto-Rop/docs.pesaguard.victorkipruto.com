@@ -24,7 +24,7 @@
   /* Larger touch targets in the compact header. */
   .docs-nav-toggle { width: 40px; height: 40px; }
 
-  /* Hidden state transitions to .is-open (and back) — opacity/transform for
+  /* Hidden state transitions to .is-open (and back): opacity/transform for
      the panel, a staggered cascade for the links, with visibility delayed so
      the close animation can play before the panel stops hit-testing. */
 

@@ -1,7 +1,7 @@
 {
   "source": {
     "repository": "Victor-Kipruto-Rop/api.pesaguard.victorkipruto.com",
-    "commit": "f9a57d0856f9f8b0c6833aec42093ae944866202",
+    "commit": "8c50cad38e5176aec2513a6ef4584493364a1d42",
     "entrypoint": "pesaguard_backend_pipeline.canonical_app:app"
   },
   "routes": [
@@ -46,6 +46,20 @@
         "GET"
       ],
       "endpoint": "analytics_sla_metrics"
+    },
+    {
+      "path": "/api/v1/catalog/datasets",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "catalog_datasets"
+    },
+    {
+      "path": "/api/v1/catalog/datasets/{dataset_name}",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "catalog_dataset"
     },
     {
       "path": "/api/v1/communications/analytics",
@@ -335,6 +349,34 @@
       "endpoint": "export_routes_api_v1.export_csv"
     },
     {
+      "path": "/api/v1/imports",
+      "methods": [
+        "POST"
+      ],
+      "endpoint": "create_import"
+    },
+    {
+      "path": "/api/v1/imports/{import_id}",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "get_import"
+    },
+    {
+      "path": "/api/v1/lineage/transactions/{transaction_id}",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "transaction_lineage"
+    },
+    {
+      "path": "/api/v1/metrics/merchants",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "merchant_metrics"
+    },
+    {
       "path": "/api/v1/operations/dead-letters/{dead_letter_id}/replay",
       "methods": [
         "POST"
@@ -519,6 +561,13 @@
         "GET"
       ],
       "endpoint": "metrics"
+    },
+    {
+      "path": "/openapi.contract.json",
+      "methods": [
+        "GET"
+      ],
+      "endpoint": "openapi_contract"
     },
     {
       "path": "/openapi.json",

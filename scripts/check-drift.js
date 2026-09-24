@@ -31,7 +31,7 @@ const strict = process.argv.includes("--strict");
 const IGNORE = [
   /^\/api\/v\d+\/example$/, // placeholder used to explain versioning
   /^\/webhooks\/pesaguard$/, // sample receiver endpoint on the customer's side
-  /^\/openapi\.json$/, // the spec document itself, served outside the API contract
+  /^\/openapi(\.contract)?\.json$/, // the spec documents themselves, served outside the API contract
   /^\/auth\/login$/, // named on the Authentication page as absent from the canonical app (legacy variants only)
 ];
 
@@ -99,7 +99,7 @@ const notRegisteredSpec = [];
 const notInSpec = [];
 let snap = null;
 /** Registered by the app but not part of the API surface. */
-const NOT_API = [/^\/static\//, /^\/docs$/, /^\/openapi\.json$/];
+const NOT_API = [/^\/static\//, /^\/docs$/, /^\/openapi(\.contract)?\.json$/];
 if (fs.existsSync(snapPath)) {
   snap = JSON.parse(fs.readFileSync(snapPath, "utf8"));
   const exact = (p) => p.replace(/\{[^}]+\}/g, "{}").replace(/\/+$/, "");

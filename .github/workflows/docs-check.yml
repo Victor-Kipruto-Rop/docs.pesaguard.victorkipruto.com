@@ -37,8 +37,15 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install backend dependencies
-        run: pip install -r backend/pesaguard_backend_pipeline/requirements.txt
+        # jsonschema is imported by the backend but missing from its
+        # requirements.txt (the backend CI installs it separately).
+        run: |
+          pip install -r backend/pesaguard_backend_pipeline/requirements.txt
+          pip install jsonschema==4.23.0
       - name: Regenerate route snapshot
+        env:
+          DATABASE_URL: sqlite:////tmp/pesaguard-docs-check.db
+          PESAGUARD_API_URL: https://api.pesaguard.victorkipruto.com
         run: python scripts/dump-flask-routes.py backend --out /tmp/routes.json
       - name: Compare routes with the committed snapshot
         run: |
@@ -51,6 +58,18 @@ jobs:
           print("route snapshot is current")
           PY
       - name: Compare openapi.json with a fresh build
+        env:
+          DATABASE_URL: sqlite:////tmp/pesaguard-docs-check.db
+          PESAGUARD_API_URL: https://api.pesaguard.victorkipruto.com
         run: |
           python scripts/generate-openapi.py backend --out /tmp/openapi.json
-          cmp /tmp/openapi.json api-reference/openapi.json || { echo "openapi.json is stale: run scripts/generate-openapi.py"; exit 1; }
+          python - <<'PY'
+          import json
+          def load(p):
+              d = json.load(open(p))
+              d["info"].get("x-generated-from", {}).pop("commit", None)  # commit stamp is not content
+              return d
+          if load("/tmp/openapi.json") != load("api-reference/openapi.json"):
+              raise SystemExit("openapi.json is stale: run scripts/generate-openapi.py (or merge the sync PR)")
+          print("openapi.json is current")
+          PY

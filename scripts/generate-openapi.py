@@ -38,7 +38,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = os.path.join(ROOT, "api-reference", "openapi.base.json")
 OUT = os.path.join(ROOT, "api-reference", "openapi.json")
 
-SKIP = re.compile(r"^/(static/|docs$|openapi\.json$)")
+SKIP = re.compile(r"^/(static/|docs$|openapi(\.contract)?\.json$)")
 TYPE_MAP = {"str": "string", "int": "integer", "float": "number", "bool": "boolean", "list": "array", "dict": "object"}
 STATUS_TEXT = {200: "OK", 201: "Created", 202: "Accepted", 204: "No content"}
 TAGS = {

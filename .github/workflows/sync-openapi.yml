@@ -1,0 +1,103 @@
+name: Sync API reference from backend
+
+# Keeps api-reference/openapi.json and api-reference/routes.snapshot.json in
+# step with the backend without a docs backend: the site stays static, and this
+# workflow rebuilds the two generated files from the backend's real routes and
+# opens a pull request when they changed.
+#
+# Triggers
+#   repository_dispatch  sent by the backend repo on every push to main
+#                        (see api repo: .github/workflows/notify-docs.yml)
+#   schedule             daily fallback, in case a dispatch was missed
+#   workflow_dispatch    manual run from the Actions tab
+#
+# One-time setting: Settings > Actions > General > "Allow GitHub Actions to
+# create and approve pull requests" must be enabled for this repository.
+
+on:
+  repository_dispatch:
+    types: [backend-updated]
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-openapi
+  cancel-in-progress: false
+
+env:
+  BACKEND_REPO: Victor-Kipruto-Rop/api.pesaguard.victorkipruto.com
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out the backend (default branch)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.BACKEND_REPO }}
+          path: backend
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/pesaguard_backend_pipeline/requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install backend dependencies
+        # jsonschema is imported by the backend but missing from its
+        # requirements.txt; the backend CI installs it separately at this pin.
+        run: |
+          pip install -r backend/pesaguard_backend_pipeline/requirements.txt
+          pip install jsonschema==4.23.0
+
+      - name: Regenerate route snapshot and OpenAPI spec
+        env:
+          # The backend refuses to import without these. No database is
+          # contacted: routes are read from the Flask url_map after import.
+          DATABASE_URL: sqlite:////tmp/pesaguard-docs-sync.db
+          PESAGUARD_API_URL: https://api.pesaguard.victorkipruto.com
+        run: |
+          python scripts/dump-flask-routes.py backend
+          python scripts/generate-openapi.py backend
+
+      - name: Skip changes that only move the commit stamp
+        run: python scripts/discard-stamp-only-changes.py
+
+      - name: Validate links, metadata and OpenAPI structure
+        run: npm run check
+
+      - name: Read backend commit
+        id: backend
+        run: echo "sha=$(git -C backend rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the sync pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: sync/backend-api-reference
+          delete-branch: true
+          add-paths: |
+            api-reference/openapi.json
+            api-reference/routes.snapshot.json
+          commit-message: "Sync API reference with backend ${{ steps.backend.outputs.sha }}"
+          title: "Sync API reference with backend ${{ steps.backend.outputs.sha }}"
+          body: |
+            Regenerated from `${{ env.BACKEND_REPO }}` @ `${{ steps.backend.outputs.sha }}`
+            with `scripts/dump-flask-routes.py` and `scripts/generate-openapi.py`.
+
+            `npm run check` passed on this branch. Routes that are new in the
+            backend now appear in the spec; hand-written pages that should
+            describe them are listed by `npm run check:drift`.
+
+            Triggered by: `${{ github.event_name }}`
+          labels: api-reference, automated

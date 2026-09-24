@@ -7,7 +7,7 @@
     "x-documentation": "https://docs.pesaguard.victorkipruto.com/api/",
     "x-generated-from": {
       "backend": "Victor-Kipruto-Rop/api.pesaguard.victorkipruto.com",
-      "commit": "f9a57d0856f9f8b0c6833aec42093ae944866202",
+      "commit": "8c50cad38e5176aec2513a6ef4584493364a1d42",
       "generator": "scripts/generate-openapi.py"
     }
   },
@@ -136,6 +136,15 @@
           "type": "string"
         }
       },
+      "DatasetName": {
+        "name": "dataset_name",
+        "in": "path",
+        "required": true,
+        "description": "`dataset_name` path segment.",
+        "schema": {
+          "type": "string"
+        }
+      },
       "CampaignId": {
         "name": "campaign_id",
         "in": "path",
@@ -213,6 +222,24 @@
         "in": "path",
         "required": true,
         "description": "`trans_id` path segment.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ImportId": {
+        "name": "import_id",
+        "in": "path",
+        "required": true,
+        "description": "`import_id` path segment.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "TransactionId": {
+        "name": "transaction_id",
+        "in": "path",
+        "required": true,
+        "description": "`transaction_id` path segment.",
         "schema": {
           "type": "string"
         }
@@ -605,6 +632,111 @@
             "description": "Error: `insufficient_permissions`.",
             "x-error-codes": [
               "insufficient_permissions"
+            ],
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/api/v1/catalog/datasets": {
+      "get": {
+        "operationId": "catalog_datasets",
+        "tags": [
+          "Catalog"
+        ],
+        "summary": "List governed data assets and their operational metadata",
+        "x-required-permission": "read:analytics",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "version": {},
+                    "datasets": {
+                      "type": "array",
+                      "items": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "Error: `insufficient_permissions`.",
+            "x-error-codes": [
+              "insufficient_permissions"
+            ],
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/api/v1/catalog/datasets/{dataset_name}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/DatasetName"
+        }
+      ],
+      "get": {
+        "operationId": "catalog_dataset",
+        "tags": [
+          "Catalog"
+        ],
+        "summary": "Catalog dataset",
+        "x-required-permission": "read:analytics",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "Error: `insufficient_permissions`.",
+            "x-error-codes": [
+              "insufficient_permissions"
+            ],
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error: `not_found`.",
+            "x-error-codes": [
+              "not_found"
             ],
             "content": {
               "application/json": {
@@ -3064,6 +3196,306 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/imports": {
+      "post": {
+        "operationId": "create_import",
+        "tags": [
+          "Imports"
+        ],
+        "summary": "Store a tenant-scoped import object and create a queued batch job",
+        "x-required-permission": "read:analytics",
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "import_id": {},
+                    "tenant_id": {},
+                    "source": {},
+                    "filename": {},
+                    "status": {},
+                    "records_received": {},
+                    "records_valid": {},
+                    "records_failed": {}
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error: `file_required`, `invalid_import`.",
+            "x-error-codes": [
+              "file_required",
+              "invalid_import"
+            ],
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "Error: `insufficient_permissions`.",
+            "x-error-codes": [
+              "insufficient_permissions"
+            ],
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/api/v1/imports/{import_id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/ImportId"
+        }
+      ],
+      "get": {
+        "operationId": "get_import",
+        "tags": [
+          "Imports"
+        ],
+        "summary": "Return tenant-scoped import progress and validation counters",
+        "x-required-permission": "read:analytics",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "import_id": {},
+                    "tenant_id": {},
+                    "source": {},
+                    "filename": {},
+                    "records_received": {},
+                    "records_valid": {},
+                    "records_failed": {},
+                    "started_at": {},
+                    "completed_at": {},
+                    "status": {},
+                    "errors": {}
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "Error: `insufficient_permissions`.",
+            "x-error-codes": [
+              "insufficient_permissions"
+            ],
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error: `not_found`.",
+            "x-error-codes": [
+              "not_found"
+            ],
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/api/v1/lineage/transactions/{transaction_id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/TransactionId"
+        }
+      ],
+      "get": {
+        "operationId": "transaction_lineage",
+        "tags": [
+          "Lineage"
+        ],
+        "summary": "Trace one tenant transaction back to its provider source event",
+        "x-required-permission": "read:analytics",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tenant_id": {},
+                    "transaction_id": {},
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "stage": {},
+                          "event_id": {},
+                          "source": {},
+                          "source_event_id": {},
+                          "upstream_event_id": {},
+                          "ingestion_time": {},
+                          "pipeline_version": {},
+                          "transformation_version": {},
+                          "job_id": {},
+                          "correlation_id": {}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "Error: `insufficient_permissions`.",
+            "x-error-codes": [
+              "insufficient_permissions"
+            ],
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          }
+        }
+      }
+    },
+    "/api/v1/metrics/merchants": {
+      "get": {
+        "operationId": "merchant_metrics",
+        "tags": [
+          "Service health"
+        ],
+        "summary": "Read precomputed merchant metrics without scanning transaction history",
+        "x-required-permission": "read:analytics",
+        "parameters": [
+          {
+            "name": "granularity",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tenant_id": {},
+                    "granularity": {},
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "merchant_id": {},
+                          "bucket_start": {},
+                          "transaction_count": {},
+                          "total_volume": {},
+                          "average_transaction": {},
+                          "failed_transactions": {},
+                          "reconciled_transactions": {},
+                          "anomaly_count": {},
+                          "failure_rate": {},
+                          "reconciliation_rate": {},
+                          "anomaly_rate": {}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error: `invalid_granularity`.",
+            "x-error-codes": [
+              "invalid_granularity"
+            ],
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "Error: `insufficient_permissions`.",
+            "x-error-codes": [
+              "insufficient_permissions"
+            ],
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
           }
         }
       }
@@ -6615,6 +7047,9 @@
       "name": "Assignment queue"
     },
     {
+      "name": "Catalog"
+    },
+    {
       "name": "Communications"
     },
     {
@@ -6624,7 +7059,13 @@
       "name": "Discrepancies"
     },
     {
+      "name": "Imports"
+    },
+    {
       "name": "Incidents"
+    },
+    {
+      "name": "Lineage"
     },
     {
       "name": "Operations"
